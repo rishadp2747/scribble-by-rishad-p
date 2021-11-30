@@ -993,9 +993,9 @@
     react-dom "^17.0.2"
 
 "@bigbinary/neetoui@^3.0.7":
-  version "3.0.7"
-  resolved "https://registry.yarnpkg.com/@bigbinary/neetoui/-/neetoui-3.0.7.tgz#0f23a5fd7c45ebce281763dcf3e97afffd344acc"
-  integrity sha512-rFh/cOnxYXaQO+0CZaBNodRvIgqLQFVO4Y/o2F6ySV0BvaI77DXlFKpFu7t5Su3xVapyERFp+DtnguIS4WUXJw==
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/@bigbinary/neetoui/-/neetoui-3.0.8.tgz#01aa06455f8dd73a144e4594bdfda7442bc2a7c2"
+  integrity sha512-X2Tf7aRcdzod9N+V8ZYgSsFB995cW/v235s/Q1qTzNZ3mET4MAy8TS7O3z6Di7lemCGklGID5MliAC0MrTzTxw==
   dependencies:
     "@bigbinary/neeto-icons" "^1.8.3"
     "@popperjs/core" "^2.9.2"

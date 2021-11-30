@@ -8,7 +8,7 @@ const Main = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/home" render={Dashboard} />
+        <Route exact path="/home" render={() => <Dashboard />} />
       </Switch>
     </BrowserRouter>
   );
