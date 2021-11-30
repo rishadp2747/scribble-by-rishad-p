@@ -27,6 +27,9 @@ gem 'bootsnap', '>= 1.4.4', require: false
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
+# React
+gem "react-rails"
+
 group :development, :test do
   # Access a debugger console by calling 'byebug' anywhere in the code
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
