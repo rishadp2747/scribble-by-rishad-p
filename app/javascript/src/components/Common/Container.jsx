@@ -2,22 +2,24 @@ import React from "react";
 
 import { ExternalLink } from "neetoicon";
 import { Button } from "neetoui";
-import { Header } from "neetoui/layouts";
 import PropTypes from "prop-types";
+
+import Header from "components/Common/Header";
+import NavBar from "components/Common/NavBar";
 
 const Container = ({ children }) => {
   return (
     <div className="w-full h-screen">
       <Header
-        className="shadow"
-        title={<span className="ml-6">Scribble</span>}
+        title="Scribble"
+        titlePosition="left"
+        navLinks={<NavBar />}
         actionBlock={
           <Button
             icon={ExternalLink}
             iconPosition="right"
             style="secondary"
             label="Preview"
-            className="mr-6"
           />
         }
       />
