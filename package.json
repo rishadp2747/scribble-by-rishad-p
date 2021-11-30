@@ -3,6 +3,7 @@
   "private": true,
   "dependencies": {
     "@babel/preset-react": "^7.16.0",
+    "@bigbinary/neetoui": "^3.0.7",
     "@rails/actioncable": "^6.0.0",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
@@ -14,7 +15,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react_ujs": "^2.6.1",
-    "tailwindcss":"1.9.6",
+    "tailwindcss": "1.9.6",
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12"
   },
