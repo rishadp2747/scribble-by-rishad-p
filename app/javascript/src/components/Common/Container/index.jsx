@@ -4,8 +4,8 @@ import { ExternalLink } from "neetoicon";
 import { Button } from "neetoui";
 import PropTypes from "prop-types";
 
-import Header from "components/Common/Header";
-import NavBar from "components/Common/NavBar";
+import Header from "components/Common/Container/Header";
+import NavBar from "components/Common/Container/NavBar";
 
 const Container = ({ children }) => {
   return (
