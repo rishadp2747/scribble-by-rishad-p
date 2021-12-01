@@ -42,7 +42,7 @@ const Dashboard = () => {
           <MenuBar.Block label="Security & Privacy" count={60} />
           <MenuBar.Block label="Misc" count={60} />
         </MenuBar>
-        <div className="flex flex-col w-full p-4">
+        <div className="flex flex-col w-full p-4 border border-green-500">
           <div className="flex flex-row w-4/5 h-8 ml-auto space-x-3">
             <Input
               size="small"
@@ -74,6 +74,10 @@ const Dashboard = () => {
               className="bg-indigo-500"
             />
           </div>
+
+          <Typography style="h4" className="py-4">
+            67 Articles
+          </Typography>
         </div>
       </div>
     </Container>
