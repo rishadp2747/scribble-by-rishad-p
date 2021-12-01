@@ -41,7 +41,7 @@ const Dashboard = () => {
     },
   ];
 
-  const data = [
+  const TABLE_DATA = [
     {
       title: "Welcome to Scribble",
       date: "October 9th, 2022",
@@ -184,14 +184,14 @@ const Dashboard = () => {
             </div>
 
             <Typography style="h4" className="py-4">
-              67 Articles
+              {TABLE_DATA?.length} Articles
             </Typography>
 
             <Scrollable>
               <Table
                 rowSelection={false}
                 columnData={TABLE_COLUMNS}
-                rowData={data}
+                rowData={TABLE_DATA}
                 className="border border-red-500 "
               />
             </Scrollable>
