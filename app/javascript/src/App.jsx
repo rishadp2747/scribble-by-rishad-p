@@ -1,7 +1,9 @@
 import React from "react";
 
+import Main from "components/Main";
+
 const App = () => {
-  return <div className="bg-blue-900"> ple helo</div>;
+  return <Main />;
 };
 
 export default App;
