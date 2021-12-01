@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Plus, Search } from "neetoicon";
-import { Typography, Dropdown, Button, Input } from "neetoui";
+import { Typography, Dropdown, Button, Input, Checkbox } from "neetoui";
 import { MenuBar } from "neetoui/layouts";
 
 import Container from "components/Common/Container";
@@ -15,6 +15,8 @@ const Dashboard = () => {
       icon: Plus,
     },
   ];
+
+  const TABLE_COLUMNS = ["Title", "Categories", "Date", "Author", "Status"];
 
   return (
     <Container>
@@ -41,20 +43,29 @@ const Dashboard = () => {
           <MenuBar.Block label="Misc" count={60} />
         </MenuBar>
         <div className="flex flex-col w-full p-4">
-          <div className="flex flex-row w-2/3 ml-auto space-x-4">
+          <div className="flex flex-row w-4/5 h-8 ml-auto space-x-3">
             <Input
               size="small"
               prefix={<Search size={20} />}
               placeholder="Search article title"
             />
             <Dropdown
-              buttonStyle="secondary"
               label="Columns"
+              buttonStyle="text"
               position="bottom-end"
+              className="h-8 bg-gray-200 border"
             >
-              <li>Option 1</li>
-              <li>Option 2</li>
-              <li>Option 3</li>
+              <div className="p-4 space-y-4">
+                <Typography style="h5">Columns</Typography>
+                {TABLE_COLUMNS.map((column, index) => (
+                  <Checkbox
+                    checked
+                    key={index}
+                    label={column}
+                    id={column.toLocaleLowerCase()}
+                  />
+                ))}
+              </div>
             </Dropdown>
             <Button
               icon={Plus}
