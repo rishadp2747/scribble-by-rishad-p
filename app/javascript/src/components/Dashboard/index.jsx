@@ -63,7 +63,17 @@ const Dashboard = () => {
     },
   ];
 
-  setTableColumns([]);
+  const handleColumnChange = e => {
+    setTableColumns(
+      tableColumns.map(column => {
+        if (column.data.key === e.target.id) {
+          column.show = !column.show;
+        }
+
+        return column;
+      })
+    );
+  };
 
   return (
     <Container>
@@ -98,6 +108,7 @@ const Dashboard = () => {
                 placeholder="Search article title"
               />
               <Dropdown
+                closeOnSelect={false}
                 label="Columns"
                 buttonStyle="text"
                 position="bottom-end"
@@ -105,12 +116,13 @@ const Dashboard = () => {
               >
                 <div className="p-4 space-y-4">
                   <Typography style="h5">Columns</Typography>
-                  {DEFAULT_TABLE_COLUMNS.map(({ data }, index) => (
+                  {DEFAULT_TABLE_COLUMNS.map(({ show, data }, index) => (
                     <Checkbox
-                      checked
+                      checked={show}
                       key={index}
                       label={data.title}
                       id={data.key}
+                      onChange={handleColumnChange}
                     />
                   ))}
                 </div>
