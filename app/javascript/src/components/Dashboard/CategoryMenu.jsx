@@ -32,11 +32,16 @@ const CategoryMenu = ({ setLoading }) => {
     try {
       const payload = { category: { title: categoryActions.add.value } };
       const response = await categoryApi.create(payload);
-      response.data?.notice && fetchCategories();
+      if (response.data?.category) {
+        setCategories(categories => [...categories, response.data?.category]);
+        setCategoryActions(categoryActions => ({
+          ...categoryActions,
+          add: { show: true, value: "" },
+        }));
+      }
     } finally {
       setLoading(false);
     }
-    // console.log(categoryActions);
   };
 
   const handleAddCategoryChange = e => {
@@ -113,6 +118,7 @@ const CategoryMenu = ({ setLoading }) => {
         <Input
           id="add"
           className="my-2"
+          value={categoryActions.add.value}
           onChange={handleAddCategoryChange}
           suffix={
             <Check className="cursor-pointer" onClick={handleAddCategory} />
