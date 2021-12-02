@@ -26,6 +26,6 @@ const handleErrorResponse = axiosErrorObject => {
   return Promise.reject(axiosErrorObject);
 };
 
-export const setAxiosIntercepts = () => {
+export const setAxiosInterceptor = () => {
   axios.interceptors.response.use(handleSuccessResponse, handleErrorResponse);
 };
