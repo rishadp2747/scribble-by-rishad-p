@@ -1,13 +1,13 @@
 import React from "react";
 
 import { ExternalLink } from "neetoicon";
-import { Button } from "neetoui";
+import { Button, PageLoader } from "neetoui";
 import PropTypes from "prop-types";
 
 import Header from "components/Common/Container/Header";
 import NavBar from "components/Common/Container/NavBar";
 
-const Container = ({ children }) => {
+const Container = ({ loading, children }) => {
   return (
     <div className="w-full h-screen">
       <Header
@@ -23,12 +23,14 @@ const Container = ({ children }) => {
           />
         }
       />
+      {loading && <PageLoader />}
       {children}
     </div>
   );
 };
 
 Container.prototype = {
+  loading: PropTypes.bool,
   children: PropTypes.node,
 };
 

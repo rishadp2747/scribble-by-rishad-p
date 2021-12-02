@@ -1,14 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
+import { setAxiosInterceptor } from "apis/axios";
 import Dashboard from "components/Dashboard";
 
 const Main = () => {
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setAxiosInterceptor();
+  }, []);
+
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/" render={() => <Dashboard />} />
+        <Route
+          exact
+          path="/"
+          render={() => <Dashboard setLoading={setLoading} loading={loading} />}
+        />
       </Switch>
     </BrowserRouter>
   );

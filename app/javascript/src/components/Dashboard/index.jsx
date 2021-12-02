@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Plus, Search, Highlight, Delete, Close, Check } from "neetoicon";
+import { Plus, Search, Highlight, Delete } from "neetoicon";
 import { Typography, Dropdown, Button, Input, Checkbox, Table } from "neetoui";
 import {
   MenuBar,
@@ -11,6 +11,8 @@ import {
 import Container from "components/Common/Container";
 import { DEFAULT_TABLE_COLUMNS } from "components/Dashboard/constant";
 
+import CategoryMenu from "./CategoryMenu";
+
 const DataActions = () => {
   return (
     <div className="flex flex-row space-x-4">
@@ -20,12 +22,8 @@ const DataActions = () => {
   );
 };
 
-const Dashboard = () => {
+const Dashboard = ({ setLoading, loading }) => {
   const [tableColumns, setTableColumns] = useState(DEFAULT_TABLE_COLUMNS);
-  const [categoryActions, setCategoryActions] = useState({
-    search: false,
-    add: false,
-  });
 
   const CUSTOM_TABLE_COLUMNS = tableColumns
     .filter(({ show }) => show)
@@ -58,50 +56,6 @@ const Dashboard = () => {
     },
   ];
 
-  const handleAddCategory = () => {
-    setCategoryActions(categoryActions => ({ ...categoryActions, add: true }));
-  };
-
-  const handleSearchCategory = () => {
-    setCategoryActions(categoryActions => ({
-      ...categoryActions,
-      search: true,
-    }));
-  };
-
-  const ACTIONS = {
-    search: <Search size={18} onClick={handleSearchCategory} />,
-    add: <Plus size={18} onClick={handleAddCategory} />,
-    searchClose: (
-      <Close size={18} onClick={() => handleActionClose("search")} />
-    ),
-    addClose: <Close size={18} onClick={() => handleActionClose("add")} />,
-  };
-
-  const CATEGORY_ACTION_ICONS = [
-    {
-      icon: () =>
-        categoryActions.search ? ACTIONS.searchClose : ACTIONS.search,
-    },
-    {
-      icon: () => (categoryActions.add ? ACTIONS.addClose : ACTIONS.add),
-    },
-  ];
-
-  const handleActionClose = action => {
-    if (action === "search") {
-      setCategoryActions(categoryActions => ({
-        ...categoryActions,
-        search: false,
-      }));
-    } else if (action === "add") {
-      setCategoryActions(categoryActions => ({
-        ...categoryActions,
-        add: false,
-      }));
-    }
-  };
-
   const handleColumnChange = e => {
     setTableColumns(
       tableColumns.map(column => {
@@ -115,37 +69,14 @@ const Dashboard = () => {
   };
 
   return (
-    <Container>
+    <Container loading={loading}>
       <div className="flex w-screen">
         <MenuBar showMenu={true} title="Articles">
           <MenuBar.Block label="All" count={67} active />
           <MenuBar.Block label="Draft" count={15} />
           <MenuBar.Block label="Published" count={52} />
-          <MenuBar.SubTitle iconProps={CATEGORY_ACTION_ICONS}>
-            <Typography
-              component="h4"
-              style="h5"
-              textTransform="uppercase"
-              weight="bold"
-            >
-              Categories
-            </Typography>
-          </MenuBar.SubTitle>
 
-          {categoryActions.search && (
-            <Input suffix={<Search />} className="my-2" />
-          )}
-          {categoryActions.add && (
-            <Input
-              suffix={<Check className="cursor-pointer" />}
-              className="my-2"
-            />
-          )}
-
-          <MenuBar.Block label="Getting Started" count={80} />
-          <MenuBar.Block label="Apps & Integration" count={60} />
-          <MenuBar.Block label="Security & Privacy" count={60} />
-          <MenuBar.Block label="Misc" count={60} />
+          <CategoryMenu setLoading={setLoading} />
         </MenuBar>
         <PageContainer>
           <div className="flex flex-col w-full py-4">
