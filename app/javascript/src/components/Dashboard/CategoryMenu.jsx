@@ -22,12 +22,13 @@ const CategoryMenu = ({ setLoading }) => {
   }, []);
 
   useEffect(() => {
-    if (SEARCH_KEYWORD && SEARCH_KEYWORD !== "") {
+    if (SEARCH_KEYWORD) {
       const keyword = SEARCH_KEYWORD.toLowerCase();
-      const result = categories.filter(({ title }) =>
-        title.toLowerCase().split(" ").includes(keyword)
+      setCategories(
+        categories.filter(({ title }) =>
+          title.toLowerCase().split(" ").includes(keyword)
+        )
       );
-      setCategories(result);
     } else {
       setCategories(searchCategories);
     }
@@ -46,24 +47,31 @@ const CategoryMenu = ({ setLoading }) => {
   const handleCategoryActionValueChange = e => {
     const action = e.target.id;
     const newCategoryActionValue = categoryActions;
+    if (e.target.value.trim() === "") {
+      newCategoryActionValue[action].error = "Required";
+    } else {
+      newCategoryActionValue[action].error = "";
+    }
     newCategoryActionValue[action].value = e.target.value;
     setCategoryActions({ ...newCategoryActionValue });
   };
 
   const handleAddCategory = async () => {
-    setLoading(true);
-    try {
-      const payload = { category: { title: categoryActions.add.value } };
-      const response = await categoryApi.create(payload);
-      if (response.data?.category) {
-        setCategories(categories => [...categories, response.data?.category]);
-        setCategoryActions(categoryActions => ({
-          ...categoryActions,
-          add: { show: true, value: "" },
-        }));
+    if (categoryActions.add.value.trim() !== "") {
+      setLoading(true);
+      try {
+        const payload = { category: { title: categoryActions.add.value } };
+        const response = await categoryApi.create(payload);
+        if (response.data?.category) {
+          setCategories(categories => [...categories, response.data?.category]);
+          setCategoryActions(categoryActions => ({
+            ...categoryActions,
+            add: { show: true, value: "" },
+          }));
+        }
+      } finally {
+        setLoading(false);
       }
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -82,13 +90,20 @@ const CategoryMenu = ({ setLoading }) => {
     }));
   };
 
+  const handleActionClose = e => {
+    const action = e.target.id.split("C")[0];
+    const newCategoryActionValue = categoryActions;
+    newCategoryActionValue[action].show = false;
+    setCategoryActions({ ...newCategoryActionValue });
+  };
+
   const ACTIONS = {
     search: <Search size={18} onClick={handleSearchCategoryIcon} />,
     add: <Plus size={18} onClick={handleAddCategoryIcon} />,
     searchClose: (
-      <Close size={18} onClick={() => handleActionClose("search")} />
+      <Close id="searchClose" size={18} onClick={handleActionClose} />
     ),
-    addClose: <Close size={18} onClick={() => handleActionClose("add")} />,
+    addClose: <Close id="addClose" size={18} onClick={handleActionClose} />,
   };
 
   const CATEGORY_ACTION_ICONS = [
@@ -100,26 +115,6 @@ const CategoryMenu = ({ setLoading }) => {
       icon: () => (categoryActions.add.show ? ACTIONS.addClose : ACTIONS.add),
     },
   ];
-
-  const handleActionClose = action => {
-    if (action === "search") {
-      setCategoryActions(categoryActions => ({
-        ...categoryActions,
-        search: {
-          show: false,
-          value: "",
-        },
-      }));
-    } else if (action === "add") {
-      setCategoryActions(categoryActions => ({
-        ...categoryActions,
-        add: {
-          show: false,
-          value: "",
-        },
-      }));
-    }
-  };
 
   return (
     <>
@@ -147,6 +142,7 @@ const CategoryMenu = ({ setLoading }) => {
           id="add"
           className="my-2"
           value={categoryActions.add.value}
+          error={categoryActions.add.error}
           onChange={handleCategoryActionValueChange}
           suffix={
             <Check className="cursor-pointer" onClick={handleAddCategory} />

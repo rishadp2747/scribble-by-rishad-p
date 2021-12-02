@@ -45,9 +45,11 @@ export const DEFAULT_CATEGORY_ACTIONS = {
   search: {
     show: false,
     value: "",
+    error: "",
   },
   add: {
     show: false,
     value: "",
+    error: "",
   },
 };
