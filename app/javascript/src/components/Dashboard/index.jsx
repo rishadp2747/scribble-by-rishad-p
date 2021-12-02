@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-import { Plus, Search, Highlight, Delete, Close, Check } from "neetoicon";
+import { Plus, Search, Highlight, Delete } from "neetoicon";
 import { Typography, Dropdown, Button, Input, Checkbox, Table } from "neetoui";
 import {
   MenuBar,
@@ -8,9 +8,10 @@ import {
   Container as PageContainer,
 } from "neetoui/layouts";
 
-import categoryApi from "apis/category";
 import Container from "components/Common/Container";
 import { DEFAULT_TABLE_COLUMNS } from "components/Dashboard/constant";
+
+import CategoryMenu from "./CategoryMenu";
 
 const DataActions = () => {
   return (
@@ -23,15 +24,6 @@ const DataActions = () => {
 
 const Dashboard = ({ setLoading, loading }) => {
   const [tableColumns, setTableColumns] = useState(DEFAULT_TABLE_COLUMNS);
-  const [categories, setCategories] = useState([]);
-  const [categoryActions, setCategoryActions] = useState({
-    search: false,
-    add: false,
-  });
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
 
   const CUSTOM_TABLE_COLUMNS = tableColumns
     .filter(({ show }) => show)
@@ -64,60 +56,6 @@ const Dashboard = ({ setLoading, loading }) => {
     },
   ];
 
-  const fetchCategories = async () => {
-    setLoading(true);
-    try {
-      const response = await categoryApi.list();
-      setCategories(response.data?.categories);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleAddCategory = () => {
-    setCategoryActions(categoryActions => ({ ...categoryActions, add: true }));
-  };
-
-  const handleSearchCategory = () => {
-    setCategoryActions(categoryActions => ({
-      ...categoryActions,
-      search: true,
-    }));
-  };
-
-  const ACTIONS = {
-    search: <Search size={18} onClick={handleSearchCategory} />,
-    add: <Plus size={18} onClick={handleAddCategory} />,
-    searchClose: (
-      <Close size={18} onClick={() => handleActionClose("search")} />
-    ),
-    addClose: <Close size={18} onClick={() => handleActionClose("add")} />,
-  };
-
-  const CATEGORY_ACTION_ICONS = [
-    {
-      icon: () =>
-        categoryActions.search ? ACTIONS.searchClose : ACTIONS.search,
-    },
-    {
-      icon: () => (categoryActions.add ? ACTIONS.addClose : ACTIONS.add),
-    },
-  ];
-
-  const handleActionClose = action => {
-    if (action === "search") {
-      setCategoryActions(categoryActions => ({
-        ...categoryActions,
-        search: false,
-      }));
-    } else if (action === "add") {
-      setCategoryActions(categoryActions => ({
-        ...categoryActions,
-        add: false,
-      }));
-    }
-  };
-
   const handleColumnChange = e => {
     setTableColumns(
       tableColumns.map(column => {
@@ -137,30 +75,8 @@ const Dashboard = ({ setLoading, loading }) => {
           <MenuBar.Block label="All" count={67} active />
           <MenuBar.Block label="Draft" count={15} />
           <MenuBar.Block label="Published" count={52} />
-          <MenuBar.SubTitle iconProps={CATEGORY_ACTION_ICONS}>
-            <Typography
-              component="h4"
-              style="h5"
-              textTransform="uppercase"
-              weight="bold"
-            >
-              Categories
-            </Typography>
-          </MenuBar.SubTitle>
 
-          {categoryActions.search && (
-            <Input suffix={<Search />} className="my-2" />
-          )}
-          {categoryActions.add && (
-            <Input
-              suffix={<Check className="cursor-pointer" />}
-              className="my-2"
-            />
-          )}
-
-          {categories.map(({ title }, index) => (
-            <MenuBar.Block key={index} label={title} count={80} />
-          ))}
+          <CategoryMenu setLoading={setLoading} />
         </MenuBar>
         <PageContainer>
           <div className="flex flex-col w-full py-4">
