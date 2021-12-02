@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Plus, Search, Highlight, Delete, Close, Check } from "neetoicon";
 import { Typography, Dropdown, Button, Input, Checkbox, Table } from "neetoui";
@@ -8,6 +8,7 @@ import {
   Container as PageContainer,
 } from "neetoui/layouts";
 
+import categoryApi from "apis/category";
 import Container from "components/Common/Container";
 import { DEFAULT_TABLE_COLUMNS } from "components/Dashboard/constant";
 
@@ -20,12 +21,17 @@ const DataActions = () => {
   );
 };
 
-const Dashboard = () => {
+const Dashboard = ({ setLoading, loading }) => {
   const [tableColumns, setTableColumns] = useState(DEFAULT_TABLE_COLUMNS);
+  const [categories, setCategories] = useState([]);
   const [categoryActions, setCategoryActions] = useState({
     search: false,
     add: false,
   });
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   const CUSTOM_TABLE_COLUMNS = tableColumns
     .filter(({ show }) => show)
@@ -58,6 +64,17 @@ const Dashboard = () => {
     },
   ];
 
+  const fetchCategories = async () => {
+    setLoading(true);
+    try {
+      const response = await categoryApi.list();
+      setCategories(response.data?.categories);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // console.log(categories);
   const handleAddCategory = () => {
     setCategoryActions(categoryActions => ({ ...categoryActions, add: true }));
   };
@@ -115,7 +132,7 @@ const Dashboard = () => {
   };
 
   return (
-    <Container>
+    <Container loading={loading}>
       <div className="flex w-screen">
         <MenuBar showMenu={true} title="Articles">
           <MenuBar.Block label="All" count={67} active />
@@ -128,7 +145,7 @@ const Dashboard = () => {
               textTransform="uppercase"
               weight="bold"
             >
-              Categories
+              {categories}
             </Typography>
           </MenuBar.SubTitle>
 
