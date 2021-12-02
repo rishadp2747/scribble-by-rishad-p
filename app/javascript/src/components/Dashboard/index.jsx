@@ -74,7 +74,6 @@ const Dashboard = ({ setLoading, loading }) => {
     }
   };
 
-  // console.log(categories);
   const handleAddCategory = () => {
     setCategoryActions(categoryActions => ({ ...categoryActions, add: true }));
   };
@@ -145,7 +144,7 @@ const Dashboard = ({ setLoading, loading }) => {
               textTransform="uppercase"
               weight="bold"
             >
-              {categories}
+              Categories
             </Typography>
           </MenuBar.SubTitle>
 
@@ -159,10 +158,9 @@ const Dashboard = ({ setLoading, loading }) => {
             />
           )}
 
-          <MenuBar.Block label="Getting Started" count={80} />
-          <MenuBar.Block label="Apps & Integration" count={60} />
-          <MenuBar.Block label="Security & Privacy" count={60} />
-          <MenuBar.Block label="Misc" count={60} />
+          {categories.map(({ title }, index) => (
+            <MenuBar.Block key={index} label={title} count={80} />
+          ))}
         </MenuBar>
         <PageContainer>
           <div className="flex flex-col w-full py-4">

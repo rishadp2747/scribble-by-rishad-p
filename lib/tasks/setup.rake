@@ -22,7 +22,7 @@ end
 
 def create_category!
   category_attributes = {
-    title: Faker::Book.title
+    title: Faker::Lorem.sentence(word_count: 2)
   }
   Category.create! category_attributes
 end
