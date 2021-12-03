@@ -3,9 +3,14 @@
 require "test_helper"
 
 class CategoriesControllerTest < ActionDispatch::IntegrationTest
+  def setup
+    @user = create(:user)
+    @user.update(email: "oliver@example.com")
+  end
+
   def test_list_all_categories
     3.times do
-      create(:category)
+      create(:category, user: @user)
     end
 
     get categories_path

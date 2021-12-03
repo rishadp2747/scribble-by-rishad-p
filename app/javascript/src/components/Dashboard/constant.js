@@ -1,3 +1,7 @@
+export const STATUSES = ["all", "draft", "published"];
+
+export const DEFAULT_ARTICLE_FILTERS = { status: "all", category: "" };
+
 export const DEFAULT_TABLE_COLUMNS = [
   {
     show: true,
@@ -5,6 +9,8 @@ export const DEFAULT_TABLE_COLUMNS = [
       title: "Title",
       dataIndex: "title",
       key: "title",
+      width: 150,
+      ellipsis: true,
     },
   },
   {
@@ -13,6 +19,8 @@ export const DEFAULT_TABLE_COLUMNS = [
       title: "Date",
       dataIndex: "date",
       key: "date",
+      width: 70,
+      ellipsis: true,
     },
   },
   {
@@ -21,6 +29,8 @@ export const DEFAULT_TABLE_COLUMNS = [
       title: "Author",
       dataIndex: "author",
       key: "author",
+      width: 80,
+      ellipsis: true,
     },
   },
   {
@@ -29,6 +39,8 @@ export const DEFAULT_TABLE_COLUMNS = [
       title: "Category",
       dataIndex: "category",
       key: "category",
+      width: 100,
+      ellipsis: true,
     },
   },
   {
@@ -37,6 +49,8 @@ export const DEFAULT_TABLE_COLUMNS = [
       title: "Status",
       dataIndex: "status",
       key: "status",
+      width: 70,
+      ellipsis: true,
     },
   },
 ];

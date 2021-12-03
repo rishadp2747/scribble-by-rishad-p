@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Plus, Search, Highlight, Delete } from "neetoicon";
 import { Typography, Dropdown, Button, Input, Checkbox, Table } from "neetoui";
@@ -8,10 +8,14 @@ import {
   Container as PageContainer,
 } from "neetoui/layouts";
 
+import articleApi from "apis/article";
 import Container from "components/Common/Container";
-import { DEFAULT_TABLE_COLUMNS } from "components/Dashboard/constant";
-
-import CategoryMenu from "./CategoryMenu";
+import CategoryMenu from "components/Dashboard/CategoryMenu";
+import {
+  DEFAULT_TABLE_COLUMNS,
+  DEFAULT_ARTICLE_FILTERS,
+  STATUSES,
+} from "components/Dashboard/constant";
 
 const DataActions = () => {
   return (
@@ -23,7 +27,19 @@ const DataActions = () => {
 };
 
 const Dashboard = ({ setLoading, loading }) => {
+  const [articles, setArticles] = useState([]);
+  const [articleCounts, setArticleCounts] = useState();
+  const [filteredArticles, setFilteredArticles] = useState([]);
   const [tableColumns, setTableColumns] = useState(DEFAULT_TABLE_COLUMNS);
+  const [selectedFilter, setSelectedFilter] = useState(DEFAULT_ARTICLE_FILTERS);
+
+  useEffect(() => {
+    fetchArticles();
+  }, []);
+
+  useEffect(() => {
+    filterArticle();
+  }, [selectedFilter, articles]);
 
   const CUSTOM_TABLE_COLUMNS = tableColumns
     .filter(({ show }) => show)
@@ -39,22 +55,16 @@ const Dashboard = ({ setLoading, loading }) => {
     },
   ];
 
-  const TABLE_DATA = [
-    {
-      title: "Welcome to Scribble",
-      date: "October 9th, 2022",
-      author: "Oliver Smith",
-      status: "Published",
-      category: "Getting Started",
-    },
-    {
-      title: "Welcome to Scribble",
-      date: "October 9th, 2022",
-      author: "Oliver Smith",
-      status: "Published",
-      category: "Getting Started",
-    },
-  ];
+  const fetchArticles = async () => {
+    setLoading(true);
+    try {
+      const response = await articleApi.list();
+      setArticleCounts(response.data?.counts);
+      setArticles(response.data?.articles);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleColumnChange = e => {
     setTableColumns(
@@ -68,15 +78,44 @@ const Dashboard = ({ setLoading, loading }) => {
     );
   };
 
+  const handleSelectedFilter = filterOption => {
+    setSelectedFilter(filter => ({ ...filter, ...filterOption }));
+  };
+
+  const filterArticle = () => {
+    setFilteredArticles(
+      articles.filter(article => {
+        if (selectedFilter.status !== "all") {
+          return (
+            article.status === selectedFilter.status &&
+            article.category === selectedFilter.category
+          );
+        }
+
+        return article.category === selectedFilter.category;
+      })
+    );
+  };
+
   return (
     <Container loading={loading}>
       <div className="flex w-screen">
         <MenuBar showMenu={true} title="Articles">
-          <MenuBar.Block label="All" count={67} active />
-          <MenuBar.Block label="Draft" count={15} />
-          <MenuBar.Block label="Published" count={52} />
-
-          <CategoryMenu setLoading={setLoading} />
+          {STATUSES.map((status, index) => (
+            <MenuBar.Block
+              key={index}
+              label={status}
+              className="capitalize"
+              count={articleCounts && articleCounts[status]}
+              active={status === selectedFilter.status}
+              onClick={() => handleSelectedFilter({ status: status })}
+            />
+          ))}
+          <CategoryMenu
+            setLoading={setLoading}
+            selectedFilter={selectedFilter}
+            handleSelectedFilter={handleSelectedFilter}
+          />
         </MenuBar>
         <PageContainer>
           <div className="flex flex-col w-full py-4">
@@ -111,18 +150,19 @@ const Dashboard = ({ setLoading, loading }) => {
                 iconPosition="right"
                 label="Add New Article"
                 className="bg-indigo-500"
+                to="/articles/create"
               />
             </div>
 
             <Typography style="h4" className="py-4">
-              {TABLE_DATA?.length} Articles
+              {articles?.length} Articles
             </Typography>
 
             <Scrollable>
               <Table
                 rowSelection={false}
                 columnData={TABLE_COLUMNS}
-                rowData={TABLE_DATA}
+                rowData={filteredArticles}
                 className="border border-red-500 "
               />
             </Scrollable>

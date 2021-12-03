@@ -5,4 +5,5 @@ json.category do
   json.extract! @category,
     :id,
     :title
+  json.count @category.articles.count
 end
