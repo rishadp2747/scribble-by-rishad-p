@@ -15,8 +15,6 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
 
     get articles_path
     assert_response :success
-    puts "hai"
-    puts response.parsed_body["counts"]
     assert_equal 3, response.parsed_body["articles"].length
   end
 

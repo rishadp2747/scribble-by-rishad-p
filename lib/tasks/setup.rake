@@ -14,9 +14,12 @@ end
 
 def create_sample_data!
   puts "Seeding with sample data..."
+
+  create_user!
   5.times do
     create_category!
   end
+
   puts 'Seeding done"'
 end
 
@@ -25,4 +28,13 @@ def create_category!
     title: Faker::Lorem.sentence(word_count: 2)
   }
   Category.create! category_attributes
+end
+
+def create_user!
+  user_attribute = {
+    name: "Oliver Smith",
+    email: "oliver@example.com"
+  }
+
+  User.create! user_attribute
 end
