@@ -8,7 +8,7 @@ import categoryApi from "apis/category";
 import { DEFAULT_CATEGORY_ACTIONS } from "components/Dashboard/constant";
 import useDebounce from "hooks/useDebounce";
 
-const CategoryMenu = ({ setLoading }) => {
+const CategoryMenu = ({ setLoading, selectedFilter, handleSelectedFilter }) => {
   const [categories, setCategories] = useState([]);
   const [searchCategories, setSearchCategories] = useState([]);
   const [categoryActions, setCategoryActions] = useState(
@@ -38,7 +38,9 @@ const CategoryMenu = ({ setLoading }) => {
     setLoading(true);
     try {
       const response = await categoryApi.list();
-      setCategories(response.data?.categories);
+      const categories = response.data?.categories;
+      setCategories(categories);
+      handleSelectedFilter({ category: categories[0].title });
     } finally {
       setLoading(false);
     }
@@ -149,8 +151,14 @@ const CategoryMenu = ({ setLoading }) => {
           }
         />
       )}
-      {categories.map(({ title }, index) => (
-        <MenuBar.Block key={index} label={title} count={80} />
+      {categories.map(({ title, count }, index) => (
+        <MenuBar.Block
+          key={index}
+          label={title}
+          count={count}
+          active={selectedFilter.category === title}
+          onClick={() => handleSelectedFilter({ category: title })}
+        />
       ))}
     </>
   );
