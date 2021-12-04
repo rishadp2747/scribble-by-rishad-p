@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import { setAxiosInterceptor } from "apis/axios";
 import CreateArticle from "components/Article/CreateArticle";
+import EditArticle from "components/Article/EditArticle";
 import Dashboard from "components/Dashboard";
 
 const Main = () => {
@@ -23,9 +24,16 @@ const Main = () => {
         />
         <Route
           exact
-          path="/articles/create"
+          path="/articles/creates"
           render={() => (
             <CreateArticle setLoading={setLoading} loading={loading} />
+          )}
+        />
+        <Route
+          exact
+          path="/articles/:articleId/edit"
+          render={() => (
+            <EditArticle setLoading={setLoading} loading={loading} />
           )}
         />
       </Switch>

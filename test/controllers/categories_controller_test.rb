@@ -13,14 +13,14 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
       create(:category, user: @user)
     end
 
-    get categories_path
+    get api_categories_path
     assert_response :success
     assert_equal 3, response.parsed_body["categories"].length
   end
 
   def test_should_create_valid_category
     assert_difference -> { Category.all.count } do
-      post categories_path, params: category_params
+      post api_categories_path, params: category_params
       assert_response :success
       assert_equal response.parsed_body["notice"], t("successfull_action", action: "created", entity: "category")
     end

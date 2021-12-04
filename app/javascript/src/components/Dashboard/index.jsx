@@ -17,15 +17,6 @@ import {
   STATUSES,
 } from "components/Dashboard/constant";
 
-const DataActions = () => {
-  return (
-    <div className="flex flex-row space-x-4">
-      <Delete size={16} />
-      <Highlight size={16} />
-    </div>
-  );
-};
-
 const Dashboard = ({ setLoading, loading }) => {
   const [articles, setArticles] = useState([]);
   const [articleCounts, setArticleCounts] = useState();
@@ -41,6 +32,22 @@ const Dashboard = ({ setLoading, loading }) => {
     filterArticle();
   }, [selectedFilter, articles]);
 
+  const ARTICLE_ACTIONS = article => (
+    <div className="flex flex-row space-x-2">
+      <Button
+        style="text"
+        icon={() => <Delete size={16} />}
+        onClick={() => deleteArticle(article)}
+      />
+
+      <Button
+        style="text"
+        to={`/articles/${article.id}/edit`}
+        icon={() => <Highlight size={16} />}
+      />
+    </div>
+  );
+
   const CUSTOM_TABLE_COLUMNS = tableColumns
     .filter(({ show }) => show)
     .map(({ data }) => data);
@@ -48,9 +55,9 @@ const Dashboard = ({ setLoading, loading }) => {
   const TABLE_COLUMNS = [
     ...CUSTOM_TABLE_COLUMNS,
     {
-      dataIndex: "edit",
-      key: "edit",
-      render: () => <DataActions />,
+      dataIndex: "",
+      key: "",
+      render: article => ARTICLE_ACTIONS(article),
       width: 20,
     },
   ];
@@ -95,6 +102,20 @@ const Dashboard = ({ setLoading, loading }) => {
         return article.category === selectedFilter.category;
       })
     );
+  };
+
+  const deleteArticle = async article => {
+    const decision = confirm("Are you sure you want to delete this article");
+    if (decision) {
+      setLoading(true);
+      try {
+        const response = await articleApi.destroy(article.id);
+        response.data?.notice &&
+          setArticles(articles.filter(({ id }) => id !== article.id));
+      } finally {
+        setLoading(false);
+      }
+    }
   };
 
   return (
@@ -150,7 +171,7 @@ const Dashboard = ({ setLoading, loading }) => {
                 iconPosition="right"
                 label="Add New Article"
                 className="bg-indigo-500"
-                to="/articles/create"
+                to="/articles/creates"
               />
             </div>
 
