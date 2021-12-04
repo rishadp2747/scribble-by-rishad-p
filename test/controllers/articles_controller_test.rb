@@ -6,6 +6,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = create(:user)
     @user.update(email: "oliver@example.com")
+    @article = create(:article, user: @user)
   end
 
   def test_list_all_articles
@@ -15,7 +16,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
 
     get articles_path
     assert_response :success
-    assert_equal 3, response.parsed_body["articles"].length
+    assert_equal 4, response.parsed_body["articles"].length
   end
 
   def test_article_can_be_created
@@ -26,10 +27,22 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_show_article
+    get article_path(@article)
+    assert_response :success
+    assert_equal response.parsed_body["article"]["id"], @article.id
+  end
+
+  def test_article_can_be_updated
+    puts article_params
+    put article_path(@article), params: article_params
+    assert_response :success
+    assert_equal response.parsed_body["notice"], t("successfull_action", action: "updated", entity: "article")
+  end
+
   def test_article_can_be_deleted
-    article = create(:article, user: @user)
     assert_difference -> { Article.all.count }, -1 do
-      delete article_path(article)
+      delete article_path(@article)
       assert_response :success
       assert_equal response.parsed_body["notice"], t("successfull_action", action: "deleted", entity: "article")
     end

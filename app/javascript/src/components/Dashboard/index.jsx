@@ -33,9 +33,18 @@ const Dashboard = ({ setLoading, loading }) => {
   }, [selectedFilter, articles]);
 
   const ARTICLE_ACTIONS = article => (
-    <div className="flex flex-row space-x-4">
-      <Delete size={16} onClick={() => deleteArticle(article)} />
-      <Highlight size={16} />
+    <div className="flex flex-row space-x-2">
+      <Button
+        style="text"
+        icon={() => <Delete size={16} />}
+        onClick={() => deleteArticle(article)}
+      />
+
+      <Button
+        style="text"
+        to={`/articles/${article.id}/edit`}
+        icon={() => <Highlight size={16} />}
+      />
     </div>
   );
 

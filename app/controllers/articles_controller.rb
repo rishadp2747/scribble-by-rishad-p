@@ -1,11 +1,27 @@
 # frozen_string_literal: true
 
 class ArticlesController < ApplicationController
-  before_action :load_user!, only: %i[create index destroy]
-  before_action :load_article, only: :destroy
+  before_action :load_user!, except: %i[new edit]
+  before_action :load_article, only: %i[destroy show update]
 
   def index
     @articles = @current_user.articles
+  end
+
+  def show
+    unless @article
+      error = @article.errors.full_messages.to_sentence
+      render status: :unprocessable_entity, json: { error: error }
+    end
+  end
+
+  def update
+    if @article.update(article_params)
+      render status: :ok, json: { notice: t("successfull_action", action: "updated", entity: "article") }
+    else
+      error = @article.errors.full_messages.to_sentence
+      render status: :unprocessable_entity, json: { error: error }
+    end
   end
 
   def create
