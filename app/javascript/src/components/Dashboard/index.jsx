@@ -23,9 +23,11 @@ const Dashboard = ({ setLoading, loading }) => {
   const [articleCounts, setArticleCounts] = useState();
   const [filteredArticles, setFilteredArticles] = useState([]);
   const [tableColumns, setTableColumns] = useState(DEFAULT_TABLE_COLUMNS);
-  const [selectedFilter, setSelectedFilter] = useState(DEFAULT_ARTICLE_FILTERS);
+  const [selectedFilters, setSelectedFilters] = useState(
+    DEFAULT_ARTICLE_FILTERS
+  );
 
-  const SEARCH_KEYWORD = useDebounce(selectedFilter.title, 1000);
+  const SEARCH_KEYWORD = useDebounce(selectedFilters.title, 1000);
 
   useEffect(() => {
     fetchArticles(articles);
@@ -33,7 +35,7 @@ const Dashboard = ({ setLoading, loading }) => {
 
   useEffect(() => {
     filterArticles(articles);
-  }, [selectedFilter, articles, SEARCH_KEYWORD]);
+  }, [selectedFilters, articles, SEARCH_KEYWORD]);
 
   useEffect(() => {
     if (SEARCH_KEYWORD) {
@@ -94,21 +96,21 @@ const Dashboard = ({ setLoading, loading }) => {
     );
   };
 
-  const handleSelectedFilter = filterOption => {
-    setSelectedFilter(filter => ({ ...filter, ...filterOption }));
+  const handleSelectedFilters = filterOption => {
+    setSelectedFilters(filter => ({ ...filter, ...filterOption }));
   };
 
   const filterArticles = articles => {
     setFilteredArticles(
       articles.filter(article => {
-        if (selectedFilter.status !== "all") {
+        if (selectedFilters.status !== "all") {
           return (
-            article.status === selectedFilter.status &&
-            article.category === selectedFilter.category
+            article.status === selectedFilters.status &&
+            article.category === selectedFilters.category
           );
         }
 
-        return article.category === selectedFilter.category;
+        return article.category === selectedFilters.category;
       })
     );
   };
@@ -149,14 +151,14 @@ const Dashboard = ({ setLoading, loading }) => {
               label={status}
               className="capitalize"
               count={articleCounts && articleCounts[status]}
-              active={status === selectedFilter.status}
-              onClick={() => handleSelectedFilter({ status: status })}
+              active={status === selectedFilters.status}
+              onClick={() => handleSelectedFilters({ status: status })}
             />
           ))}
           <CategoryMenu
             setLoading={setLoading}
-            selectedFilter={selectedFilter}
-            handleSelectedFilter={handleSelectedFilter}
+            selectedFilters={selectedFilters}
+            handleSelectedFilters={handleSelectedFilters}
           />
         </MenuBar>
         <PageContainer>
@@ -166,8 +168,8 @@ const Dashboard = ({ setLoading, loading }) => {
                 size="small"
                 prefix={<Search size={20} />}
                 placeholder="Search article title"
-                value={selectedFilter.title}
-                onChange={e => handleSelectedFilter({ title: e.target.value })}
+                value={selectedFilters.title}
+                onChange={e => handleSelectedFilters({ title: e.target.value })}
               />
               <Dropdown
                 closeOnSelect={false}
