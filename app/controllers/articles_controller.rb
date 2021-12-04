@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ArticlesController < ApplicationController
-  before_action :load_user!, only: %i[create index]
+  before_action :load_user!, only: %i[create index destroy]
   before_action :load_article, only: :destroy
 
   def index
