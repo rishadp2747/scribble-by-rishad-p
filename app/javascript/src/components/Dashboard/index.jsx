@@ -95,8 +95,18 @@ const Dashboard = ({ setLoading, loading }) => {
     );
   };
 
-  const deleteArticle = () => {
-    // console.log(article);
+  const deleteArticle = async article => {
+    const decision = confirm("Are you sure you want to delete this article");
+    if (decision) {
+      setLoading(true);
+      try {
+        const response = await articleApi.destroy(article.id);
+        response.data?.notice &&
+          setArticles(articles.filter(({ id }) => id !== article.id));
+      } finally {
+        setLoading(false);
+      }
+    }
   };
 
   return (
