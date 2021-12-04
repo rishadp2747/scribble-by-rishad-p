@@ -17,15 +17,6 @@ import {
   STATUSES,
 } from "components/Dashboard/constant";
 
-const DataActions = () => {
-  return (
-    <div className="flex flex-row space-x-4">
-      <Delete size={16} />
-      <Highlight size={16} />
-    </div>
-  );
-};
-
 const Dashboard = ({ setLoading, loading }) => {
   const [articles, setArticles] = useState([]);
   const [articleCounts, setArticleCounts] = useState();
@@ -41,6 +32,13 @@ const Dashboard = ({ setLoading, loading }) => {
     filterArticle();
   }, [selectedFilter, articles]);
 
+  const ARTICLE_ACTIONS = article => (
+    <div className="flex flex-row space-x-4">
+      <Delete size={16} onClick={() => deleteArticle(article)} />
+      <Highlight size={16} />
+    </div>
+  );
+
   const CUSTOM_TABLE_COLUMNS = tableColumns
     .filter(({ show }) => show)
     .map(({ data }) => data);
@@ -48,9 +46,9 @@ const Dashboard = ({ setLoading, loading }) => {
   const TABLE_COLUMNS = [
     ...CUSTOM_TABLE_COLUMNS,
     {
-      dataIndex: "edit",
-      key: "edit",
-      render: () => <DataActions />,
+      dataIndex: "",
+      key: "",
+      render: article => ARTICLE_ACTIONS(article),
       width: 20,
     },
   ];
@@ -95,6 +93,10 @@ const Dashboard = ({ setLoading, loading }) => {
         return article.category === selectedFilter.category;
       })
     );
+  };
+
+  const deleteArticle = () => {
+    // console.log(article);
   };
 
   return (
