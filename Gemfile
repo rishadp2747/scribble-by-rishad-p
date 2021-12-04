@@ -32,6 +32,9 @@ gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 # React
 gem "react-rails"
 
+# For auto-generating demo data
+gem "faker"
+
 group :development, :test do
   # Access a debugger console by calling 'byebug' anywhere in the code
   gem "byebug", platforms: %i[mri mingw x64_mingw]
@@ -43,8 +46,6 @@ group :development, :test do
   # Rails integration for factory_bot, a replacement for fixtures
   gem "factory_bot_rails"
 
-  # For auto-generating demo data
-  gem "faker"
 end
 
 group :development do
