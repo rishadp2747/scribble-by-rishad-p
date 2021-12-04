@@ -1,6 +1,10 @@
 export const STATUSES = ["all", "draft", "published"];
 
-export const DEFAULT_ARTICLE_FILTERS = { status: "all", category: "" };
+export const DEFAULT_ARTICLE_FILTERS = {
+  status: "all",
+  category: "",
+  title: "",
+};
 
 export const DEFAULT_TABLE_COLUMNS = [
   {

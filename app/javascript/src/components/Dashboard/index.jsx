@@ -16,6 +16,7 @@ import {
   DEFAULT_ARTICLE_FILTERS,
   STATUSES,
 } from "components/Dashboard/constant";
+import useDebounce from "hooks/useDebounce";
 
 const Dashboard = ({ setLoading, loading }) => {
   const [articles, setArticles] = useState([]);
@@ -24,13 +25,21 @@ const Dashboard = ({ setLoading, loading }) => {
   const [tableColumns, setTableColumns] = useState(DEFAULT_TABLE_COLUMNS);
   const [selectedFilter, setSelectedFilter] = useState(DEFAULT_ARTICLE_FILTERS);
 
+  const SEARCH_KEYWORD = useDebounce(selectedFilter.title, 1000);
+
   useEffect(() => {
-    fetchArticles();
+    fetchArticles(articles);
   }, []);
 
   useEffect(() => {
-    filterArticle();
-  }, [selectedFilter, articles]);
+    filterArticles(articles);
+  }, [selectedFilter, articles, SEARCH_KEYWORD]);
+
+  useEffect(() => {
+    if (SEARCH_KEYWORD) {
+      searchArticles();
+    }
+  }, [SEARCH_KEYWORD]);
 
   const ARTICLE_ACTIONS = article => (
     <div className="flex flex-row space-x-2">
@@ -89,7 +98,7 @@ const Dashboard = ({ setLoading, loading }) => {
     setSelectedFilter(filter => ({ ...filter, ...filterOption }));
   };
 
-  const filterArticle = () => {
+  const filterArticles = articles => {
     setFilteredArticles(
       articles.filter(article => {
         if (selectedFilter.status !== "all") {
@@ -101,6 +110,18 @@ const Dashboard = ({ setLoading, loading }) => {
 
         return article.category === selectedFilter.category;
       })
+    );
+  };
+
+  const searchArticles = () => {
+    // To find multitple space between words in a sentence
+    const REMOVE_SPACES_BETWEEN_WORDS = /\s+/g;
+    const keyword = SEARCH_KEYWORD.trim()
+      .toLowerCase()
+      .replace(REMOVE_SPACES_BETWEEN_WORDS, " ");
+
+    filterArticles(
+      articles.filter(({ title }) => title.toLowerCase().includes(keyword))
     );
   };
 
@@ -145,6 +166,8 @@ const Dashboard = ({ setLoading, loading }) => {
                 size="small"
                 prefix={<Search size={20} />}
                 placeholder="Search article title"
+                value={selectedFilter.title}
+                onChange={e => handleSelectedFilter({ title: e.target.value })}
               />
               <Dropdown
                 closeOnSelect={false}
