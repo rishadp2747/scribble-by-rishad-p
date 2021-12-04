@@ -171,7 +171,7 @@ const Dashboard = ({ setLoading, loading }) => {
                 iconPosition="right"
                 label="Add New Article"
                 className="bg-indigo-500"
-                to="/articles/create"
+                to="/articles/creates"
               />
             </div>
 

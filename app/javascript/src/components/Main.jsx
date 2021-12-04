@@ -24,7 +24,7 @@ const Main = () => {
         />
         <Route
           exact
-          path="/articles/create"
+          path="/articles/creates"
           render={() => (
             <CreateArticle setLoading={setLoading} loading={loading} />
           )}
