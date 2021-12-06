@@ -7,6 +7,10 @@
 $indigo-primary: #6366f1;
 $indigo-dark: #5653d8;
 
+.neeto-ui-checkbox[type="checkbox"] {
+  color: $indigo-primary !important;
+}
+
 .neeto-ui-btn--style {
   &-primary {
     background-color: $indigo-primary !important;
