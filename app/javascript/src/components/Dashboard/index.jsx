@@ -207,7 +207,6 @@ const Dashboard = ({ setLoading }) => {
               rowSelection={false}
               columnData={TABLE_COLUMNS}
               rowData={filteredArticles}
-              className="border border-red-500 "
             />
           </Scrollable>
         </div>

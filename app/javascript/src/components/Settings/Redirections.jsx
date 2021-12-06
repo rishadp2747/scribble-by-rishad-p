@@ -54,7 +54,7 @@ const Redirections = () => {
           rowSelection={false}
           columnData={TABLE_COLUMNS}
           rowData={[]}
-          className="bg-indigo-100"
+          className="bg-indigo-100 border"
         />
       </div>
     </>
