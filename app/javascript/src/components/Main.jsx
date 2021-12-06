@@ -7,7 +7,8 @@ import CreateArticle from "components/Article/CreateArticle";
 import EditArticle from "components/Article/EditArticle";
 import Container from "components/Common/Container";
 import Dashboard from "components/Dashboard";
-import Settings from "components/Settings";
+import SettingsContainer from "components/Settings/Container";
+import GeneralSettings from "components/Settings/General";
 
 const Main = () => {
   const [loading, setLoading] = useState(false);
@@ -18,9 +19,8 @@ const Main = () => {
 
   return (
     <BrowserRouter>
-      <Switch>
-        <Container loading={loading}>
-          <Redirect exact from="/" to={{ pathname: "/home" }} />
+      <Container loading={loading}>
+        <Switch>
           <Route
             exact
             path="/home"
@@ -42,15 +42,24 @@ const Main = () => {
               <EditArticle setLoading={setLoading} loading={loading} />
             )}
           />
-          <Route
-            exact
-            path="/settings"
-            render={() => (
-              <Settings setLoading={setLoading} loading={loading} />
-            )}
-          />
-        </Container>
-      </Switch>
+          <SettingsContainer>
+            <Route
+              exact
+              path="/settings/general"
+              render={() => (
+                <GeneralSettings setLoading={setLoading} loading={loading} />
+              )}
+            />
+            <Redirect
+              exact
+              from="/settings/"
+              to={{ pathname: "/settings/general" }}
+            />
+          </SettingsContainer>
+
+          <Redirect exact from="/" to={{ pathname: "/home" }} />
+        </Switch>
+      </Container>
     </BrowserRouter>
   );
 };
