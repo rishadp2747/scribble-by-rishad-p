@@ -42,6 +42,13 @@ const Main = () => {
               <EditArticle setLoading={setLoading} loading={loading} />
             )}
           />
+          <Redirect exact from="/" to={{ pathname: "/home" }} />
+          <Redirect
+            exact
+            strict
+            from="/settings"
+            to={{ pathname: "/settings/general" }}
+          />
           <SettingsContainer>
             <Route
               exact
@@ -50,15 +57,7 @@ const Main = () => {
                 <GeneralSettings setLoading={setLoading} loading={loading} />
               )}
             />
-
-            <Redirect
-              exact
-              from="/settings/"
-              to={{ pathname: "/settings/general" }}
-            />
           </SettingsContainer>
-
-          <Redirect exact from="/" to={{ pathname: "/home" }} />
         </Switch>
       </Container>
     </BrowserRouter>
