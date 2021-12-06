@@ -15,7 +15,7 @@ const NAVLINKS = [
     icon: <Repeat />,
     title: "Redirections",
     subTitle: "Create & configure redirection rules",
-    link: "/settings/redirection",
+    link: "/settings/redirections",
   },
   {
     icon: <Seo />,

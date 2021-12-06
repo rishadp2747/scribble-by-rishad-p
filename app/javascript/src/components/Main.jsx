@@ -10,6 +10,8 @@ import Dashboard from "components/Dashboard";
 import SettingsContainer from "components/Settings/Container";
 import GeneralSettings from "components/Settings/General";
 
+import RedirectionsSettings from "./Settings/Redirections";
+
 const Main = () => {
   const [loading, setLoading] = useState(false);
 
@@ -55,6 +57,16 @@ const Main = () => {
               path="/settings/general"
               render={() => (
                 <GeneralSettings setLoading={setLoading} loading={loading} />
+              )}
+            />
+            <Route
+              exact
+              path="/settings/redirections"
+              render={() => (
+                <RedirectionsSettings
+                  setLoading={setLoading}
+                  loading={loading}
+                />
               )}
             />
           </SettingsContainer>
