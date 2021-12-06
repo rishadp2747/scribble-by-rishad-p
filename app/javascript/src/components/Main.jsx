@@ -50,6 +50,7 @@ const Main = () => {
                 <GeneralSettings setLoading={setLoading} loading={loading} />
               )}
             />
+
             <Redirect
               exact
               from="/settings/"
