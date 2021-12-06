@@ -17,7 +17,11 @@ def create_sample_data!
 
   create_user!
   5.times do
-    create_category!
+    category = create_category!
+    3.times do
+      create_article!("draft", category)
+      create_article!("published", category)
+    end
   end
 
   puts 'Seeding done"'
@@ -25,7 +29,8 @@ end
 
 def create_category!
   category_attributes = {
-    title: Faker::Lorem.sentence(word_count: 2)
+    title: Faker::Lorem.sentence(word_count: 2),
+    user: @user
   }
   Category.create! category_attributes
 end
@@ -36,5 +41,16 @@ def create_user!
     email: "oliver@example.com"
   }
 
-  User.create! user_attribute
+  @user = User.create! user_attribute
+end
+
+def create_article!(status, category)
+  article_attribute = {
+    title: Faker::Book.title,
+    body: Faker::Lorem.paragraph,
+    status: status,
+    category: category,
+    user: @user
+  }
+  Article.create! article_attribute
 end

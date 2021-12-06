@@ -16,21 +16,32 @@ import {
   DEFAULT_ARTICLE_FILTERS,
   STATUSES,
 } from "components/Dashboard/constant";
+import useDebounce from "hooks/useDebounce";
 
 const Dashboard = ({ setLoading, loading }) => {
   const [articles, setArticles] = useState([]);
   const [articleCounts, setArticleCounts] = useState();
   const [filteredArticles, setFilteredArticles] = useState([]);
   const [tableColumns, setTableColumns] = useState(DEFAULT_TABLE_COLUMNS);
-  const [selectedFilter, setSelectedFilter] = useState(DEFAULT_ARTICLE_FILTERS);
+  const [selectedFilters, setSelectedFilters] = useState(
+    DEFAULT_ARTICLE_FILTERS
+  );
+
+  const SEARCH_KEYWORD = useDebounce(selectedFilters.title, 1000);
 
   useEffect(() => {
-    fetchArticles();
+    fetchArticles(articles);
   }, []);
 
   useEffect(() => {
-    filterArticle();
-  }, [selectedFilter, articles]);
+    filterArticles(articles);
+  }, [selectedFilters, articles, SEARCH_KEYWORD]);
+
+  useEffect(() => {
+    if (SEARCH_KEYWORD) {
+      searchArticles();
+    }
+  }, [SEARCH_KEYWORD]);
 
   const ARTICLE_ACTIONS = article => (
     <div className="flex flex-row space-x-2">
@@ -85,22 +96,34 @@ const Dashboard = ({ setLoading, loading }) => {
     );
   };
 
-  const handleSelectedFilter = filterOption => {
-    setSelectedFilter(filter => ({ ...filter, ...filterOption }));
+  const handleSelectedFilters = filterOption => {
+    setSelectedFilters(filter => ({ ...filter, ...filterOption }));
   };
 
-  const filterArticle = () => {
+  const filterArticles = articles => {
     setFilteredArticles(
       articles.filter(article => {
-        if (selectedFilter.status !== "all") {
+        if (selectedFilters.status !== "all") {
           return (
-            article.status === selectedFilter.status &&
-            article.category === selectedFilter.category
+            article.status === selectedFilters.status &&
+            article.category === selectedFilters.category
           );
         }
 
-        return article.category === selectedFilter.category;
+        return article.category === selectedFilters.category;
       })
+    );
+  };
+
+  const searchArticles = () => {
+    // To find multitple space between words in a sentence
+    const REMOVE_SPACES_BETWEEN_WORDS = /\s+/g;
+    const keyword = SEARCH_KEYWORD.trim()
+      .toLowerCase()
+      .replace(REMOVE_SPACES_BETWEEN_WORDS, " ");
+
+    filterArticles(
+      articles.filter(({ title }) => title.toLowerCase().includes(keyword))
     );
   };
 
@@ -128,14 +151,14 @@ const Dashboard = ({ setLoading, loading }) => {
               label={status}
               className="capitalize"
               count={articleCounts && articleCounts[status]}
-              active={status === selectedFilter.status}
-              onClick={() => handleSelectedFilter({ status: status })}
+              active={status === selectedFilters.status}
+              onClick={() => handleSelectedFilters({ status: status })}
             />
           ))}
           <CategoryMenu
             setLoading={setLoading}
-            selectedFilter={selectedFilter}
-            handleSelectedFilter={handleSelectedFilter}
+            selectedFilters={selectedFilters}
+            handleSelectedFilters={handleSelectedFilters}
           />
         </MenuBar>
         <PageContainer>
@@ -145,6 +168,8 @@ const Dashboard = ({ setLoading, loading }) => {
                 size="small"
                 prefix={<Search size={20} />}
                 placeholder="Search article title"
+                value={selectedFilters.title}
+                onChange={e => handleSelectedFilters({ title: e.target.value })}
               />
               <Dropdown
                 closeOnSelect={false}

@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 
 const Header = ({ title, navLinks, actionBlock, titlePosition }) => {
   return (
-    <div className="flex flex-row items-center h-16 p-6 shadow">
+    <div className="relative z-50 flex flex-row items-center h-16 p-6 shadow">
       <div
         className={classnames("flex flex-row space-x-6", {
           "justify-center w-full": titlePosition === "center",
