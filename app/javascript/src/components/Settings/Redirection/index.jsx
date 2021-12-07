@@ -4,20 +4,19 @@ import { Formik, Form } from "formik";
 import { Typography, Table } from "neetoui";
 
 import {
-  CHANGE_TABLE_DESIGN,
   REDIRECTION_FORM_INITIAL_VALUE,
   REDIRECTION_FORM_VALIDATION_SCHEMA,
 } from "components/Settings/constant";
+import ActionBlock from "components/Settings/Redirection//ActionBlock";
 import EditableRow from "components/Settings/Redirection//EditableRow";
 import EditableCell from "components/Settings/Redirection/EditableCell";
-
-import ActionBlock from "./ActionBlock";
+import { changeTableDesign } from "helpers/table";
 
 const Redirections = () => {
   const [editingRecord, setEditingRecord] = useState("");
 
   useEffect(() => {
-    CHANGE_TABLE_DESIGN();
+    changeTableDesign();
   }, []);
 
   const TABLE_COMPONENTS = {
