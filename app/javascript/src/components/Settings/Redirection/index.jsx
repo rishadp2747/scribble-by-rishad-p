@@ -8,9 +8,9 @@ import {
   REDIRECTION_FORM_VALIDATION_SCHEMA,
 } from "components/Settings/constant";
 import Header from "components/Settings/Header";
-import ActionBlock from "components/Settings/Redirection//ActionBlock";
-import EditableRow from "components/Settings/Redirection//EditableRow";
+import ActionBlock from "components/Settings/Redirection/ActionBlock";
 import EditableCell from "components/Settings/Redirection/EditableCell";
+import EditableRow from "components/Settings/Redirection/EditableRow";
 import { changeTableDesign } from "helpers/table";
 
 const Redirections = () => {
