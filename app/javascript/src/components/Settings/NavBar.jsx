@@ -15,7 +15,7 @@ const NAVLINKS = [
     icon: <Repeat />,
     title: "Redirections",
     subTitle: "Create & configure redirection rules",
-    link: "/settings/redirection",
+    link: "/settings/redirections",
   },
   {
     icon: <Seo />,
@@ -31,7 +31,7 @@ const NavBar = () =>
       exact
       key={index}
       to={navlink.link}
-      activeClassName="bg-indigo-100"
+      activeClassName="bg-indigo-50"
       className="flex flex-row items-center h-16 px-2 space-x-4"
     >
       {navlink.icon}
