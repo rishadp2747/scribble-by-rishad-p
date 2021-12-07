@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 
 import { arrayMoveImmutable } from "array-move";
-import { Reorder } from "neetoicon";
-import { Table } from "neetoui";
+import { Formik, Form } from "formik";
+import { Reorder, Plus, Check } from "neetoicon";
+import { Button, Table } from "neetoui";
+import { Input } from "neetoui/formik";
 import {
   sortableContainer,
   sortableElement,
   sortableHandle,
 } from "react-sortable-hoc";
 
+import { CATEGORIES_FORM_VALIDATION_SCHEMA } from "components/Settings/constant";
 import Header from "components/Settings/Header";
 import ActionBlock from "components/Settings/Redirection/ActionBlock";
+import EditableCell from "components/Settings/Redirection/EditableCell";
 
 const TABLE_DATA = [
   {
@@ -25,10 +29,14 @@ const TABLE_DATA = [
 
 const Category = () => {
   const [data, setData] = useState(TABLE_DATA);
+  const [addCategory, setAddCategory] = useState(false);
+  const [editingRecord, setEditingRecord] = useState("");
 
   const SortableItem = sortableElement(props => <tr {...props} />);
   const SortableContainer = sortableContainer(props => <tbody {...props} />);
-  const DragHandle = sortableHandle(() => <Reorder />);
+  const DragHandle = sortableHandle(() => <Reorder size={16} />);
+
+  const isEditing = record => editingRecord === record.id;
 
   const TABLE_COLUMNS = [
     {
@@ -40,18 +48,41 @@ const Category = () => {
     {
       dataIndex: "title",
       key: "title",
+      editable: true,
     },
     {
       dataIndex: "",
       key: "",
       render: category => (
-        <ActionBlock record={category} editRecordHandler={handleRecordEdit} />
+        <ActionBlock
+          record={category}
+          editRecordHandler={handleRecordEdit}
+          isRecordEditing={isEditing(category)}
+        />
       ),
       width: 80,
     },
   ];
 
-  const handleRecordEdit = () => {};
+  const EDITABLE_TABLE_COLUMNS = TABLE_COLUMNS.map(col => {
+    if (!col.editable) {
+      return col;
+    }
+
+    return {
+      ...col,
+      onCell: record => ({
+        record,
+        dataIndex: col.dataIndex,
+        title: col.title,
+        editing: record.id === editingRecord,
+      }),
+    };
+  });
+
+  const handleRecordEdit = ({ id }) => {
+    setEditingRecord(id);
+  };
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
     if (oldIndex !== newIndex) {
@@ -84,7 +115,12 @@ const Category = () => {
     body: {
       wrapper: DraggableContainer,
       row: DraggableBodyRow,
+      cell: EditableCell,
     },
+  };
+
+  const handleSubmit = () => {
+    setAddCategory(false);
   };
 
   return (
@@ -93,14 +129,46 @@ const Category = () => {
         title="Manage Categories"
         subTitle="Create and configure the categories inside your scribble."
       />
-      <Table
-        rowSelection={false}
-        rowKey="id"
-        columnData={TABLE_COLUMNS}
-        rowData={TABLE_DATA}
-        className="redirection-table-row"
-        components={TABLE_COMPONENTS}
-      />
+
+      <Formik
+        enableReinitialize
+        onSubmit={handleSubmit}
+        initialValues={{ title: "" }}
+        validationSchema={CATEGORIES_FORM_VALIDATION_SCHEMA}
+      >
+        {({ handleSubmit }) => (
+          <Form>
+            {addCategory ? (
+              <Input
+                name="title"
+                type="text"
+                className="w-1/2"
+                suffix={
+                  <Check className="cursor-pointer" onClick={handleSubmit} />
+                }
+              />
+            ) : (
+              <Button
+                style="link"
+                label="Add new category"
+                iconPosition="left"
+                className="w-36"
+                icon={() => <Plus size={16} />}
+                onClick={() => setAddCategory(true)}
+              />
+            )}
+
+            <Table
+              rowSelection={false}
+              rowKey="id"
+              columnData={EDITABLE_TABLE_COLUMNS}
+              rowData={data}
+              className="redirection-table-row"
+              components={TABLE_COMPONENTS}
+            />
+          </Form>
+        )}
+      </Formik>
     </>
   );
 };
