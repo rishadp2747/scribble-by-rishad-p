@@ -10,7 +10,7 @@ import Dashboard from "components/Dashboard";
 import SettingsContainer from "components/Settings/Container";
 import GeneralSettings from "components/Settings/General";
 
-import RedirectionsSettings from "./Settings/Redirections";
+import RedirectionsSettings from "./Settings/Redirection";
 
 const Main = () => {
   const [loading, setLoading] = useState(false);

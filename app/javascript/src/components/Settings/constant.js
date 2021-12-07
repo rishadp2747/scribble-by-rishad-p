@@ -45,3 +45,13 @@ export const CHANGE_TABLE_DESIGN = () => {
   );
   table[1].classList.add("redirection-table");
 };
+
+export const REDIRECTION_FORM_INITIAL_VALUE = {
+  from_path: "",
+  to_path: "",
+};
+
+export const REDIRECTION_FORM_VALIDATION_SCHEMA = yup.object().shape({
+  from_path: yup.string().trim().required("Required"),
+  to_path: yup.string().trim().required("Required"),
+});
