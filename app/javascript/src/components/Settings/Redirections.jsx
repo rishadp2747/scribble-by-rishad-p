@@ -1,42 +1,127 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-// import { Formik, Form } from "formik";
+import { Formik, Form } from "formik";
 import { Delete, Highlight } from "neetoicon";
 import { Typography, Table, Button } from "neetoui";
-// import { Input, Checkbox } from "neetoui/formik";
+import { Input } from "neetoui/formik";
+
+import { CHANGE_TABLE_DESIGN } from "components/Settings/constant";
+
+const EditableRow = ({ ...props }) => {
+  return <tr {...props} />;
+};
+
+const EditableCell = ({
+  editing,
+  dataIndex,
+  record,
+  children,
+  ...restProps
+}) => {
+  return (
+    <td {...restProps}>
+      {editing ? (
+        <Input name={dataIndex} type="text" value={record[dataIndex]} />
+      ) : (
+        children
+      )}
+    </td>
+  );
+};
 
 const Redirections = () => {
+  const [editingKey, setEditingKey] = useState("");
+  const isEditing = record => record.id === editingKey;
+
+  useEffect(() => {
+    CHANGE_TABLE_DESIGN();
+  }, []);
+
+  const components = {
+    body: {
+      row: EditableRow,
+      cell: EditableCell,
+    },
+  };
+
   const TABLE_COLUMNS = [
     {
       title: "From Path",
-      dataIndex: "fromPath",
+      dataIndex: "from_path",
       key: "fromPath",
-      width: 150,
+      width: 270,
       ellipsis: true,
+      editable: true,
     },
     {
       title: "To Path",
-      dataIndex: "toPath",
+      dataIndex: "to_path",
       key: "toPath",
-      width: 150,
+      width: 270,
       ellipsis: true,
+      editable: true,
     },
     {
       title: "Actions",
       dataIndex: "",
       key: "",
-      render: redirection => REDIRECTIONS_ACTIONS(redirection),
-      width: 100,
+      render: redirection => {
+        isEditing(redirection);
+        return REDIRECTIONS_ACTIONS(redirection);
+      },
+      width: 80,
     },
   ];
 
-  const REDIRECTIONS_ACTIONS = () => (
-    <div className="flex flex-row space-x-2">
+  const TABLE_DATA = [
+    {
+      id: 1,
+      from_path: "kl",
+      to_path: "help",
+    },
+    {
+      id: 2,
+      from_path: "kl",
+      to_path: "help",
+    },
+  ];
+
+  const edit = record => {
+    setEditingKey(record.id);
+  };
+
+  const columns = TABLE_COLUMNS.map(col => {
+    if (!col.editable) {
+      return col;
+    }
+
+    return {
+      ...col,
+      onCell: record => ({
+        record,
+        dataIndex: col.dataIndex,
+        title: col.title,
+        editing: isEditing(record),
+      }),
+    };
+  });
+
+  const REDIRECTIONS_ACTIONS = record => (
+    <div className="flex flex-row justify-end space-x-6">
       <Button style="text" icon={() => <Delete size={16} />} />
 
-      <Button style="text" icon={() => <Highlight size={16} />} />
+      <Button
+        style="text"
+        icon={() => <Highlight size={16} />}
+        onClick={() => edit(record)}
+      />
     </div>
   );
+
+  const INITIAL_VALUE = {
+    from_path: "",
+    to_path: "",
+  };
 
   return (
     <>
@@ -49,13 +134,18 @@ const Redirections = () => {
         </Typography>
       </div>
 
-      <div className="bg-indigo-100 border bordre-green-800">
-        <Table
-          rowSelection={false}
-          columnData={TABLE_COLUMNS}
-          rowData={[]}
-          className="bg-indigo-100 border"
-        />
+      <div className="p-6 bg-indigo-50">
+        <Formik initialValues={INITIAL_VALUE}>
+          <Form>
+            <Table
+              components={components}
+              rowSelection={false}
+              columnData={columns}
+              rowData={TABLE_DATA}
+              className="redirection-table-row"
+            />
+          </Form>
+        </Formik>
       </div>
     </>
   );
