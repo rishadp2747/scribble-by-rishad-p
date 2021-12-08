@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 
 import { Formik, Form } from "formik";
-import { Typography, Table } from "neetoui";
+import { Table } from "neetoui";
 
 import {
   REDIRECTION_FORM_INITIAL_VALUE,
   REDIRECTION_FORM_VALIDATION_SCHEMA,
 } from "components/Settings/constant";
-import ActionBlock from "components/Settings/Redirection//ActionBlock";
-import EditableRow from "components/Settings/Redirection//EditableRow";
+import Header from "components/Settings/Header";
+import ActionBlock from "components/Settings/Redirection/ActionBlock";
 import EditableCell from "components/Settings/Redirection/EditableCell";
+import EditableRow from "components/Settings/Redirection/EditableRow";
 import { changeTableDesign } from "helpers/table";
 
 const Redirections = () => {
@@ -90,15 +91,12 @@ const Redirections = () => {
 
   return (
     <>
-      <div>
-        <Typography style="h2">Redirections</Typography>
-        <Typography style="body1">
-          Create and configure redirection rules to send users from old links to
+      <Header
+        title="Redirections"
+        subTitle="Create and configure redirection rules to send users from old links to
           new links. All redirections are performed with 301 status codes to be
-          SEO friendly.
-        </Typography>
-      </div>
-
+          SEO friendly."
+      />
       <div className="p-6 bg-indigo-50">
         <Formik
           enableReinitialize

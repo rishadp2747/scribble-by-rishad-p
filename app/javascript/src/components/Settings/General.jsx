@@ -5,6 +5,8 @@ import { Close, Check } from "neetoicon";
 import { Typography, Button } from "neetoui";
 import { Input, Checkbox } from "neetoui/formik";
 
+import Header from "components/Settings/Header";
+
 import {
   GENERAL_SETTINGS_FORM_INITIAL_VALUE,
   GENERAL_SETTINGS_FORM_VALIDATION,
@@ -23,12 +25,10 @@ const General = () => {
 
   return (
     <>
-      <div>
-        <Typography style="h2">General Settings</Typography>
-        <Typography style="body1">
-          Configure general attributes of scribble.
-        </Typography>
-      </div>
+      <Header
+        title="General Settings"
+        subTitle="  Configure general attributes of scribble."
+      />
       <Formik
         onSubmit={handleSubmit}
         initialValues={GENERAL_SETTINGS_FORM_INITIAL_VALUE}
