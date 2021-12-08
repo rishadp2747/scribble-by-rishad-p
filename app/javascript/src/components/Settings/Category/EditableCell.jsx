@@ -9,7 +9,7 @@ const EditableCell = ({ editing, children, ...restProps }) => {
     <td {...restProps}>
       {editing ? (
         <Input
-          name="editRecord"
+          name="editCategory.title"
           type="text"
           suffix={
             <Button

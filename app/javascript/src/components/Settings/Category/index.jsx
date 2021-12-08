@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { arrayMoveImmutable } from "array-move";
 import { Formik, Form } from "formik";
@@ -11,34 +11,25 @@ import {
   sortableHandle,
 } from "react-sortable-hoc";
 
+import categoryApi from "apis/category";
 import EditableCell from "components/Settings/Category/EditableCell";
 import { CATEGORIES_FORM_VALIDATION_SCHEMA } from "components/Settings/constant";
 import Header from "components/Settings/Header";
 import ActionBlock from "components/Settings/Redirection/ActionBlock";
 
-const TABLE_DATA = [
-  {
-    id: 1,
-    index: 0,
-    title: "Getting Started",
-  },
-  {
-    id: 2,
-    index: 1,
-    title: "neeto products",
-  },
-];
-
-const Category = () => {
-  const [data, setData] = useState(TABLE_DATA);
+const Category = ({ setLoading }) => {
+  const [data, setData] = useState([]);
   const [addCategory, setAddCategory] = useState(false);
   const [editingRecord, setEditingRecord] = useState("");
+  // const [categories, setCategories] = useState();
 
   const SortableItem = sortableElement(props => <tr {...props} />);
   const SortableContainer = sortableContainer(props => <tbody {...props} />);
   const DragHandle = sortableHandle(() => <Reorder size={16} />);
 
-  const isEditing = record => editingRecord === record.index;
+  const isEditing = record => editingRecord === record.position;
+
+  useEffect(() => fetchCategories(), []);
 
   const TABLE_COLUMNS = [
     {
@@ -93,12 +84,13 @@ const Category = () => {
         newIndex
       ).filter(el => !!el);
 
-      setData(
-        newData.map((data, index) => {
-          data.index = index;
-          return data;
-        })
-      );
+      // setData(
+      //   newData.map((data, index) => {
+      //     data.index = index;
+      //     return data;
+      //   })
+      // );
+      setData(newData);
     }
   };
 
@@ -114,7 +106,7 @@ const Category = () => {
 
   const DraggableBodyRow = ({ ...restProps }) => {
     const index = data.findIndex(
-      data => data.index === restProps["data-row-key"]
+      data => data.position === restProps["data-row-key"]
     );
     return <SortableItem index={index} {...restProps} />;
   };
@@ -128,7 +120,7 @@ const Category = () => {
   };
 
   const handleRecordEdit = record => {
-    setEditingRecord(record.index);
+    setEditingRecord(record.position);
   };
 
   const handleCategoryDelete = category => {
@@ -140,15 +132,53 @@ const Category = () => {
     }
   };
 
-  const handleSubmit = values => {
-    setAddCategory(false);
-    if (values.addCategory) {
-      setData(data => [...data, { title: values.addCategory }]);
-    }
+  const fetchCategories = async () => {
+    setLoading(true);
+    try {
+      const response = await categoryApi.list();
+      const categories = response.data?.categories;
 
-    if (values.editRecord) {
-      setData(data => [...data, { title: values.editRecord }]);
+      if (categories) {
+        // setCategories(categories);
+        setData(categories);
+      }
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleSubmit = async values => {
+    setAddCategory(false);
+    setLoading(true);
+
+    const addedCategory = values.addCategory;
+    const editedCategory = values.editCategory;
+
+    try {
+      if (addedCategory) {
+        const payload = { category: { title: addedCategory } };
+        const response = await categoryApi.create(payload);
+        response.data?.category &&
+          setData(data => [...data, response.data?.category]);
+      }
+
+      if (editedCategory) {
+        const payload = {
+          category: {
+            title: editedCategory.title,
+            position: editedCategory.position,
+          },
+        };
+        await categoryApi.update(editedCategory.id, payload);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddCategory = setFieldValue => {
+    setFieldValue("isAdded", true);
+    setAddCategory(true);
   };
 
   return (
@@ -162,13 +192,13 @@ const Category = () => {
         enableReinitialize
         onSubmit={handleSubmit}
         initialValues={{
+          isAdded: false,
           addCategory: "",
-          editRecord: editingRecord !== "" && data[editingRecord]?.title,
-          categories: data,
+          editCategory: editingRecord !== "" && data[editingRecord],
         }}
         validationSchema={CATEGORIES_FORM_VALIDATION_SCHEMA}
       >
-        {({ handleSubmit }) => (
+        {({ handleSubmit, setFieldValue }) => (
           <Form>
             {addCategory ? (
               <Input
@@ -186,13 +216,13 @@ const Category = () => {
                 iconPosition="left"
                 className="w-36"
                 icon={() => <Plus size={16} />}
-                onClick={() => setAddCategory(true)}
+                onClick={() => handleAddCategory(setFieldValue)}
               />
             )}
 
             <Table
               rowSelection={false}
-              rowKey="index"
+              rowKey="position"
               className="redirection-table-row"
               rowData={data}
               columnData={editableTableColumns}
