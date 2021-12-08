@@ -88,13 +88,20 @@ const Category = () => {
   };
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
+    setEditingRecord("");
     if (oldIndex !== newIndex) {
       const newData = arrayMoveImmutable(
         [].concat(data),
         oldIndex,
         newIndex
       ).filter(el => !!el);
-      setData(newData);
+
+      setData(
+        newData.map((data, index) => {
+          data.index = index;
+          return data;
+        })
+      );
     }
   };
 
@@ -109,8 +116,9 @@ const Category = () => {
   );
 
   const DraggableBodyRow = ({ ...restProps }) => {
-    // function findIndex base on Table rowKey props and should always be a right array index
-    const index = data.findIndex(data => data.id === restProps["data-row-key"]);
+    const index = data.findIndex(
+      data => data.index === restProps["data-row-key"]
+    );
     return <SortableItem index={index} {...restProps} />;
   };
 
@@ -168,7 +176,7 @@ const Category = () => {
 
             <Table
               rowSelection={false}
-              rowKey="id"
+              rowKey="index"
               columnData={EDITABLE_TABLE_COLUMNS}
               rowData={data}
               className="redirection-table-row"
