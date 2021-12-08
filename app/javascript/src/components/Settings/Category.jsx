@@ -12,17 +12,19 @@ import {
 } from "react-sortable-hoc";
 
 import { CATEGORIES_FORM_VALIDATION_SCHEMA } from "components/Settings/constant";
+import EditableCell from "components/Settings/EditableCell";
 import Header from "components/Settings/Header";
 import ActionBlock from "components/Settings/Redirection/ActionBlock";
-import EditableCell from "components/Settings/Redirection/EditableCell";
 
 const TABLE_DATA = [
   {
     id: 1,
+    index: 0,
     title: "Getting Started",
   },
   {
     id: 2,
+    index: 1,
     title: "neeto products",
   },
 ];
@@ -36,7 +38,7 @@ const Category = () => {
   const SortableContainer = sortableContainer(props => <tbody {...props} />);
   const DragHandle = sortableHandle(() => <Reorder size={16} />);
 
-  const isEditing = record => editingRecord === record.id;
+  const isEditing = record => editingRecord === record.index;
 
   const TABLE_COLUMNS = [
     {
@@ -53,13 +55,14 @@ const Category = () => {
     {
       dataIndex: "",
       key: "",
-      render: category => (
-        <ActionBlock
-          record={category}
-          editRecordHandler={handleRecordEdit}
-          isRecordEditing={isEditing(category)}
-        />
-      ),
+      render: category =>
+        !isEditing(category) && (
+          <ActionBlock
+            record={category}
+            editRecordHandler={handleRecordEdit}
+            isRecordEditing={isEditing(category)}
+          />
+        ),
       width: 80,
     },
   ];
@@ -75,13 +78,13 @@ const Category = () => {
         record,
         dataIndex: col.dataIndex,
         title: col.title,
-        editing: record.id === editingRecord,
+        editing: isEditing(record),
       }),
     };
   });
 
-  const handleRecordEdit = ({ id }) => {
-    setEditingRecord(id);
+  const handleRecordEdit = record => {
+    setEditingRecord(record.index);
   };
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
@@ -133,14 +136,19 @@ const Category = () => {
       <Formik
         enableReinitialize
         onSubmit={handleSubmit}
-        initialValues={{ title: "" }}
+        initialValues={{
+          addTitle: "",
+          title: "",
+          editRecord: editingRecord !== "" && data[editingRecord]?.title,
+          categories: data,
+        }}
         validationSchema={CATEGORIES_FORM_VALIDATION_SCHEMA}
       >
         {({ handleSubmit }) => (
           <Form>
             {addCategory ? (
               <Input
-                name="title"
+                name="addTitle"
                 type="text"
                 className="w-1/2"
                 suffix={
