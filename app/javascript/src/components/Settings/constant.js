@@ -46,6 +46,5 @@ export const REDIRECTION_FORM_VALIDATION_SCHEMA = yup.object().shape({
 });
 
 export const CATEGORIES_FORM_VALIDATION_SCHEMA = yup.object().shape({
-  title: yup.string().trim().required("Required"),
-  addTitle: yup.string().trim().required("Required"),
+  addCategory: yup.string().trim().required("Required"),
 });

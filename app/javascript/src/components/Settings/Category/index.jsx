@@ -11,8 +11,8 @@ import {
   sortableHandle,
 } from "react-sortable-hoc";
 
+import EditableCell from "components/Settings/Category/EditableCell";
 import { CATEGORIES_FORM_VALIDATION_SCHEMA } from "components/Settings/constant";
-import EditableCell from "components/Settings/EditableCell";
 import Header from "components/Settings/Header";
 import ActionBlock from "components/Settings/Redirection/ActionBlock";
 
@@ -59,7 +59,8 @@ const Category = () => {
         !isEditing(category) && (
           <ActionBlock
             record={category}
-            editRecordHandler={handleRecordEdit}
+            handleRecordEdit={handleRecordEdit}
+            handleRecordDelete={handleCategoryDelete}
             isRecordEditing={isEditing(category)}
           />
         ),
@@ -67,7 +68,7 @@ const Category = () => {
     },
   ];
 
-  const EDITABLE_TABLE_COLUMNS = TABLE_COLUMNS.map(col => {
+  const editableTableColumns = TABLE_COLUMNS.map(col => {
     if (!col.editable) {
       return col;
     }
@@ -82,10 +83,6 @@ const Category = () => {
       }),
     };
   });
-
-  const handleRecordEdit = record => {
-    setEditingRecord(record.index);
-  };
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
     setEditingRecord("");
@@ -130,8 +127,28 @@ const Category = () => {
     },
   };
 
-  const handleSubmit = () => {
+  const handleRecordEdit = record => {
+    setEditingRecord(record.index);
+  };
+
+  const handleCategoryDelete = category => {
+    const confirmDelete = confirm(
+      "Are you sure you want to delete this category"
+    );
+    if (confirmDelete) {
+      setData(data.filter(data => data.id !== category.id));
+    }
+  };
+
+  const handleSubmit = values => {
     setAddCategory(false);
+    if (values.addCategory) {
+      setData(data => [...data, { title: values.addCategory }]);
+    }
+
+    if (values.editRecord) {
+      setData(data => [...data, { title: values.editRecord }]);
+    }
   };
 
   return (
@@ -145,8 +162,7 @@ const Category = () => {
         enableReinitialize
         onSubmit={handleSubmit}
         initialValues={{
-          addTitle: "",
-          title: "",
+          addCategory: "",
           editRecord: editingRecord !== "" && data[editingRecord]?.title,
           categories: data,
         }}
@@ -156,7 +172,7 @@ const Category = () => {
           <Form>
             {addCategory ? (
               <Input
-                name="addTitle"
+                name="addCategory"
                 type="text"
                 className="w-1/2"
                 suffix={
@@ -177,9 +193,9 @@ const Category = () => {
             <Table
               rowSelection={false}
               rowKey="index"
-              columnData={EDITABLE_TABLE_COLUMNS}
-              rowData={data}
               className="redirection-table-row"
+              rowData={data}
+              columnData={editableTableColumns}
               components={TABLE_COMPONENTS}
             />
           </Form>
