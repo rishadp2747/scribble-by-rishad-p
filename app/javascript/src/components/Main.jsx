@@ -7,9 +7,9 @@ import CreateArticle from "components/Article/CreateArticle";
 import EditArticle from "components/Article/EditArticle";
 import Container from "components/Common/Container";
 import Dashboard from "components/Dashboard";
-import CategorySettings from "components/Settings/Category";
 import SettingsContainer from "components/Settings/Container";
 import GeneralSettings from "components/Settings/General";
+import CategorySettings from "components/Settings/ManageCategory";
 import RedirectionsSettings from "components/Settings/Redirection";
 
 const Main = () => {
@@ -71,7 +71,7 @@ const Main = () => {
             />
             <Route
               exact
-              path="/settings/categories"
+              path="/settings/manage-categories"
               render={() => (
                 <CategorySettings setLoading={setLoading} loading={loading} />
               )}

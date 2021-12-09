@@ -6,6 +6,8 @@ class User < ApplicationRecord
   has_many :articles
   has_many :categories
 
+  accepts_nested_attributes_for :categories
+
   validates :name, presence: true, length: { maximum: 30 }
   validates :email, presence: true, uniqueness: true, length: { maximum: 50 }, format: { with: VALID_EMAIL_REGEX }
 

@@ -4,7 +4,9 @@ Rails.application.routes.draw do
 
   defaults format: :json do
     namespace :api do
-      resources :categories, only: %i[index create]
+      resources :categories, except: %i[new edit] do
+        put "sort", on: :collection
+      end
       resources :articles, except: %i[new edit]
     end
   end

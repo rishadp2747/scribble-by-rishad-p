@@ -6,4 +6,13 @@ class Category < ApplicationRecord
 
   validates :title, presence: true, uniqueness: true
   validates_associated :user
+
+  before_create :set_position
+
+  private
+
+    def set_position
+      count = Category.all.count
+      self.position = count
+    end
 end

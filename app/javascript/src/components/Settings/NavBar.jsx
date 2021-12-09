@@ -21,7 +21,7 @@ const NAVLINKS = [
     icon: <Seo />,
     title: "Manage categories",
     subTitle: "Edit and Reorder KB Structure",
-    link: "/settings/categories",
+    link: "/settings/manage-categories",
   },
 ];
 
