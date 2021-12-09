@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :site do
-
+    name { Faker::Name.name }
   end
 end
