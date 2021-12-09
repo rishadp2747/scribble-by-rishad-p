@@ -8,7 +8,7 @@ json.articles @articles do |article|
     :status
 
   json.author article.user.name
-  json.category article.category.title
+  json.category article.category&.title
   json.date article.published? ? article.convert_date_format : "-"
 end
 
