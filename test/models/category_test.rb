@@ -22,16 +22,4 @@ class CategoryTest < ActiveSupport::TestCase
     assert_not duplicate_category.valid?
     assert_includes duplicate_category.errors.full_messages, "Title has already been taken"
   end
-
-  def test_category_should_not_be_valid_without_unique_position
-    @category.position = ""
-    assert_not @category.valid?
-    assert_includes @category.errors.full_messages, "Position can't be blank"
-  end
-
-  def test_category_should_not_be_valid_without_unique_position
-    duplicate_category = @category.dup
-    assert_not duplicate_category.valid?
-    assert_includes duplicate_category.errors.full_messages, "Position has already been taken"
-  end
 end

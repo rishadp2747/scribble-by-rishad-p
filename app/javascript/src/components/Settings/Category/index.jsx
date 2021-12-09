@@ -12,22 +12,18 @@ import {
 
 import categoryApi from "apis/category";
 import EditableCell from "components/Settings/Category/EditableCell";
+import {
+  INITIAL_ADD_CATEGORY,
+  INITIAL_EDIT_CATEGORY,
+} from "components/Settings/constant";
 import Header from "components/Settings/Header";
 import ActionBlock from "components/Settings/Redirection/ActionBlock";
 
 const Category = ({ setLoading }) => {
-  const [data, setData] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [editingRecord, setEditingRecord] = useState("");
-  const [addCategory, setAddCategory] = useState({
-    show: false,
-    vlaue: "",
-    error: "",
-  });
-
-  const [editCategory, setEditCategory] = useState({
-    value: "",
-    error: "",
-  });
+  const [addCategory, setAddCategory] = useState(INITIAL_ADD_CATEGORY);
+  const [editCategory, setEditCategory] = useState(INITIAL_EDIT_CATEGORY);
 
   const SortableItem = sortableElement(props => <tr {...props} />);
   const SortableContainer = sortableContainer(props => <tbody {...props} />);
@@ -81,15 +77,26 @@ const Category = ({ setLoading }) => {
     };
   });
 
-  const onSortEnd = ({ oldIndex, newIndex }) => {
+  const onSortEnd = async ({ oldIndex, newIndex }) => {
     setEditingRecord("");
     if (oldIndex !== newIndex) {
-      const newData = arrayMoveImmutable(
-        [].concat(data),
+      const sortedCtegories = arrayMoveImmutable(
+        [].concat(categories),
         oldIndex,
         newIndex
-      ).filter(el => !!el);
-      setData(newData);
+      ).map((category, index) => {
+        category.position = index;
+        return category;
+      });
+
+      try {
+        const payload = {
+          categories: { categories_attributes: sortedCtegories },
+        };
+        await categoryApi.sort(payload);
+      } finally {
+        setCategories(sortedCtegories);
+      }
     }
   };
 
@@ -104,8 +111,8 @@ const Category = ({ setLoading }) => {
   );
 
   const DraggableBodyRow = ({ ...restProps }) => {
-    const index = data.findIndex(
-      data => data.position === restProps["data-row-key"]
+    const index = categories.findIndex(
+      category => category.position === restProps["data-row-key"]
     );
     return <SortableItem index={index} {...restProps} />;
   };
@@ -118,38 +125,36 @@ const Category = ({ setLoading }) => {
     },
   };
 
-  const handleCategoryDelete = async category => {
+  const fetchCategories = async () => {
+    setLoading(true);
+    try {
+      const response = await categoryApi.list();
+      const categories = response.data?.categories;
+      response.data?.categories && setCategories(categories);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCategoryDelete = async deletedCategory => {
     const confirmDelete = confirm(
       "Are you sure you want to delete this category"
     );
     if (confirmDelete) {
       setLoading(true);
       try {
-        const response = await categoryApi.destroy(category.id);
+        const response = await categoryApi.destroy(deletedCategory.id);
 
         response.data?.notice &&
-          setData(data.filter(data => data.id !== category.id));
+          setCategories(
+            categories.filter(category => category.id !== deletedCategory.id)
+          );
       } finally {
         setLoading(false);
       }
     }
   };
 
-  const fetchCategories = async () => {
-    setLoading(true);
-    try {
-      const response = await categoryApi.list();
-      const categories = response.data?.categories;
-
-      if (categories) {
-        setData(categories);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  //final
   const handleEditCategoryValue = e => {
     const value = e.target.value;
     const error = value.trim() === "" && "Required";
@@ -161,7 +166,6 @@ const Category = ({ setLoading }) => {
     }));
   };
 
-  //finale
   const handleEditCategory = category => {
     setEditingRecord(category.position);
     setEditCategory(editCategory => ({
@@ -170,14 +174,12 @@ const Category = ({ setLoading }) => {
     }));
   };
 
-  //final
   const handleAddCategoryValue = e => {
     const value = e.target.value;
     const error = value.trim() === "" && "Required";
     setAddCategory({ show: true, value: value, error: error });
   };
 
-  //final
   const handleSubmitAddCategory = async () => {
     const error = addCategory.value.trim() === "" && "Required";
     setAddCategory({ show: true, value: "", error: error });
@@ -187,8 +189,9 @@ const Category = ({ setLoading }) => {
         const payload = { category: { title: addCategory.value } };
         const response = await categoryApi.create(payload);
         response.data?.category &&
-          setData(data => [...data, response.data?.category]);
+          setCategories(category => [...category, response.data?.category]);
       } finally {
+        setAddCategory(addCategory => ({ ...addCategory, show: false }));
         setLoading(false);
       }
     }
@@ -207,9 +210,9 @@ const Category = ({ setLoading }) => {
         const response = await categoryApi.update(id, payload);
         if (response.data?.notice) {
           setEditingRecord("");
-          const categories = data;
-          categories[position] = editCategory.value;
-          setData([...categories]);
+          const editedCategories = categories;
+          editedCategories[position] = editCategory.value;
+          setCategories([...editedCategories]);
         }
       } finally {
         setLoading(false);
@@ -252,7 +255,7 @@ const Category = ({ setLoading }) => {
           rowSelection={false}
           rowKey="position"
           className="redirection-table-row"
-          rowData={data}
+          rowData={categories}
           columnData={editableTableColumns}
           components={TABLE_COMPONENTS}
         />

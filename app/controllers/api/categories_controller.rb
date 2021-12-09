@@ -5,7 +5,7 @@ class Api::CategoriesController < ApplicationController
   before_action :load_category, only: %i[update destroy]
 
   def index
-    @categories = @current_user.categories.all
+    @categories = @current_user.categories.all.order(:position)
   end
 
   def update
@@ -15,6 +15,19 @@ class Api::CategoriesController < ApplicationController
       error = @article.errors.full_messages.to_sentence
       render status: :unprocessable_entity, json: { error: error }
     end
+  end
+
+  def sort
+    puts @current_user.to_json
+    if @current_user.update(categories_params)
+      render status: :ok, json: { success: true }
+    else
+      error = @current_user.errors.full_messages.to_sentence
+      render status: :unprocessable_entity, json: { error: error }
+    end
+
+    # sample = @current_user.categories.update_all([])
+    # puts sample.to_json
   end
 
   def create
@@ -38,6 +51,10 @@ class Api::CategoriesController < ApplicationController
 
     def category_params
       params.require(:category).permit(:title, :position)
+    end
+
+    def categories_params
+      params.require(:categories).permit(categories_attributes: [:id, :title, :position])
     end
 
     def load_category
