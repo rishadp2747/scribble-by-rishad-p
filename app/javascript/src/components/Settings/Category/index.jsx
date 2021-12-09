@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 
 import { arrayMoveImmutable } from "array-move";
-import { Formik, Form } from "formik";
 import { Reorder, Plus, Check } from "neetoicon";
-import { Button, Table } from "neetoui";
-import { Input } from "neetoui/formik";
+import { Button, Table, Input } from "neetoui";
+// import { Input } from "neetoui/formik";
 import {
   sortableContainer,
   sortableElement,
@@ -13,15 +12,22 @@ import {
 
 import categoryApi from "apis/category";
 import EditableCell from "components/Settings/Category/EditableCell";
-import { CATEGORIES_FORM_VALIDATION_SCHEMA } from "components/Settings/constant";
 import Header from "components/Settings/Header";
 import ActionBlock from "components/Settings/Redirection/ActionBlock";
 
 const Category = ({ setLoading }) => {
   const [data, setData] = useState([]);
-  const [addCategory, setAddCategory] = useState(false);
   const [editingRecord, setEditingRecord] = useState("");
-  // const [categories, setCategories] = useState();
+  const [addCategory, setAddCategory] = useState({
+    show: false,
+    vlaue: "",
+    error: "",
+  });
+
+  const [editCategory, setEditCategory] = useState({
+    value: "",
+    error: "",
+  });
 
   const SortableItem = sortableElement(props => <tr {...props} />);
   const SortableContainer = sortableContainer(props => <tbody {...props} />);
@@ -50,7 +56,7 @@ const Category = ({ setLoading }) => {
         !isEditing(category) && (
           <ActionBlock
             record={category}
-            handleRecordEdit={handleRecordEdit}
+            handleRecordEdit={record => handleEditCategory(record)}
             handleRecordDelete={handleCategoryDelete}
             isRecordEditing={isEditing(category)}
           />
@@ -67,10 +73,10 @@ const Category = ({ setLoading }) => {
     return {
       ...col,
       onCell: record => ({
-        record,
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
+        editCategory,
+        handleEditCategoryValue,
+        handleSubmitEditCategory,
+        isRecordEditing: isEditing(record),
       }),
     };
   });
@@ -83,13 +89,6 @@ const Category = ({ setLoading }) => {
         oldIndex,
         newIndex
       ).filter(el => !!el);
-
-      // setData(
-      //   newData.map((data, index) => {
-      //     data.index = index;
-      //     return data;
-      //   })
-      // );
       setData(newData);
     }
   };
@@ -119,10 +118,6 @@ const Category = ({ setLoading }) => {
     },
   };
 
-  const handleRecordEdit = record => {
-    setEditingRecord(record.position);
-  };
-
   const handleCategoryDelete = category => {
     const confirmDelete = confirm(
       "Are you sure you want to delete this category"
@@ -139,7 +134,6 @@ const Category = ({ setLoading }) => {
       const categories = response.data?.categories;
 
       if (categories) {
-        // setCategories(categories);
         setData(categories);
       }
     } finally {
@@ -147,38 +141,72 @@ const Category = ({ setLoading }) => {
     }
   };
 
-  const handleSubmit = async values => {
-    setAddCategory(false);
-    setLoading(true);
+  //final
+  const handleEditCategoryValue = e => {
+    const value = e.target.value;
+    const error = value.trim() === "" && "Required";
 
-    const addedCategory = values.addCategory;
-    const editedCategory = values.editCategory;
+    setEditCategory(editCategory => ({
+      ...editCategory,
+      value: { ...editCategory.value, title: value },
+      error: error,
+    }));
+  };
 
-    try {
-      if (addedCategory) {
-        const payload = { category: { title: addedCategory } };
+  //finale
+  const handleEditCategory = category => {
+    setEditingRecord(category.position);
+    setEditCategory(editCategory => ({
+      ...editCategory,
+      value: category,
+    }));
+  };
+
+  //final
+  const handleAddCategoryValue = e => {
+    const value = e.target.value;
+    const error = value.trim() === "" && "Required";
+    setAddCategory({ show: true, value: value, error: error });
+  };
+
+  //final
+  const handleSubmitAddCategory = async () => {
+    const error = addCategory.value.trim() === "" && "Required";
+    setAddCategory({ show: true, value: "", error: error });
+    if (!error) {
+      setLoading(true);
+      try {
+        const payload = { category: { title: addCategory.value } };
         const response = await categoryApi.create(payload);
         response.data?.category &&
           setData(data => [...data, response.data?.category]);
+      } finally {
+        setLoading(false);
       }
-
-      if (editedCategory) {
-        const payload = {
-          category: {
-            title: editedCategory.title,
-            position: editedCategory.position,
-          },
-        };
-        await categoryApi.update(editedCategory.id, payload);
-      }
-    } finally {
-      setLoading(false);
     }
   };
 
-  const handleAddCategory = setFieldValue => {
-    setFieldValue("isAdded", true);
-    setAddCategory(true);
+  const handleSubmitEditCategory = async () => {
+    const error = editCategory.value.title.trim() === "" && "Required";
+    setAddCategory(editCategory => ({ ...editCategory, error: error }));
+    if (!error) {
+      setLoading(true);
+      try {
+        const { id, title, position } = editCategory.value;
+        const payload = {
+          category: { title, position },
+        };
+        const response = await categoryApi.update(id, payload);
+        if (response.data?.notice) {
+          setEditingRecord("");
+          const categories = data;
+          categories[position] = editCategory.value;
+          setData([...categories]);
+        }
+      } finally {
+        setLoading(false);
+      }
+    }
   };
 
   return (
@@ -187,50 +215,40 @@ const Category = ({ setLoading }) => {
         title="Manage Categories"
         subTitle="Create and configure the categories inside your scribble."
       />
-
-      <Formik
-        enableReinitialize
-        onSubmit={handleSubmit}
-        initialValues={{
-          isAdded: false,
-          addCategory: "",
-          editCategory: editingRecord !== "" && data[editingRecord],
-        }}
-        validationSchema={CATEGORIES_FORM_VALIDATION_SCHEMA}
-      >
-        {({ handleSubmit, setFieldValue }) => (
-          <Form>
-            {addCategory ? (
-              <Input
-                name="addCategory"
-                type="text"
-                className="w-1/2"
-                suffix={
-                  <Check className="cursor-pointer" onClick={handleSubmit} />
-                }
+      <div>
+        {addCategory.show ? (
+          <Input
+            type="text"
+            name="addCategory"
+            className="w-1/2"
+            error={addCategory.error}
+            onChange={handleAddCategoryValue}
+            suffix={
+              <Check
+                className="cursor-pointer"
+                onClick={handleSubmitAddCategory}
               />
-            ) : (
-              <Button
-                style="link"
-                label="Add new category"
-                iconPosition="left"
-                className="w-36"
-                icon={() => <Plus size={16} />}
-                onClick={() => handleAddCategory(setFieldValue)}
-              />
-            )}
-
-            <Table
-              rowSelection={false}
-              rowKey="position"
-              className="redirection-table-row"
-              rowData={data}
-              columnData={editableTableColumns}
-              components={TABLE_COMPONENTS}
-            />
-          </Form>
+            }
+          />
+        ) : (
+          <Button
+            style="link"
+            label="Add new category"
+            iconPosition="left"
+            className="w-36"
+            icon={() => <Plus size={16} />}
+            onClick={() => setAddCategory({ show: true, value: "" })}
+          />
         )}
-      </Formik>
+        <Table
+          rowSelection={false}
+          rowKey="position"
+          className="redirection-table-row"
+          rowData={data}
+          columnData={editableTableColumns}
+          components={TABLE_COMPONENTS}
+        />
+      </div>
     </>
   );
 };

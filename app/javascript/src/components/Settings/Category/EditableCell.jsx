@@ -1,22 +1,36 @@
 import React from "react";
 
 import { Check } from "neetoicon";
-import { Button } from "neetoui";
-import { Input } from "neetoui/formik";
+import { Button, Input } from "neetoui";
 
-const EditableCell = ({ editing, children, ...restProps }) => {
+const EditableCell = ({
+  isRecordEditing,
+  editCategory,
+  handleEditCategoryValue,
+  handleSubmitEditCategory,
+  children,
+  ...restProps
+}) => {
   return (
     <td {...restProps}>
-      {editing ? (
+      {isRecordEditing ? (
         <Input
-          name="editCategory.title"
           type="text"
+          autoFocus="autoFocus"
+          value={editCategory.value.title}
+          onChange={handleEditCategoryValue}
+          error={editCategory.error}
           suffix={
             <Button
               type="submit"
               style="text"
               className="input-suffix-button"
-              icon={() => <Check className="cursor-pointer" />}
+              icon={() => (
+                <Check
+                  className="cursor-pointer"
+                  onClick={handleSubmitEditCategory}
+                />
+              )}
             />
           }
         />
@@ -27,4 +41,4 @@ const EditableCell = ({ editing, children, ...restProps }) => {
   );
 };
 
-export default EditableCell;
+export default React.memo(EditableCell);
