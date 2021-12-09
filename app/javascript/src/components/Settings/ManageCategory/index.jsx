@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { arrayMoveImmutable } from "array-move";
 import { Reorder, Plus, Check } from "neetoicon";
 import { Button, Table, Input } from "neetoui";
-// import { Input } from "neetoui/formik";
 import {
   sortableContainer,
   sortableElement,
