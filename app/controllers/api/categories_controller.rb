@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class Api::CategoriesController < ApplicationController
-  before_action :load_user!, only: %i[index update create]
-  before_action :load_category, only: :update
+  before_action :load_user!, excpet: %i[new edit]
+  before_action :load_category, only: %i[update destroy]
 
   def index
     @categories = @current_user.categories.all
@@ -21,6 +21,15 @@ class Api::CategoriesController < ApplicationController
     @category = @current_user.categories.new(category_params)
     unless @category.save
       error = @category.errors.full_messages.to_sentence
+      render status: :unprocessable_entity, json: { error: error }
+    end
+  end
+
+  def destroy
+    if @category.destroy
+      render status: :ok, json: { notice: t("successfull_action", action: "deleted", entity: "category") }
+    else
+      error = @article.errors.full_messages.to_sentence
       render status: :unprocessable_entity, json: { error: error }
     end
   end

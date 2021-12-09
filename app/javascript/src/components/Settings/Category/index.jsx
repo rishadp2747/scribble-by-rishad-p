@@ -118,12 +118,20 @@ const Category = ({ setLoading }) => {
     },
   };
 
-  const handleCategoryDelete = category => {
+  const handleCategoryDelete = async category => {
     const confirmDelete = confirm(
       "Are you sure you want to delete this category"
     );
     if (confirmDelete) {
-      setData(data.filter(data => data.id !== category.id));
+      setLoading(true);
+      try {
+        const response = await categoryApi.destroy(category.id);
+
+        response.data?.notice &&
+          setData(data.filter(data => data.id !== category.id));
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
