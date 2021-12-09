@@ -35,7 +35,7 @@ const General = () => {
         validate={GENERAL_SETTINGS_FORM_VALIDATION}
       >
         {({ values, errors }) => (
-          <Form className="space-y-4">
+          <Form className="w-1/2 space-y-4 divide-y">
             <Input
               required
               type="text"
@@ -80,10 +80,10 @@ const General = () => {
                   </div>
                 </>
               )}
-            </div>
-            <div className="flex flex-row space-x-2">
-              <Button type="submit" style="primary" label="Save Changes" />
-              <Button type="reset" style="text" label="Cancel" />
+              <div className="flex flex-row py-4 space-x-2">
+                <Button type="submit" style="primary" label="Save Changes" />
+                <Button type="reset" style="text" label="Cancel" />
+              </div>
             </div>
           </Form>
         )}
