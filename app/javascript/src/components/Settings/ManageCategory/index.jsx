@@ -11,12 +11,12 @@ import {
 } from "react-sortable-hoc";
 
 import categoryApi from "apis/category";
-import EditableCell from "components/Settings/Category/EditableCell";
 import {
   INITIAL_ADD_CATEGORY,
   INITIAL_EDIT_CATEGORY,
 } from "components/Settings/constant";
 import Header from "components/Settings/Header";
+import EditableCell from "components/Settings/ManageCategory/EditableCell";
 import ActionBlock from "components/Settings/Redirection/ActionBlock";
 
 const Category = ({ setLoading }) => {
