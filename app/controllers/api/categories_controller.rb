@@ -25,9 +25,6 @@ class Api::CategoriesController < ApplicationController
       error = @current_user.errors.full_messages.to_sentence
       render status: :unprocessable_entity, json: { error: error }
     end
-
-    # sample = @current_user.categories.update_all([])
-    # puts sample.to_json
   end
 
   def create
