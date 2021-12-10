@@ -8,6 +8,7 @@ Rails.application.routes.draw do
         put "sort", on: :collection
       end
       resources :articles, except: %i[new edit]
+      resource :sites, only: %i[show update]
     end
   end
 

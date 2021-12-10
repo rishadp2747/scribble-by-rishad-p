@@ -1,19 +1,52 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import { Formik, Form } from "formik";
 import { Close, Check } from "neetoicon";
 import { Typography, Button } from "neetoui";
 import { Input, Checkbox } from "neetoui/formik";
 
+import siteApi from "apis/site";
 import Header from "components/Settings/Header";
 
-import {
-  GENERAL_SETTINGS_FORM_INITIAL_VALUE,
-  GENERAL_SETTINGS_FORM_VALIDATION,
-} from "./constant";
+import { GENERAL_SETTINGS_FORM_VALIDATION } from "./constant";
 
-const General = () => {
-  const handleSubmit = () => {};
+const General = ({ setLoading }) => {
+  const [siteSettings, setSiteSettings] = useState();
+
+  const GENERAL_SETTINGS_FORM_INITIAL_VALUE = {
+    password: "",
+    name: siteSettings?.name,
+    isPassword: siteSettings?.isPassword,
+  };
+
+  useEffect(() => fetchSite(), []);
+
+  const fetchSite = async () => {
+    setLoading(true);
+
+    try {
+      const response = await siteApi.show();
+      setSiteSettings(response.data?.site);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async values => {
+    setLoading(true);
+
+    try {
+      const payload = {
+        site: {
+          name: values.name,
+          password: values.isPassword ? values.password : null,
+        },
+      };
+      await siteApi.update(payload);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const passwordValiadtionIcon = (passwordValue, passwordErrors, message) => {
     if (passwordValue === "" || passwordErrors?.includes(message)) {
@@ -30,12 +63,13 @@ const General = () => {
         subTitle="  Configure general attributes of scribble."
       />
       <Formik
+        enableReinitialize
         onSubmit={handleSubmit}
         initialValues={GENERAL_SETTINGS_FORM_INITIAL_VALUE}
         validate={GENERAL_SETTINGS_FORM_VALIDATION}
       >
         {({ values, errors }) => (
-          <Form className="space-y-4">
+          <Form className="w-1/2 space-y-4 divide-y">
             <Input
               required
               type="text"
@@ -80,10 +114,10 @@ const General = () => {
                   </div>
                 </>
               )}
-            </div>
-            <div className="flex flex-row space-x-2">
-              <Button type="submit" style="primary" label="Save Changes" />
-              <Button type="reset" style="text" label="Cancel" />
+              <div className="flex flex-row py-4 space-x-2">
+                <Button type="submit" style="primary" label="Save Changes" />
+                <Button type="reset" style="text" label="Cancel" />
+              </div>
             </div>
           </Form>
         )}
