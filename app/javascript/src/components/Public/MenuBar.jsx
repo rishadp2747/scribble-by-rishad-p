@@ -64,7 +64,8 @@ const MenuBar = ({ setLoading }) => {
     setLoading(true);
     try {
       const response = await articleApi.list();
-      setArticles(response.data?.articles);
+      const articles = response.data?.articles;
+      setArticles(articles.filter(article => article.date !== "-"));
     } finally {
       setLoading(false);
     }

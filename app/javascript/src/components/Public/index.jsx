@@ -43,8 +43,8 @@ const Public = ({ loading, setLoading }) => {
       <MenuContainer setLoading={setLoading}>
         <Route
           exact
-          path="/public/articles"
-          render={() => <Home setLoading={setLoading} loading={loading} />}
+          path="/public/articles/:slug/show"
+          render={() => <Home setLoading={setLoading} />}
         />
       </MenuContainer>
     </Container>

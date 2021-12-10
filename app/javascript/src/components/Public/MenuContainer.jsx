@@ -9,11 +9,7 @@ const MenuContainer = ({ children, setLoading }) => {
       <SideMenu>
         <MenuBar setLoading={setLoading} />
       </SideMenu>
-      <div className="flex w-full">
-        <div className="flex justify-center w-full py-8">
-          <div className="flex flex-col w-2/3 h-full space-y-6">{children}</div>
-        </div>
-      </div>
+      <div className="flex w-full p-8">{children}</div>
     </div>
   );
 };

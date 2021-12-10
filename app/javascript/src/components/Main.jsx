@@ -27,14 +27,22 @@ const Main = () => {
           path="/public"
           render={() => <Public loading={loading} setLoading={setLoading} />}
         />
+        <Route exact path="/" render={() => <Redirect to="/dashboard" />} />
+        <Route
+          exact
+          path="/settings"
+          render={() => <Redirect to="/settings/general" />}
+        />
+
         <Container loading={loading} title="Scribble">
           <Route
             exact
-            path="/home"
+            path="/dashboard"
             render={() => (
               <Dashboard setLoading={setLoading} loading={loading} />
             )}
           />
+
           <Route
             exact
             path="/articles/creates"
@@ -49,13 +57,6 @@ const Main = () => {
               <EditArticle setLoading={setLoading} loading={loading} />
             )}
           />
-          <Redirect exact from="/" to={{ pathname: "/home" }} />
-          <Redirect
-            exact
-            strict
-            from="/settings"
-            to={{ pathname: "/settings/general" }}
-          />
 
           <SettingsContainer>
             <Route
@@ -65,6 +66,7 @@ const Main = () => {
                 <GeneralSettings setLoading={setLoading} loading={loading} />
               )}
             />
+
             <Route
               exact
               path="/settings/redirections"
