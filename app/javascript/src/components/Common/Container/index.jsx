@@ -7,12 +7,12 @@ import PropTypes from "prop-types";
 import Header from "components/Common/Container/Header";
 import NavBar from "components/Common/Container/NavBar";
 
-const Container = ({ loading, children }) => {
+const Container = ({ loading, title, titlePosition, children }) => {
   return (
     <div className="w-full h-screen">
       <Header
-        title="Scribble"
-        titlePosition="left"
+        title={title}
+        titlePosition={titlePosition}
         navLinks={<NavBar />}
         actionBlock={
           <Button
@@ -20,6 +20,7 @@ const Container = ({ loading, children }) => {
             iconPosition="right"
             style="secondary"
             label="Preview"
+            to="/public"
           />
         }
       />

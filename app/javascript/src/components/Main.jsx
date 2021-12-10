@@ -7,6 +7,7 @@ import CreateArticle from "components/Article/CreateArticle";
 import EditArticle from "components/Article/EditArticle";
 import Container from "components/Common/Container";
 import Dashboard from "components/Dashboard";
+import Public from "components/Public";
 import SettingsContainer from "components/Settings/Container";
 import GeneralSettings from "components/Settings/General";
 import CategorySettings from "components/Settings/ManageCategory";
@@ -21,8 +22,12 @@ const Main = () => {
 
   return (
     <BrowserRouter>
-      <Container loading={loading}>
-        <Switch>
+      <Switch>
+        <Route
+          path="/public"
+          render={() => <Public loading={loading} setLoading={setLoading} />}
+        />
+        <Container loading={loading} title="Scribble">
           <Route
             exact
             path="/home"
@@ -51,6 +56,7 @@ const Main = () => {
             from="/settings"
             to={{ pathname: "/settings/general" }}
           />
+
           <SettingsContainer>
             <Route
               exact
@@ -77,8 +83,8 @@ const Main = () => {
               )}
             />
           </SettingsContainer>
-        </Switch>
-      </Container>
+        </Container>
+      </Switch>
     </BrowserRouter>
   );
 };
