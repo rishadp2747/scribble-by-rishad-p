@@ -3,24 +3,27 @@ import React from "react";
 import { ExternalLink } from "neetoicon";
 import { Button, PageLoader } from "neetoui";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 import Header from "components/Common/Container/Header";
 import NavBar from "components/Common/Container/NavBar";
 
-const Container = ({ loading, children }) => {
+const Container = ({ loading, title, titlePosition, children }) => {
   return (
     <div className="w-full h-screen">
       <Header
-        title="Scribble"
-        titlePosition="left"
+        title={title}
+        titlePosition={titlePosition}
         navLinks={<NavBar />}
         actionBlock={
-          <Button
-            icon={ExternalLink}
-            iconPosition="right"
-            style="secondary"
-            label="Preview"
-          />
+          <Link to="/public" target="_blank">
+            <Button
+              icon={ExternalLink}
+              iconPosition="right"
+              style="secondary"
+              label="Preview"
+            />
+          </Link>
         }
       />
       {loading && <PageLoader />}

@@ -29,7 +29,7 @@ const Dashboard = ({ setLoading }) => {
   const SEARCH_KEYWORD = useDebounce(selectedFilters.title, 1000);
 
   useEffect(() => {
-    fetchArticles(articles);
+    fetchArticles();
   }, []);
 
   useEffect(() => {

@@ -7,6 +7,7 @@ import CreateArticle from "components/Article/CreateArticle";
 import EditArticle from "components/Article/EditArticle";
 import Container from "components/Common/Container";
 import Dashboard from "components/Dashboard";
+import Public from "components/Public";
 import SettingsContainer from "components/Settings/Container";
 import GeneralSettings from "components/Settings/General";
 import CategorySettings from "components/Settings/ManageCategory";
@@ -21,15 +22,27 @@ const Main = () => {
 
   return (
     <BrowserRouter>
-      <Container loading={loading}>
-        <Switch>
+      <Switch>
+        <Route
+          path="/public"
+          render={() => <Public loading={loading} setLoading={setLoading} />}
+        />
+        <Route exact path="/" render={() => <Redirect to="/dashboard" />} />
+        <Route
+          exact
+          path="/settings"
+          render={() => <Redirect to="/settings/general" />}
+        />
+
+        <Container loading={loading} title="Scribble">
           <Route
             exact
-            path="/home"
+            path="/dashboard"
             render={() => (
               <Dashboard setLoading={setLoading} loading={loading} />
             )}
           />
+
           <Route
             exact
             path="/articles/creates"
@@ -44,13 +57,7 @@ const Main = () => {
               <EditArticle setLoading={setLoading} loading={loading} />
             )}
           />
-          <Redirect exact from="/" to={{ pathname: "/home" }} />
-          <Redirect
-            exact
-            strict
-            from="/settings"
-            to={{ pathname: "/settings/general" }}
-          />
+
           <SettingsContainer>
             <Route
               exact
@@ -59,6 +66,7 @@ const Main = () => {
                 <GeneralSettings setLoading={setLoading} loading={loading} />
               )}
             />
+
             <Route
               exact
               path="/settings/redirections"
@@ -77,8 +85,8 @@ const Main = () => {
               )}
             />
           </SettingsContainer>
-        </Switch>
-      </Container>
+        </Container>
+      </Switch>
     </BrowserRouter>
   );
 };
