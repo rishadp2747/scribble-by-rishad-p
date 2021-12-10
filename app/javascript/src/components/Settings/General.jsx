@@ -23,6 +23,7 @@ const General = ({ setLoading }) => {
 
   const fetchSite = async () => {
     setLoading(true);
+
     try {
       const response = await siteApi.show();
       setSiteSettings(response.data?.site);
@@ -31,7 +32,21 @@ const General = ({ setLoading }) => {
     }
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = async values => {
+    setLoading(true);
+
+    try {
+      const payload = {
+        site: {
+          name: values.name,
+          password: values.isPassword ? values.password : null,
+        },
+      };
+      await siteApi.update(payload);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const passwordValiadtionIcon = (passwordValue, passwordErrors, message) => {
     if (passwordValue === "" || passwordErrors?.includes(message)) {
