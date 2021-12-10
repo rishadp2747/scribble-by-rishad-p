@@ -1,18 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import { Formik, Form } from "formik";
 import { Close, Check } from "neetoicon";
 import { Typography, Button } from "neetoui";
 import { Input, Checkbox } from "neetoui/formik";
 
+import siteApi from "apis/site";
 import Header from "components/Settings/Header";
 
-import {
-  GENERAL_SETTINGS_FORM_INITIAL_VALUE,
-  GENERAL_SETTINGS_FORM_VALIDATION,
-} from "./constant";
+import { GENERAL_SETTINGS_FORM_VALIDATION } from "./constant";
 
-const General = () => {
+const General = ({ setLoading }) => {
+  const [siteSettings, setSiteSettings] = useState();
+
+  const GENERAL_SETTINGS_FORM_INITIAL_VALUE = {
+    password: "",
+    name: siteSettings?.name,
+    isPassword: siteSettings?.isPassword,
+  };
+
+  useEffect(() => fetchSite(), []);
+
+  const fetchSite = async () => {
+    setLoading(true);
+    try {
+      const response = await siteApi.show();
+      setSiteSettings(response.data?.site);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmit = () => {};
 
   const passwordValiadtionIcon = (passwordValue, passwordErrors, message) => {
@@ -30,6 +48,7 @@ const General = () => {
         subTitle="  Configure general attributes of scribble."
       />
       <Formik
+        enableReinitialize
         onSubmit={handleSubmit}
         initialValues={GENERAL_SETTINGS_FORM_INITIAL_VALUE}
         validate={GENERAL_SETTINGS_FORM_VALIDATION}

@@ -15,12 +15,6 @@ const GENERAL_SETTINGS_FORM_VALIDATION_SCHEMA = yup.object().shape({
   }),
 });
 
-export const GENERAL_SETTINGS_FORM_INITIAL_VALUE = {
-  name: "",
-  isPassword: false,
-  password: "",
-};
-
 export const GENERAL_SETTINGS_FORM_VALIDATION = async values => {
   const errors = {};
   try {
