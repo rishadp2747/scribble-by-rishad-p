@@ -6,7 +6,7 @@ import { NavLink, useHistory } from "react-router-dom";
 import articleApi from "apis/article";
 import categoryApi from "apis/category";
 
-const MenuBar = ({ setLoading }) => {
+const NavBar = ({ setLoading }) => {
   const [categories, setCategories] = useState([]);
   const [articles, setArticles] = useState([]);
   const [menu, setMenu] = useState({});
@@ -33,6 +33,7 @@ const MenuBar = ({ setLoading }) => {
       const component = (
         <NavLink
           exact
+          key={index}
           to={`/public/articles/${article.id}/show`}
           activeClassName="text-indigo-500"
           className="mt-4"
@@ -42,10 +43,10 @@ const MenuBar = ({ setLoading }) => {
           </Typography>
         </NavLink>
       );
-      menuItems[article.category].push(component);
+      menuItems[article.category]?.push(component);
     });
 
-    history.push(`articles/${activeLinkId}/show`);
+    history.push(`/public/articles/${activeLinkId}/show`);
     setMenu(menuItems);
   };
 
@@ -84,4 +85,4 @@ const MenuBar = ({ setLoading }) => {
   );
 };
 
-export default MenuBar;
+export default NavBar;

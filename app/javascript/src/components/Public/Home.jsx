@@ -47,4 +47,5 @@ const Home = ({ setLoading }) => {
     </div>
   );
 };
+
 export default Home;
