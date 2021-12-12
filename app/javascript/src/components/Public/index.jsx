@@ -7,11 +7,11 @@ import Container from "components/Common/Container";
 import Home from "components/Public/Home";
 import Login from "components/Public/Login";
 import MenuContainer from "components/Public/Menu/Container";
-import { getFromLocalStorage } from "helpers/storage";
+import { getFromSession } from "helpers/session";
 
 const Public = ({ loading, setLoading }) => {
   const [siteSettings, setSiteSettings] = useState();
-  const authToken = getFromLocalStorage("authToken");
+  const authToken = getFromSession("authToken");
   const isLoggedIn = authToken ? true : false;
 
   useEffect(() => {

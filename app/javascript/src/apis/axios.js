@@ -1,11 +1,11 @@
 import axios from "axios";
 import { Toastr } from "neetoui";
 
-import { getFromLocalStorage } from "helpers/storage.js";
+import { getFromSession } from "helpers/session";
 
 axios.defaults.baseURL = "/";
 
-const authToken = getFromLocalStorage("authToken");
+const authToken = getFromSession("authToken");
 
 axios.defaults.headers = {
   "Content-Type": "application/json",
