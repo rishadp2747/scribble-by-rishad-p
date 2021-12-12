@@ -2,5 +2,8 @@
 
 class Api::Public::CategoriesController < ApplicationController
   before_action :load_site!, only: :index
-  before_action :load_user!, only: :index
+
+  def index
+    @site.user.categories.all.order(:position)
+  end
 end
