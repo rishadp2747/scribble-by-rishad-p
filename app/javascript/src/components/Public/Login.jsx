@@ -4,6 +4,7 @@ import { Typography, Label, Input, Button } from "neetoui";
 
 import sessionApi from "apis/public/session";
 import Password from "assets/images/Password.png";
+import { setToLocalStorage } from "helpers/storage";
 
 const Login = ({ setLoading }) => {
   const [password, setPassword] = useState({ value: "", error: "" });
@@ -30,8 +31,10 @@ const Login = ({ setLoading }) => {
       setLoading(true);
       try {
         const payload = { site: { password: password.value } };
-        await sessionApi.login(payload);
-        // console.log(response.data);
+        const response = await sessionApi.login(payload);
+        setToLocalStorage({
+          authToken: response.data?.authentication_token,
+        });
       } finally {
         setLoading(false);
       }
