@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_09_115413) do
+ActiveRecord::Schema.define(version: 2021_12_12_100006) do
 
   create_table "articles", force: :cascade do |t|
     t.string "title", null: false
@@ -50,10 +50,13 @@ ActiveRecord::Schema.define(version: 2021_12_09_115413) do
     t.string "email", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "site_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["site_id"], name: "index_users_on_site_id"
   end
 
   add_foreign_key "articles", "categories", on_delete: :nullify
   add_foreign_key "articles", "users"
   add_foreign_key "categories", "users"
+  add_foreign_key "users", "sites"
 end

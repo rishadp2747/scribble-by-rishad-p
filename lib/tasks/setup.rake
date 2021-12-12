@@ -15,6 +15,7 @@ end
 def create_sample_data!
   puts "Seeding with sample data..."
 
+  create_site!
   create_user!
   5.times do
     category = create_category!
@@ -38,7 +39,8 @@ end
 def create_user!
   user_attribute = {
     name: "Oliver Smith",
-    email: "oliver@example.com"
+    email: "oliver@example.com",
+    site: @site
   }
 
   @user = User.create! user_attribute
@@ -53,4 +55,13 @@ def create_article!(status, category)
     user: @user
   }
   Article.create! article_attribute
+end
+
+def create_site!
+  site_attribute = {
+    name: "Spinkart",
+    password: nil
+  }
+
+  @site = Site.create! site_attribute
 end

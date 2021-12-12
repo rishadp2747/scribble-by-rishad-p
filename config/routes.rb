@@ -11,10 +11,12 @@ Rails.application.routes.draw do
     end
 
     resources :articles, except: %i[new edit]
+    resource :sites, only: %i[show update]
+
     resources :categories, except: %i[new edit] do
       put "sort", on: :collection
     end
-    resource :sites, only: %i[show update]
+
   end
 
   root "home#index"
