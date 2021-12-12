@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Accordion, Typography } from "neetoui";
 import { NavLink, useHistory } from "react-router-dom";
 
-import articleApi from "apis/article";
+import articleApi from "apis/public/article";
 import categoryApi from "apis/public/category";
 
 const NavBar = ({ setLoading }) => {
@@ -64,8 +64,7 @@ const NavBar = ({ setLoading }) => {
     setLoading(true);
     try {
       const response = await articleApi.list();
-      const articles = response.data?.articles;
-      setArticles(articles.filter(article => article.date !== "-"));
+      setArticles(response.data?.articles);
     } finally {
       setLoading(false);
     }

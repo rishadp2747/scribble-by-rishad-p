@@ -2,10 +2,9 @@
 
 class Api::Public::ArticlesController < ApplicationController
   before_action :load_site!, only: :index
-  # before_action :authenticate_site, only: :index, if: @site.password.present?
+  before_action :authenticate_site_using_x_auth_token, only: :index, if: :is_authenticatable
 
   def index
-    puts @site
     @articles = @site.user.articles
   end
 end

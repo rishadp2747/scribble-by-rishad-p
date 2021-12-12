@@ -1,22 +1,23 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  defaults format: :json do
+    namespace :api do
 
-  namespace :api, defaults: { format: :json } do
+      namespace :public do
+        resources :sessions, only: :create
+        resources :categories, only: :index
+        resources :articles, only: :index
+      end
 
-    namespace :public do
-      resources :sessions, only: :create
-      resources :categories, only: :index
-      resources :articles, only: %i[index, show]
+      resources :articles, except: %i[new edit]
+      resource :sites, only: %i[show update]
+
+      resources :categories, except: %i[new edit] do
+        put "sort", on: :collection
+      end
+
     end
-
-    resources :articles, except: %i[new edit]
-    resource :sites, only: %i[show update]
-
-    resources :categories, except: %i[new edit] do
-      put "sort", on: :collection
-    end
-
   end
 
   root "home#index"
