@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Typography, Label, Tag } from "neetoui";
 import { useParams } from "react-router-dom";
 
-import articleApi from "apis/article";
+import articleApi from "apis/public/article";
 
 const Home = ({ setLoading }) => {
   const [article, setArticle] = useState();
@@ -35,7 +35,7 @@ const Home = ({ setLoading }) => {
           style="solid"
           size="small"
           color="blue"
-          label={article?.category?.title}
+          label={article?.category}
         />
         <Label>{article?.date} </Label>
       </div>
