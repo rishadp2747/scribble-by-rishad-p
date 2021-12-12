@@ -50,6 +50,6 @@ class Api::ArticlesController < ApplicationController
     end
 
     def load_article
-      @article = @current_user.categories.find(params[:id])
+      @article = @current_user.articles.find(params[:id])
     end
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::SitesController < ApplicationController
-  before_action :load_site!, only: %i[show login update]
+  before_action :load_site!, only: %i[show update]
 
   def show
     render

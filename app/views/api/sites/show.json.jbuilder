@@ -2,7 +2,6 @@
 
 json.site do
   json.extract! @site,
-    :name,
-    :authentication_token
+    :name
   json.isPassword @site.isPassword
 end
