@@ -7,9 +7,12 @@ import Container from "components/Common/Container";
 import Home from "components/Public/Home";
 import Login from "components/Public/Login";
 import MenuContainer from "components/Public/Menu/Container";
+import { getFromLocalStorage } from "helpers/storage";
 
 const Public = ({ loading, setLoading }) => {
   const [siteSettings, setSiteSettings] = useState();
+  const authToken = getFromLocalStorage("authToken");
+  const isLoggedIn = authToken ? true : false;
 
   useEffect(() => {
     fetchSite();
@@ -32,7 +35,7 @@ const Public = ({ loading, setLoading }) => {
       titlePosition="center"
       title={siteSettings?.name}
     >
-      {siteSettings?.isPassword ? (
+      {siteSettings?.isPassword && !isLoggedIn ? (
         <>
           <Route
             exact

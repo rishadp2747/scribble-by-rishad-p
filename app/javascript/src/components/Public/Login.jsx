@@ -32,9 +32,13 @@ const Login = ({ setLoading }) => {
       try {
         const payload = { site: { password: password.value } };
         const response = await sessionApi.login(payload);
-        setToLocalStorage({
-          authToken: response.data?.authentication_token,
-        });
+        const authToken = response.data?.authentication_token;
+        if (authToken) {
+          setToLocalStorage({
+            authToken: response.data?.authentication_token,
+          });
+          window.location.href = "/public/articles";
+        }
       } finally {
         setLoading(false);
       }
