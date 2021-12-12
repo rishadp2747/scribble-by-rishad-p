@@ -1,3 +1,6 @@
 
 en:
+  session:
+    incorrect_credentials: "Incorrect credential"
   successfull_action: "Successfully %{action} %{entity}"
+  successfully_logged: "Logged %{state} successfully"

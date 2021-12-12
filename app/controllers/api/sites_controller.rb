@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::SitesController < ApplicationController
-  before_action :load_site!, only: %i[show update]
+  before_action :load_site!, only: %i[show login update]
 
   def show
     render
@@ -20,9 +20,5 @@ class Api::SitesController < ApplicationController
 
     def site_params
       params.require(:site).permit(:name, :password)
-    end
-
-    def load_site!
-      @site = Site.first
     end
 end

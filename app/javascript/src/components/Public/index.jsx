@@ -34,7 +34,13 @@ const Public = ({ loading, setLoading }) => {
     >
       {siteSettings?.isPassword ? (
         <>
-          <Route exact path="/public/login" render={() => <Login />} />
+          <Route
+            exact
+            path="/public/login"
+            render={() => (
+              <Login siteSettings={siteSettings} setLoading={setLoading} />
+            )}
+          />
           <Redirect from="/public" to={{ pathname: "/public/login" }} />
         </>
       ) : (

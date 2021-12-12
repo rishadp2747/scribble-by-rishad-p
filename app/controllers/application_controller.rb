@@ -2,4 +2,5 @@
 
 class ApplicationController < ActionController::Base
   include LoadUser
+  include LoadSite
 end
