@@ -5,7 +5,8 @@ json.articles @articles do |article|
   if article.published? && article.category.present?
     json.extract! article,
       :id,
-      :title
+      :title,
+      :slug
 
     json.category article.category.title
   end

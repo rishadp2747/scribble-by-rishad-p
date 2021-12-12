@@ -24,17 +24,17 @@ const NavBar = ({ setLoading }) => {
 
   const setMenuItems = () => {
     const menuItems = {};
-    let activeLinkId = "";
+    let activeLinkSlug = "";
 
     categories?.forEach(({ title }) => (menuItems[title] = []));
 
     articles?.forEach((article, index) => {
-      index === 0 && (activeLinkId = article.id);
+      index === 0 && (activeLinkSlug = article.slug);
       const component = (
         <NavLink
           exact
           key={index}
-          to={`/public/articles/${article.id}/show`}
+          to={`/public/articles/${article.slug}/show`}
           activeClassName="text-indigo-500"
           className="mt-4"
         >
@@ -46,7 +46,7 @@ const NavBar = ({ setLoading }) => {
       menuItems[article.category]?.push(component);
     });
 
-    history.push(`/public/articles/${activeLinkId}/show`);
+    history.push(`/public/articles/${activeLinkSlug}/show`);
     setMenu(menuItems);
   };
 
