@@ -4,7 +4,7 @@ import { Accordion, Typography } from "neetoui";
 import { NavLink, useHistory } from "react-router-dom";
 
 import articleApi from "apis/article";
-import categoryApi from "apis/category";
+import categoryApi from "apis/public/category";
 
 const NavBar = ({ setLoading }) => {
   const [categories, setCategories] = useState([]);
@@ -54,8 +54,7 @@ const NavBar = ({ setLoading }) => {
     setLoading(true);
     try {
       const response = await categoryApi.list();
-      const categories = response.data?.categories;
-      setCategories(categories.filter(category => category.count > 0));
+      setCategories(response.data?.categories);
     } finally {
       setLoading(false);
     }

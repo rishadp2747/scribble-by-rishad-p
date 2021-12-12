@@ -15,6 +15,7 @@ const Public = ({ loading, setLoading }) => {
   const isLoggedIn = authToken ? true : false;
 
   useEffect(() => {
+    // setAxiosHeaders();
     fetchSite();
   }, []);
 

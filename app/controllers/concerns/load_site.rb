@@ -6,4 +6,8 @@ module LoadSite
   def load_site!
     @site = Site.first
   end
+
+  def is_authenticatable
+    @site.isPassword
+  end
 end
