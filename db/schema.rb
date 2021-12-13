@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_12_154919) do
+ActiveRecord::Schema.define(version: 2021_12_13_142654) do
 
   create_table "articles", force: :cascade do |t|
     t.string "title", null: false
@@ -37,6 +37,15 @@ ActiveRecord::Schema.define(version: 2021_12_12_154919) do
     t.index ["user_id"], name: "index_categories_on_user_id"
   end
 
+  create_table "redirections", force: :cascade do |t|
+    t.string "from_path", null: false
+    t.string "to_path", null: false
+    t.integer "site_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["site_id"], name: "index_redirections_on_site_id"
+  end
+
   create_table "sites", force: :cascade do |t|
     t.string "name", null: false
     t.string "password_digest"
@@ -59,5 +68,6 @@ ActiveRecord::Schema.define(version: 2021_12_12_154919) do
   add_foreign_key "articles", "categories", on_delete: :nullify
   add_foreign_key "articles", "users"
   add_foreign_key "categories", "users"
+  add_foreign_key "redirections", "sites"
   add_foreign_key "users", "sites"
 end

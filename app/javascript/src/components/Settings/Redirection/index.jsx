@@ -40,7 +40,7 @@ const TABLE_DATA = [
   },
 ];
 
-const INITIAL_EDITING_REDIRECTION = {
+const INITIAL_FORM_VALUE = {
   id: "",
   from_path: "",
   to_path: "",
@@ -48,9 +48,8 @@ const INITIAL_EDITING_REDIRECTION = {
 
 const Redirections = () => {
   const [redirections, setRedirections] = useState(TABLE_DATA);
-  const [editingRedirection, setEditingRedirection] = useState(
-    INITIAL_EDITING_REDIRECTION
-  );
+  const [editingRedirection, setEditingRedirection] =
+    useState(INITIAL_FORM_VALUE);
 
   const TABLE_COLUMNS = [
     {
