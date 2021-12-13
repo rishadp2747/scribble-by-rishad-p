@@ -5,6 +5,6 @@ class Api::Public::CategoriesController < ApplicationController
   before_action :authenticate_site_using_x_auth_token, only: :index, if: :is_authenticatable
 
   def index
-    @categories = @site.user.categories.all.order(:position)
+    @categories = @site.user.categories.order(:position)
   end
 end

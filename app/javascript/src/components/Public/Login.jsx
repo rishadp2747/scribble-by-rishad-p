@@ -6,7 +6,7 @@ import sessionApi from "apis/public/session";
 import Password from "assets/images/Password.png";
 import { setToSession } from "helpers/session";
 
-const Login = ({ setLoading }) => {
+const Login = ({ setLoading, siteSettings }) => {
   const [password, setPassword] = useState({ value: "", error: "" });
 
   const validatePassword = value => {
@@ -49,7 +49,9 @@ const Login = ({ setLoading }) => {
     <div className="flex flex-col items-center justify-center h-full space-y-3">
       <img src={Password} width="210" height="218" />
       <div className="flex flex-col justify-start space-y-1">
-        <Typography style="h4">Spinkart is password protected!</Typography>
+        <Typography style="h4">
+          {siteSettings.name} is password protected!
+        </Typography>
         <Label>Enter the password to gain access to spinkart.</Label>
         <Input
           required

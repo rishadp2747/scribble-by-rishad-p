@@ -24,13 +24,11 @@ const NavBar = ({ setLoading }) => {
 
   const setMenuItems = () => {
     const menuItems = {};
-    let activeLinkSlug = "";
 
     categories?.forEach(({ title }) => (menuItems[title] = []));
 
     articles?.forEach((article, index) => {
-      index === 0 && (activeLinkSlug = article.slug);
-      const component = (
+      const link = (
         <NavLink
           exact
           key={index}
@@ -43,10 +41,13 @@ const NavBar = ({ setLoading }) => {
           </Typography>
         </NavLink>
       );
-      menuItems[article.category]?.push(component);
+      menuItems[article.category].push(link);
     });
 
-    history.push(`/public/articles/${activeLinkSlug}/show`);
+    const firstArticle = menuItems[categories[0].title][0];
+    const activeArticleLink = firstArticle.props.to;
+
+    history.push(activeArticleLink);
     setMenu(menuItems);
   };
 
