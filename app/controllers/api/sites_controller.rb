@@ -21,8 +21,4 @@ class Api::SitesController < ApplicationController
     def site_params
       params.require(:site).permit(:name, :password)
     end
-
-    def load_site!
-      @site = Site.first
-    end
 end

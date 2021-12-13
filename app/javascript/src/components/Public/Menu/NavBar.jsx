@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react";
 import { Accordion, Typography } from "neetoui";
 import { NavLink, useHistory } from "react-router-dom";
 
-import articleApi from "apis/article";
-import categoryApi from "apis/category";
+import articleApi from "apis/public/article";
+import categoryApi from "apis/public/category";
 
-const MenuBar = ({ setLoading }) => {
+const NavBar = ({ setLoading }) => {
   const [categories, setCategories] = useState([]);
   const [articles, setArticles] = useState([]);
   const [menu, setMenu] = useState({});
@@ -24,16 +24,15 @@ const MenuBar = ({ setLoading }) => {
 
   const setMenuItems = () => {
     const menuItems = {};
-    let activeLinkId = "";
 
     categories?.forEach(({ title }) => (menuItems[title] = []));
 
     articles?.forEach((article, index) => {
-      index === 0 && (activeLinkId = article.id);
-      const component = (
+      const link = (
         <NavLink
           exact
-          to={`/public/articles/${article.id}/show`}
+          key={index}
+          to={`/public/articles/${article.slug}/show`}
           activeClassName="text-indigo-500"
           className="mt-4"
         >
@@ -42,10 +41,13 @@ const MenuBar = ({ setLoading }) => {
           </Typography>
         </NavLink>
       );
-      menuItems[article.category].push(component);
+      menuItems[article.category].push(link);
     });
 
-    history.push(`articles/${activeLinkId}/show`);
+    const firstArticle = menuItems[categories[0].title][0];
+    const activeArticleLink = firstArticle.props.to;
+
+    history.push(activeArticleLink);
     setMenu(menuItems);
   };
 
@@ -53,8 +55,7 @@ const MenuBar = ({ setLoading }) => {
     setLoading(true);
     try {
       const response = await categoryApi.list();
-      const categories = response.data?.categories;
-      setCategories(categories.filter(category => category.count > 0));
+      setCategories(response.data?.categories);
     } finally {
       setLoading(false);
     }
@@ -64,8 +65,7 @@ const MenuBar = ({ setLoading }) => {
     setLoading(true);
     try {
       const response = await articleApi.list();
-      const articles = response.data?.articles;
-      setArticles(articles.filter(article => article.date !== "-"));
+      setArticles(response.data?.articles);
     } finally {
       setLoading(false);
     }
@@ -84,4 +84,4 @@ const MenuBar = ({ setLoading }) => {
   );
 };
 
-export default MenuBar;
+export default NavBar;

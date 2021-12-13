@@ -1,14 +1,19 @@
 import axios from "axios";
 import { Toastr } from "neetoui";
 
+import { getFromSession } from "helpers/session";
+
 axios.defaults.baseURL = "/";
+
+const authToken = getFromSession("authToken");
 
 axios.defaults.headers = {
   "Content-Type": "application/json",
-  common: {
-    "X-CSRF-TOKEN": document.querySelector("[name=csrf-token]").content,
-  },
+
+  "X-CSRF-TOKEN": document.querySelector("[name=csrf-token]").content,
 };
+
+authToken && (axios.defaults.headers["X-Auth-Token"] = authToken);
 
 const handleSuccessResponse = response => {
   if (response?.status === 200 && response?.data?.notice) {

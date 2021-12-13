@@ -5,6 +5,7 @@ class User < ApplicationRecord
 
   has_many :articles
   has_many :categories
+  belongs_to :site
 
   accepts_nested_attributes_for :categories
 
