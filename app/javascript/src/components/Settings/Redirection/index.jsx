@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { Formik, Form } from "formik";
 import { Table } from "neetoui";
@@ -9,23 +9,24 @@ import {
 } from "components/Settings/constant";
 import Header from "components/Settings/Header";
 import ActionBlock from "components/Settings/Redirection/ActionBlock";
-import EditableCell from "components/Settings/Redirection/EditableCell";
-import EditableRow from "components/Settings/Redirection/EditableRow";
-import { changeTableDesign } from "helpers/table";
+import CustomTable from "components/Settings/Redirection/Table";
+import BodyCell from "components/Settings/Redirection/Table/Body/Cell";
+import BodyRow from "components/Settings/Redirection/Table/Body/Row";
+import HeaderCell from "components/Settings/Redirection/Table/Header/Cell";
+
+const TABLE_COMPONENTS = {
+  table: CustomTable,
+  header: {
+    cell: HeaderCell,
+  },
+  body: {
+    row: BodyRow,
+    cell: BodyCell,
+  },
+};
 
 const Redirections = () => {
   const [editingRecord, setEditingRecord] = useState("");
-
-  useEffect(() => {
-    changeTableDesign();
-  }, []);
-
-  const TABLE_COMPONENTS = {
-    body: {
-      row: EditableRow,
-      cell: EditableCell,
-    },
-  };
 
   const TABLE_COLUMNS = [
     {
