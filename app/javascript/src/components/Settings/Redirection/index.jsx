@@ -76,13 +76,8 @@ const Redirections = () => {
   const TABLE_DATA = [
     {
       id: 1,
-      from_path: "https://scribble.com/welcome",
+      from_path: "welcome",
       to_path: "https://scribble.com",
-    },
-    {
-      id: 2,
-      from_path: "https://scribble.com/welcome",
-      to_path: "https://scribble.com/about-us",
     },
   ];
 

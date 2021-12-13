@@ -1,9 +1,9 @@
 import React from "react";
 
-const EditableRow = ({ ...props }) => {
+const Row = ({ ...props }) => {
   return (
     <tr {...props} className="border border-red-800 redirection-table-row" />
   );
 };
 
-export default EditableRow;
+export default Row;
