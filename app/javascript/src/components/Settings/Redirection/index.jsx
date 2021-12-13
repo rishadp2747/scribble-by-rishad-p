@@ -3,12 +3,9 @@ import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import { Table } from "neetoui";
 
-import {
-  REDIRECTION_FORM_INITIAL_VALUE,
-  REDIRECTION_FORM_VALIDATION_SCHEMA,
-} from "components/Settings/constant";
+import ActionBlock from "components/Settings/ActionBlock";
+import { REDIRECTION_FORM_VALIDATION_SCHEMA } from "components/Settings/constant";
 import Header from "components/Settings/Header";
-import ActionBlock from "components/Settings/Redirection/ActionBlock";
 import CustomTable from "components/Settings/Redirection/Table";
 import BodyCell from "components/Settings/Redirection/Table/Body/Cell";
 import BodyRow from "components/Settings/Redirection/Table/Body/Row";
@@ -25,8 +22,35 @@ const TABLE_COMPONENTS = {
   },
 };
 
+const TABLE_DATA = [
+  {
+    id: 1,
+    from_path: "welcome",
+    to_path: "https://scribble.com",
+  },
+  {
+    id: 2,
+    from_path: "abput",
+    to_path: "https://scribble.com",
+  },
+  {
+    id: 3,
+    from_path: "sample",
+    to_path: "https://scribble.com",
+  },
+];
+
+const INITIAL_EDITING_REDIRECTION = {
+  id: "",
+  from_path: "",
+  to_path: "",
+};
+
 const Redirections = () => {
-  const [editingRecord, setEditingRecord] = useState("");
+  const [redirections, setRedirections] = useState(TABLE_DATA);
+  const [editingRedirection, setEditingRedirection] = useState(
+    INITIAL_EDITING_REDIRECTION
+  );
 
   const TABLE_COLUMNS = [
     {
@@ -40,7 +64,7 @@ const Redirections = () => {
       title: "To Path",
       dataIndex: "to_path",
       key: "toPath",
-      width: 270,
+
       editable: true,
     },
     {
@@ -50,10 +74,12 @@ const Redirections = () => {
       render: redirection => (
         <ActionBlock
           record={redirection}
-          editRecordHandler={handleRecordEdit}
+          editingRecord={editingRedirection}
+          handleEditRecord={handleEditRedirection}
+          handleDeleteRecord={handleDeleteRedirection}
         />
       ),
-      width: 80,
+      width: 100,
     },
   ];
 
@@ -68,22 +94,25 @@ const Redirections = () => {
         record,
         dataIndex: col.dataIndex,
         title: col.title,
-        editing: record.id === editingRecord,
+        editing: record.id === editingRedirection.id,
       }),
     };
   });
 
-  const TABLE_DATA = [
-    {
-      id: 1,
-      from_path: "welcome",
-      to_path: "https://scribble.com",
-    },
-  ];
-
-  const handleRecordEdit = ({ id }) => {
-    setEditingRecord(id);
+  const handleEditRedirection = redirection => {
+    setEditingRedirection(redirection);
   };
+
+  const handleDeleteRedirection = redirection => {
+    const confirmDelete = confirm(
+      "Are you sure you want to delete this redirection"
+    );
+    if (confirmDelete) {
+      setRedirections(redirections.filter(({ id }) => id !== redirection.id));
+    }
+  };
+
+  const handleSubmit = async () => {};
 
   return (
     <>
@@ -96,7 +125,8 @@ const Redirections = () => {
       <div className="p-6 bg-indigo-50">
         <Formik
           enableReinitialize
-          initialValues={REDIRECTION_FORM_INITIAL_VALUE}
+          onSubmit={handleSubmit}
+          initialValues={editingRedirection}
           validationSchema={REDIRECTION_FORM_VALIDATION_SCHEMA}
         >
           <Form>
@@ -104,7 +134,7 @@ const Redirections = () => {
               components={TABLE_COMPONENTS}
               rowSelection={false}
               columnData={EDITABLE_TABLE_COLUMNS}
-              rowData={TABLE_DATA}
+              rowData={redirections}
               className="redirection-table-row"
             />
           </Form>
