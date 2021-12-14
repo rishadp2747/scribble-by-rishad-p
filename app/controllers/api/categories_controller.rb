@@ -55,5 +55,8 @@ class Api::CategoriesController < ApplicationController
 
     def load_category
       @category = @current_user.categories.find(params[:id])
+      unless @category
+        render status: :not_found, json: { error: t("not_found", entity: "Category") }
+      end
     end
 end

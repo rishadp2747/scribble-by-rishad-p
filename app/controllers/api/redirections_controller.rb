@@ -42,5 +42,8 @@ class Api::RedirectionsController < ApplicationController
 
     def load_redirection
       @redirection = @site.redirections.find(params[:id])
+      unless @redirection
+        render status: :not_found, json: { error: t("not_found", entity: "Redirection") }
+      end
     end
 end

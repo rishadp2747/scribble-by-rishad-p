@@ -19,6 +19,9 @@ class Api::Public::ArticlesController < ApplicationController
   private
 
     def load_article
-      @article = @site.user.articles.find_by(slug: params[:slug])
+      @article = @site.user.articles.find_by_slug(params[:slug])
+      unless @article
+        render status: :not_found, json: { error: t("not_found", entity: "Article") }
+      end
     end
 end

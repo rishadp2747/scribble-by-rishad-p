@@ -51,5 +51,8 @@ class Api::ArticlesController < ApplicationController
 
     def load_article
       @article = @current_user.articles.find(params[:id])
+      unless @article
+        render status: :not_found, json: { error: t("not_found", entity: "Article") }
+      end
     end
 end

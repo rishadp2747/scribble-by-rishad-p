@@ -8,3 +8,4 @@ en:
       immutable: "is immutable!"
   successfull_action: "Successfully %{action} %{entity}"
   successfully_logged: "Logged %{state} successfully"
+  not_found: "%{entity} not found."
