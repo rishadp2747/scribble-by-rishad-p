@@ -35,7 +35,12 @@ const Main = () => {
 
   const REDIRECTION_ROUTES = redirections.map(
     ({ from_path, to_path }, index) => (
-      <Redirect key={index} from={from_path} to={to_path} />
+      <Route
+        exact
+        key={index}
+        path={from_path}
+        render={() => (window.location.href = to_path)}
+      />
     )
   );
 
@@ -43,7 +48,7 @@ const Main = () => {
     <BrowserRouter>
       <Switch>
         {REDIRECTION_ROUTES}
-        <Redirect from="/articles/creates" to={"hia"} />
+
         <Route
           path="/public"
           render={() => <Public loading={loading} setLoading={setLoading} />}

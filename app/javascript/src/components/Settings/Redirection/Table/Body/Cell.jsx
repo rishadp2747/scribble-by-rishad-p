@@ -1,6 +1,5 @@
 import React from "react";
 
-import classnames from "classnames";
 import { Label } from "neetoui";
 import { Input } from "neetoui/formik";
 
@@ -13,11 +12,7 @@ const Cell = ({ editing, dataIndex, children, ...otherProps }) => {
 
   return (
     <td {...otherProps}>
-      <div
-        className={classnames("flex", {
-          "w-48 struncate": dataIndex === "to_path",
-        })}
-      >
+      <div className={"flex truncate"}>
         {dataIndex === "from_path" && <Label>https://scribble.com/</Label>}
         {childNode}
       </div>
