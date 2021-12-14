@@ -75,6 +75,7 @@ const Dashboard = ({ setLoading }) => {
 
   const fetchArticles = async () => {
     setLoading(true);
+
     try {
       const response = await articleApi.list();
       setArticleCounts(response.data?.counts);
