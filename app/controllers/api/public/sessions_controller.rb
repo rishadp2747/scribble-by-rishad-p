@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::Public::SessionsController < ApplicationController
-  before_action :load_site!, only: :create
+  before_action :load_site, only: :create
 
   def create
     unless @site.present? && @site.authenticate(site_params[:password])

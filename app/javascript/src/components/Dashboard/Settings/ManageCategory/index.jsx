@@ -11,13 +11,13 @@ import {
 
 import categoryApi from "apis/category";
 import { DELETE_ALERT_MESSAGE } from "common/message";
-import ActionBlock from "components/Settings/ActionBlock";
+import ActionBlock from "components/Dashboard/Settings/ActionBlock";
 import {
   INITIAL_ADD_CATEGORY,
   INITIAL_EDIT_CATEGORY,
-} from "components/Settings/constant";
-import Header from "components/Settings/Header";
-import BodyCell from "components/Settings/ManageCategory/Table/Body/Cell";
+} from "components/Dashboard/Settings/constant";
+import Header from "components/Dashboard/Settings/Header";
+import BodyCell from "components/Dashboard/Settings/ManageCategory/Table/Body/Cell";
 
 const Category = ({ setLoading }) => {
   const [categories, setCategories] = useState([]);
@@ -217,10 +217,14 @@ const Category = ({ setLoading }) => {
         const response = await categoryApi.update(id, payload);
 
         if (response.data?.notice) {
-          setEditingRecord("");
           const editedCategories = categories;
-          editedCategories[position] = editCategory.value;
+
+          const editedCategoryIndex = editedCategories.findIndex(
+            editedCategory => editedCategory.id === id
+          );
+          editedCategories[editedCategoryIndex] = editCategory.value;
           setCategories([...editedCategories]);
+          setEditingRecord("");
         }
       } finally {
         setLoading(false);

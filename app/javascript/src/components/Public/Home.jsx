@@ -30,24 +30,34 @@ const Home = ({ setLoading }) => {
     }
   };
 
+  if (article) {
+    return (
+      <MenuContainer setLoading={setLoading} slug={slug}>
+        <div className="space-y-4">
+          <Typography style="h1">{article?.title}</Typography>
+          <div className="flex flex-row space-x-4">
+            <Tag
+              style="solid"
+              size="small"
+              color="blue"
+              label={article?.category}
+            />
+            <Label>{article?.date} </Label>
+          </div>
+          {paragraphs.map((paragraph, index) => (
+            <Typography key={index} style="body3">
+              {paragraph}
+            </Typography>
+          ))}
+        </div>
+      </MenuContainer>
+    );
+  }
+
   return (
     <MenuContainer setLoading={setLoading} slug={slug}>
-      <div className="space-y-4">
-        <Typography style="h1">{article?.title}</Typography>
-        <div className="flex flex-row space-x-4">
-          <Tag
-            style="solid"
-            size="small"
-            color="blue"
-            label={article?.category}
-          />
-          <Label>{article?.date} </Label>
-        </div>
-        {paragraphs.map((paragraph, index) => (
-          <Typography key={index} style="body3">
-            {paragraph}
-          </Typography>
-        ))}
+      <div className="flex items-center justify-center w-full">
+        <Typography style="h3">Article not found</Typography>
       </div>
     </MenuContainer>
   );

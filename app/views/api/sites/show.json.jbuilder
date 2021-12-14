@@ -3,5 +3,6 @@
 json.site do
   json.extract! @site,
     :name
+
   json.isPassword @site.isPassword
 end

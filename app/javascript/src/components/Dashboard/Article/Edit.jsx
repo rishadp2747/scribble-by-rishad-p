@@ -4,8 +4,8 @@ import { Formik } from "formik";
 import { useParams, useHistory } from "react-router-dom";
 
 import articleApi from "apis/article";
-import { ARTICLE_FORM_VALIDATION_SCHEMA } from "components/Article/constant";
-import Article from "components/Article/Form/Article";
+import { ARTICLE_FORM_VALIDATION_SCHEMA } from "components/Dashboard/Article/constant";
+import Article from "components/Dashboard/Article/Form/Article";
 
 const EditArticle = ({ setLoading }) => {
   const [article, setArticle] = useState({});
@@ -16,13 +16,15 @@ const EditArticle = ({ setLoading }) => {
     fetchArticle();
   }, []);
 
+  const CATEGORY_INITIAL_VALUE = {
+    label: article?.category?.title,
+    value: article?.category?.id,
+  };
+
   const ARTICLE_FORM_INITIAL_VALUE = {
     ...article,
     ...{
-      category: {
-        label: article?.category?.title,
-        value: article?.category?.id,
-      },
+      category: article?.category ? CATEGORY_INITIAL_VALUE : "",
     },
   };
 

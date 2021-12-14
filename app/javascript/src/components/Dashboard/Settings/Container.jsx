@@ -1,8 +1,8 @@
 import React from "react";
 
-import NavBar from "./NavBar";
+import SideMenu from "components/Common/SideMenu";
 
-import SideMenu from "../Common/SideMenu";
+import NavBar from "./NavBar";
 
 const Container = ({ children }) => {
   return (

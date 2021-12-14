@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::RedirectionsController < ApplicationController
-  before_action :load_site!, only: %i[index create update destroy]
+  before_action :load_site, excpet: %i[new edit show]
   before_action :load_redirection, only: %i[update destroy]
 
   def index
@@ -11,26 +11,23 @@ class Api::RedirectionsController < ApplicationController
   def create
     @redirection = @site.redirections.new(redirection_params)
     unless @redirection.save
-      error = @redirection.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(@redirection)
     end
   end
 
   def update
     if @redirection.update(redirection_params)
-      render status: :ok, json: { notice: t("successfull_action", action: "updated", entity: "redirection") }
+      handle_successful_response("redirection", "updated")
     else
-      error = @redirection.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(@redirection)
     end
   end
 
   def destroy
     if @redirection.destroy
-      render status: :ok, json: { notice: t("successfull_action", action: "deleted", entity: "redirection") }
+      handle_successful_response("redirection", "deleted")
     else
-      error = @redirection.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(@redirection)
     end
   end
 
@@ -42,5 +39,8 @@ class Api::RedirectionsController < ApplicationController
 
     def load_redirection
       @redirection = @site.redirections.find(params[:id])
+      unless @redirection
+        handle_not_found_enitiy_response("Redirection")
+      end
     end
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::SitesController < ApplicationController
-  before_action :load_site!, only: %i[show update]
+  before_action :load_site, only: %i[show update]
 
   def show
     render
@@ -9,10 +9,9 @@ class Api::SitesController < ApplicationController
 
   def update
     if @site.update(site_params)
-      render status: :ok, json: { notice: t("successfull_action", action: "updated", entity: "site settings") }
+      handle_successful_response("site", "updated")
     else
-      error = @site.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(@site)
     end
   end
 

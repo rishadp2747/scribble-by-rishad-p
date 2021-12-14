@@ -7,8 +7,8 @@ import articleApi from "apis/article";
 import {
   ARTICLE_FORM_INITIAL_VALUE,
   ARTICLE_FORM_VALIDATION_SCHEMA,
-} from "components/Article/constant";
-import Article from "components/Article/Form/Article";
+} from "components/Dashboard/Article/constant";
+import Article from "components/Dashboard/Article/Form/Article";
 
 const Create = ({ setLoading }) => {
   const history = useHistory();

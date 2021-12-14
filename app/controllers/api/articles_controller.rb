@@ -1,45 +1,41 @@
 # frozen_string_literal: true
 
 class Api::ArticlesController < ApplicationController
-  before_action :load_user!, except: %i[new edit]
+  before_action :load_user, except: %i[new edit]
   before_action :load_article, only: %i[destroy show update]
 
   def index
-    @articles = @current_user.articles
+    @articles = @current_user.articles.order("updated_at DESC")
   end
 
   def show
     unless @article
-      error = @article.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(@article)
     end
   end
 
   def update
     if @article.update(article_params)
-      render status: :ok, json: { notice: t("successfull_action", action: "updated", entity: "article") }
+      handle_successful_response("article", "updated")
     else
-      error = @article.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(@article)
     end
   end
 
   def create
     article = @current_user.articles.new(article_params)
     if article.save
-      render status: :ok, json: { notice: t("successfull_action", action: "created", entity: "article") }
+      handle_successful_response("article", "created")
     else
-      error = article.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(article)
     end
   end
 
   def destroy
     if @article.destroy
-      render status: :ok, json: { notice: t("successfull_action", action: "deleted", entity: "article") }
+      handle_successful_response("article", "deleted")
     else
-      error = @article.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(@article)
     end
   end
 
@@ -51,5 +47,8 @@ class Api::ArticlesController < ApplicationController
 
     def load_article
       @article = @current_user.articles.find(params[:id])
+      unless @article
+        handle_not_found_enitiy_response("Article")
+      end
     end
 end

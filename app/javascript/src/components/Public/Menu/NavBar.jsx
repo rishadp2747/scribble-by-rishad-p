@@ -10,6 +10,7 @@ const NavBar = ({ setLoading, slug }) => {
   const [categories, setCategories] = useState([]);
   const [articles, setArticles] = useState([]);
   const [menu, setMenu] = useState({});
+  const [defaultCategory, setDefaultCategory] = useState(0);
   const history = useHistory();
 
   useEffect(() => {
@@ -48,6 +49,11 @@ const NavBar = ({ setLoading, slug }) => {
 
     if (slug) {
       activeArticleLink = `/public/articles/${slug}/show`;
+      const selectedArticle = articles?.find(article => article.slug === slug);
+      const activeCategoryIndex = categories?.findIndex(
+        category => category?.title === selectedArticle?.category
+      );
+      setDefaultCategory(activeCategoryIndex);
     } else {
       const firstArticle = menuItems[categories[0].title][0];
       activeArticleLink = firstArticle.props.to;
@@ -82,7 +88,7 @@ const NavBar = ({ setLoading, slug }) => {
 
   return (
     <>
-      <Accordion defaultActiveKey={0}>
+      <Accordion defaultActiveKey={defaultCategory}>
         {categories.map((category, index) => (
           <Accordion.Item key={index} title={category.title}>
             {menu[category.title]}

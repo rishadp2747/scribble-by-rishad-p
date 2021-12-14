@@ -4,7 +4,7 @@ class Article < ApplicationRecord
   belongs_to :user
   belongs_to :category
 
-  enum status: { draft: 0, published: 1 }
+  enum status: { Draft: 0, Published: 1 }
 
   validates :title, presence: true, length: { maximum: 80 }
   validates :body, presence: true
@@ -17,7 +17,7 @@ class Article < ApplicationRecord
   before_create :set_slug!
 
   def convert_date_format
-    self.updated_at.strftime("%B %d th, %Y")
+    self.updated_at.strftime("%B %dth, %Y")
   end
 
   private

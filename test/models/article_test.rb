@@ -64,10 +64,10 @@ class ArticleTest < ActiveSupport::TestCase
   end
 
   def test_status_should_accept_valid_values
-    @article.status = "draft"
+    @article.status = "Draft"
     assert @article.valid?
 
-    @article.status = "published"
+    @article.status = "Published"
     assert @article.valid?
   end
 
