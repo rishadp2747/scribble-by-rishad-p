@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::RedirectionsController < ApplicationController
-  before_action :load_site!, only: %i[index create update destroy]
+  before_action :load_site, excpet: %i[new edit show]
   before_action :load_redirection, only: %i[update destroy]
 
   def index

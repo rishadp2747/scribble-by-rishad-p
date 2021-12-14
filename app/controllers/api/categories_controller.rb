@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::CategoriesController < ApplicationController
-  before_action :load_user!, excpet: %i[new edit]
+  before_action :load_user, excpet: %i[new edit]
   before_action :load_category, only: %i[update destroy]
 
   def index

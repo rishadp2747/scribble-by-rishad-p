@@ -3,10 +3,10 @@
 module LoadSite
   extend ActiveSupport::Concern
 
-  def load_site!
+  def load_site
     @site = Site.first
     unless @site
-      render status: :not_found, json: { error: t("not_found", entity: "Site") }
+      handle_not_found_enitiy_response("Site")
     end
   end
 
