@@ -17,7 +17,7 @@ class Article < ApplicationRecord
   before_create :set_slug!
 
   def convert_date_format
-    self.updated_at.strftime("%B %d, %Y")
+    self.updated_at.strftime("%B %d th, %Y")
   end
 
   private
