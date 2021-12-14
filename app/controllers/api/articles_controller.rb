@@ -5,7 +5,7 @@ class Api::ArticlesController < ApplicationController
   before_action :load_article, only: %i[destroy show update]
 
   def index
-    @articles = @current_user.articles
+    @articles = @current_user.articles.order("updated_at DESC")
   end
 
   def show

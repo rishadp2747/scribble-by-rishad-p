@@ -217,10 +217,10 @@ const Category = ({ setLoading }) => {
         const response = await categoryApi.update(id, payload);
 
         if (response.data?.notice) {
-          setEditingRecord("");
           const editedCategories = categories;
           editedCategories[position] = editCategory.value;
           setCategories([...editedCategories]);
+          setEditingRecord("");
         }
       } finally {
         setLoading(false);
