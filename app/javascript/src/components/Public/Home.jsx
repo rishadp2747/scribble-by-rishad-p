@@ -32,23 +32,29 @@ const Home = ({ setLoading }) => {
 
   return (
     <MenuContainer setLoading={setLoading} slug={slug}>
-      <div className="space-y-4">
-        <Typography style="h1">{article?.title}</Typography>
-        <div className="flex flex-row space-x-4">
-          <Tag
-            style="solid"
-            size="small"
-            color="blue"
-            label={article?.category}
-          />
-          <Label>{article?.date} </Label>
+      {article ? (
+        <div className="space-y-4">
+          <Typography style="h1">{article?.title}</Typography>
+          <div className="flex flex-row space-x-4">
+            <Tag
+              style="solid"
+              size="small"
+              color="blue"
+              label={article?.category}
+            />
+            <Label>{article?.date} </Label>
+          </div>
+          {paragraphs.map((paragraph, index) => (
+            <Typography key={index} style="body3">
+              {paragraph}
+            </Typography>
+          ))}
         </div>
-        {paragraphs.map((paragraph, index) => (
-          <Typography key={index} style="body3">
-            {paragraph}
-          </Typography>
-        ))}
-      </div>
+      ) : (
+        <div className="flex items-center justify-center w-full">
+          <Typography style="h3">No such article Found</Typography>
+        </div>
+      )}
     </MenuContainer>
   );
 };

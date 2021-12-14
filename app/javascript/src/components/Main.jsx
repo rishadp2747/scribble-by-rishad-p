@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import { setAxiosInterceptor } from "apis/axios";
-import CreateArticle from "components/Article/CreateArticle";
-import EditArticle from "components/Article/EditArticle";
+import CreateArticle from "components/Article/Create";
+import EditArticle from "components/Article/Edit";
 import Container from "components/Common/Container";
 import Dashboard from "components/Dashboard";
 import Public from "components/Public";
