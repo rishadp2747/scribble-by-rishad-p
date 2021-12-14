@@ -13,41 +13,29 @@ import SettingsRoute from "./Settings/Route";
 
 const Main = () => {
   const [loading, setLoading] = useState(false);
-  // const [redirections, setRedirections] = useState([]);
 
   useEffect(() => {
     setAxiosInterceptor();
-    // fetchRedirections();
   }, []);
-
-  // const fetchRedirections = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const response = await redirectionApi.list();
-  //     setRedirections(response.data?.redirections);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // const REDIRECTION_ROUTES = redirections.map(
-  //   ({ from_path, to_path }, index) => (
-  //     <Route
-  //       exact
-  //       key={index}
-  //       path={from_path}
-  //       render={() => (window.location.href = to_path)}
-  //     />
-  //   )
-  // );
 
   return (
     <BrowserRouter>
       <Switch>
         <Route
-          path="/public"
-          render={() => <Public loading={loading} setLoading={setLoading} />}
+          path="/public/articles"
+          render={() => <Public setLoading={setLoading} />}
         />
+        {/* <Route
+          exact
+          path="/public/articles/:slug/show/"
+          render={() => <Public setLoading={setLoading} />}
+        /> */}
+
+        {/* <Route
+          path="/public"
+          render={() => <Public setLoading={setLoading} />}
+        /> */}
+
         <Route exact path="/" render={() => <Redirect to="/dashboard" />} />
         {/* {REDIRECTION_ROUTES} */}
 

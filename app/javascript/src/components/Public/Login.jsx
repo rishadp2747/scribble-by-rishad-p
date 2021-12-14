@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import { Typography, Label, Input, Button } from "neetoui";
+import { useParams } from "react-router-dom";
 
 import sessionApi from "apis/public/session";
 import Password from "assets/images/Password.png";
@@ -8,6 +9,7 @@ import { setToSession } from "helpers/session";
 
 const Login = ({ setLoading, siteSettings }) => {
   const [password, setPassword] = useState({ value: "", error: "" });
+  const { slug } = useParams();
 
   const validatePassword = value => {
     const error = value.trim() === "" ? "Required" : "";
@@ -34,10 +36,16 @@ const Login = ({ setLoading, siteSettings }) => {
         const response = await sessionApi.login(payload);
         const authToken = response.data?.authentication_token;
         if (authToken) {
+          let location = "/public/articles";
           setToSession({
             authToken: response.data?.authentication_token,
           });
-          window.location.href = "/public/articles";
+
+          if (slug) {
+            location = `/public/articles/${slug}/show`;
+          }
+
+          window.location.href = location;
         }
       } finally {
         setLoading(false);
