@@ -9,7 +9,7 @@ class Api::SitesController < ApplicationController
 
   def update
     if @site.update(site_params)
-      render status: :ok, json: { notice: t("successfull_action", action: "updated", entity: "site settings") }
+      handle_successful_response("site", "updated")
     else
       handle_error_response(@site)
     end

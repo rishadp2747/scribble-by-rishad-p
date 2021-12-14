@@ -11,4 +11,8 @@ module HandleResponse
     error = entity.errors.full_messages.to_sentence
     render status: :unprocessable_entity, json: { error: error }
   end
+
+  def handle_not_found_enitiy_response(entity)
+    render status: :not_found, json: { error: t("not_found", entity: entity) }
+  end
 end
