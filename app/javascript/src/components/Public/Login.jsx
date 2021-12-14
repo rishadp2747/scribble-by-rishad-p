@@ -60,7 +60,7 @@ const Login = ({ setLoading, siteSettings }) => {
         <Typography style="h4">
           {siteSettings.name} is password protected!
         </Typography>
-        <Label>Enter the password to gain access to spinkart.</Label>
+        <Label>Enter the password to gain access to {siteSettings.name}.</Label>
         <Input
           required
           type="password"
