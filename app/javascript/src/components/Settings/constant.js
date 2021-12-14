@@ -29,7 +29,8 @@ export const GENERAL_SETTINGS_FORM_VALIDATION = async values => {
   return errors;
 };
 
-export const REDIRECTION_FORM_INITIAL_VALUE = {
+export const DEFAULT_EDITING_REDIRECTION = {
+  id: "",
   from_path: "",
   to_path: "",
 };

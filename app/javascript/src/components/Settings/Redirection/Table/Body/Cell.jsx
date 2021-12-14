@@ -1,9 +1,10 @@
 import React from "react";
 
+import classnames from "classnames";
 import { Label } from "neetoui";
 import { Input } from "neetoui/formik";
 
-const Cell = ({ editing, dataIndex, children, ...restProps }) => {
+const Cell = ({ editing, dataIndex, children, ...otherProps }) => {
   let childNode = children;
 
   if (editing) {
@@ -11,8 +12,12 @@ const Cell = ({ editing, dataIndex, children, ...restProps }) => {
   }
 
   return (
-    <td {...restProps}>
-      <div className="flex">
+    <td {...otherProps}>
+      <div
+        className={classnames("flex", {
+          "w-48 struncate": dataIndex === "to_path",
+        })}
+      >
         {dataIndex === "from_path" && <Label>https://scribble.com/</Label>}
         {childNode}
       </div>

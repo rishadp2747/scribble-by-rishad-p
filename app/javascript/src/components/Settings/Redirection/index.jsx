@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Formik, Form } from "formik";
-import { Table } from "neetoui";
+import { Plus } from "neetoicon";
+import { Table, Button } from "neetoui";
 
+import redirectionApi from "apis/redirection";
+import { DELETE_ALERT_MESSAGE } from "common/message";
 import ActionBlock from "components/Settings/ActionBlock";
-import { REDIRECTION_FORM_VALIDATION_SCHEMA } from "components/Settings/constant";
+import {
+  DEFAULT_EDITING_REDIRECTION,
+  REDIRECTION_FORM_VALIDATION_SCHEMA,
+} from "components/Settings/constant";
 import Header from "components/Settings/Header";
 import CustomTable from "components/Settings/Redirection/Table";
 import BodyCell from "components/Settings/Redirection/Table/Body/Cell";
@@ -22,54 +28,38 @@ const TABLE_COMPONENTS = {
   },
 };
 
-const TABLE_DATA = [
-  {
-    id: 1,
-    from_path: "welcome",
-    to_path: "https://scribble.com",
-  },
-  {
-    id: 2,
-    from_path: "abput",
-    to_path: "https://scribble.com",
-  },
-  {
-    id: 3,
-    from_path: "sample",
-    to_path: "https://scribble.com",
-  },
-];
+const Redirections = ({ setLoading }) => {
+  const [redirections, setRedirections] = useState([]);
+  const [isAddedRedirection, setIsAddedRedirection] = useState(false);
+  const [editingRedirection, setEditingRedirection] = useState(
+    DEFAULT_EDITING_REDIRECTION
+  );
 
-const INITIAL_FORM_VALUE = {
-  id: "",
-  from_path: "",
-  to_path: "",
-};
-
-const Redirections = () => {
-  const [redirections, setRedirections] = useState(TABLE_DATA);
-  const [editingRedirection, setEditingRedirection] =
-    useState(INITIAL_FORM_VALUE);
+  useEffect(() => {
+    fetchRedirections();
+  }, []);
 
   const TABLE_COLUMNS = [
     {
       title: "From Path",
       dataIndex: "from_path",
       key: "fromPath",
-      width: 270,
+      width: 230,
       editable: true,
     },
     {
       title: "To Path",
       dataIndex: "to_path",
       key: "toPath",
-
+      width: 300,
+      ellipsis: true,
       editable: true,
     },
     {
+      key: "",
       title: "Actions",
       dataIndex: "",
-      key: "",
+      width: 100,
       render: redirection => (
         <ActionBlock
           record={redirection}
@@ -78,40 +68,119 @@ const Redirections = () => {
           handleDeleteRecord={handleDeleteRedirection}
         />
       ),
-      width: 100,
     },
   ];
 
-  const EDITABLE_TABLE_COLUMNS = TABLE_COLUMNS.map(col => {
-    if (!col.editable) {
-      return col;
+  const EDITABLE_TABLE_COLUMNS = TABLE_COLUMNS.map(column => {
+    if (!column.editable) {
+      return column;
     }
 
     return {
-      ...col,
+      ...column,
       onCell: record => ({
-        record,
-        dataIndex: col.dataIndex,
-        title: col.title,
+        dataIndex: column.dataIndex,
         editing: record.id === editingRedirection.id,
       }),
     };
   });
 
-  const handleEditRedirection = redirection => {
-    setEditingRedirection(redirection);
-  };
+  const fetchRedirections = async () => {
+    setLoading(true);
 
-  const handleDeleteRedirection = redirection => {
-    const confirmDelete = confirm(
-      "Are you sure you want to delete this redirection"
-    );
-    if (confirmDelete) {
-      setRedirections(redirections.filter(({ id }) => id !== redirection.id));
+    try {
+      const response = await redirectionApi.list();
+      setRedirections(response.data?.redirections);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleSubmit = async () => {};
+  const handleEditRedirection = redirection => {
+    setIsAddedRedirection(false);
+    setEditingRedirection(redirection);
+  };
+
+  const handleDeleteRedirection = async redirection => {
+    const confirmDelete = confirm(DELETE_ALERT_MESSAGE("redirection"));
+
+    if (confirmDelete) {
+      setLoading(true);
+
+      try {
+        const response = await redirectionApi.destroy(redirection.id);
+
+        if (response.data?.notice) {
+          const latestRedirections = redirections.filter(
+            ({ id }) => id !== redirection.id
+          );
+          setRedirections(latestRedirections);
+        }
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleAddRedirection = () => {
+    if (!isAddedRedirection) {
+      const newRedirection = {
+        from_path: "",
+        to_path: "",
+      };
+
+      setRedirections(redirections => [...redirections, newRedirection]);
+      setEditingRedirection(newRedirection);
+      setIsAddedRedirection(true);
+    }
+  };
+
+  const handleSubmitAddRedirection = async values => {
+    setLoading(true);
+
+    try {
+      const payload = { redirection: values };
+      const response = await redirectionApi.create(payload);
+
+      if (response.data?.notice) {
+        const latestRedirections = redirections;
+        const lastIndex = latestRedirections.length - 1;
+        latestRedirections[lastIndex] = response.data?.redirection;
+        setIsAddedRedirection(false);
+        setRedirections([...latestRedirections]);
+        setEditingRedirection(DEFAULT_EDITING_REDIRECTION);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmitEditRedirection = async values => {
+    setLoading(true);
+
+    try {
+      const payload = { redirection: values };
+      const response = await redirectionApi.update(values.id, payload);
+
+      if (response.data?.notice) {
+        const latestRedirections = redirections.map(redirection =>
+          redirection.id === values.id ? values : redirection
+        );
+        setRedirections(latestRedirections);
+        setEditingRedirection(DEFAULT_EDITING_REDIRECTION);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async values => {
+    if (isAddedRedirection) {
+      handleSubmitAddRedirection(values);
+    } else {
+      handleSubmitEditRedirection(values);
+    }
+  };
 
   return (
     <>
@@ -121,7 +190,7 @@ const Redirections = () => {
           new links. All redirections are performed with 301 status codes to be
           SEO friendly."
       />
-      <div className="p-6 bg-indigo-50">
+      <div className="p-6 space-y-4 bg-indigo-50">
         <Formik
           enableReinitialize
           onSubmit={handleSubmit}
@@ -138,6 +207,14 @@ const Redirections = () => {
             />
           </Form>
         </Formik>
+        <Button
+          style="link"
+          label="Add New Redirection"
+          iconPosition="left"
+          onClick={handleAddRedirection}
+          disabled={isAddedRedirection}
+          icon={() => <Plus size={16} className="mr-2" />}
+        />
       </div>
     </>
   );

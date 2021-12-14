@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import { setAxiosInterceptor } from "apis/axios";
+import redirectionApi from "apis/redirection";
 import CreateArticle from "components/Article/CreateArticle";
 import EditArticle from "components/Article/EditArticle";
 import Container from "components/Common/Container";
@@ -15,14 +16,34 @@ import RedirectionsSettings from "components/Settings/Redirection";
 
 const Main = () => {
   const [loading, setLoading] = useState(false);
+  const [redirections, setRedirections] = useState([]);
 
   useEffect(() => {
     setAxiosInterceptor();
+    fetchRedirections();
   }, []);
+
+  const fetchRedirections = async () => {
+    setLoading(true);
+    try {
+      const response = await redirectionApi.list();
+      setRedirections(response.data?.redirections);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const REDIRECTION_ROUTES = redirections.map(
+    ({ from_path, to_path }, index) => (
+      <Redirect key={index} from={from_path} to={to_path} />
+    )
+  );
 
   return (
     <BrowserRouter>
       <Switch>
+        {REDIRECTION_ROUTES}
+        <Redirect from="/articles/creates" to={"hia"} />
         <Route
           path="/public"
           render={() => <Public loading={loading} setLoading={setLoading} />}

@@ -10,12 +10,13 @@ Rails.application.routes.draw do
         resources :articles, only: %i[index show], param: :slug
       end
 
-      resources :articles, except: %i[new edit]
-      resource :sites, only: %i[show update]
-
       resources :categories, except: %i[new edit] do
         put "sort", on: :collection
       end
+
+      resources :articles, except: %i[new edit]
+      resources :redirections, except: %i[show new edit]
+      resource :sites, only: %i[show update]
 
     end
   end
