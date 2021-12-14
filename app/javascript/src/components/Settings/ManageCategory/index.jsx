@@ -10,13 +10,14 @@ import {
 } from "react-sortable-hoc";
 
 import categoryApi from "apis/category";
+import { DELETE_ALERT_MESSAGE } from "common/message";
+import ActionBlock from "components/Settings/ActionBlock";
 import {
   INITIAL_ADD_CATEGORY,
   INITIAL_EDIT_CATEGORY,
 } from "components/Settings/constant";
 import Header from "components/Settings/Header";
-import EditableCell from "components/Settings/ManageCategory/EditableCell";
-import ActionBlock from "components/Settings/Redirection/ActionBlock";
+import BodyCell from "components/Settings/ManageCategory/Table/Body/Cell";
 
 const Category = ({ setLoading }) => {
   const [categories, setCategories] = useState([]);
@@ -47,26 +48,26 @@ const Category = ({ setLoading }) => {
     {
       dataIndex: "",
       key: "",
+      width: 80,
       render: category =>
         !isEditing(category) && (
           <ActionBlock
             record={category}
-            handleRecordEdit={record => handleEditCategory(record)}
-            handleRecordDelete={handleCategoryDelete}
+            handleEditRecord={record => handleEditCategory(record)}
+            handleDeleteRecord={handleCategoryDelete}
             isRecordEditing={isEditing(category)}
           />
         ),
-      width: 80,
     },
   ];
 
-  const editableTableColumns = TABLE_COLUMNS.map(col => {
-    if (!col.editable) {
-      return col;
+  const editableTableColumns = TABLE_COLUMNS.map(column => {
+    if (!column.editable) {
+      return column;
     }
 
     return {
-      ...col,
+      ...column,
       onCell: record => ({
         editCategory,
         handleEditCategoryValue,
@@ -78,6 +79,7 @@ const Category = ({ setLoading }) => {
 
   const onSortEnd = async ({ oldIndex, newIndex }) => {
     setEditingRecord("");
+
     if (oldIndex !== newIndex) {
       const sortedCtegories = arrayMoveImmutable(
         [].concat(categories),
@@ -113,6 +115,7 @@ const Category = ({ setLoading }) => {
     const index = categories.findIndex(
       category => category.position === restProps["data-row-key"]
     );
+
     return <SortableItem index={index} {...restProps} />;
   };
 
@@ -120,12 +123,13 @@ const Category = ({ setLoading }) => {
     body: {
       wrapper: DraggableContainer,
       row: DraggableBodyRow,
-      cell: EditableCell,
+      cell: BodyCell,
     },
   };
 
   const fetchCategories = async () => {
     setLoading(true);
+
     try {
       const response = await categoryApi.list();
       const categories = response.data?.categories;
@@ -136,11 +140,11 @@ const Category = ({ setLoading }) => {
   };
 
   const handleCategoryDelete = async deletedCategory => {
-    const confirmDelete = confirm(
-      "Are you sure you want to delete this category"
-    );
+    const confirmDelete = confirm(DELETE_ALERT_MESSAGE("category"));
+
     if (confirmDelete) {
       setLoading(true);
+
       try {
         const response = await categoryApi.destroy(deletedCategory.id);
 
@@ -182,8 +186,10 @@ const Category = ({ setLoading }) => {
   const handleSubmitAddCategory = async () => {
     const error = addCategory.value.trim() === "" && "Required";
     setAddCategory({ show: true, value: "", error: error });
+
     if (!error) {
       setLoading(true);
+
       try {
         const payload = { category: { title: addCategory.value } };
         const response = await categoryApi.create(payload);
@@ -199,14 +205,17 @@ const Category = ({ setLoading }) => {
   const handleSubmitEditCategory = async () => {
     const error = editCategory.value.title.trim() === "" && "Required";
     setAddCategory(editCategory => ({ ...editCategory, error: error }));
+
     if (!error) {
       setLoading(true);
+
       try {
         const { id, title, position } = editCategory.value;
         const payload = {
           category: { title, position },
         };
         const response = await categoryApi.update(id, payload);
+
         if (response.data?.notice) {
           setEditingRecord("");
           const editedCategories = categories;

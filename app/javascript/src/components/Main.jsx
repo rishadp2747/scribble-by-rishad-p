@@ -8,10 +8,7 @@ import EditArticle from "components/Article/EditArticle";
 import Container from "components/Common/Container";
 import Dashboard from "components/Dashboard";
 import Public from "components/Public";
-import SettingsContainer from "components/Settings/Container";
-import GeneralSettings from "components/Settings/General";
-import CategorySettings from "components/Settings/ManageCategory";
-import RedirectionsSettings from "components/Settings/Redirection";
+import SettingsRoute from "components/Settings/Route";
 
 const Main = () => {
   const [loading, setLoading] = useState(false);
@@ -24,67 +21,33 @@ const Main = () => {
     <BrowserRouter>
       <Switch>
         <Route
-          path="/public"
-          render={() => <Public loading={loading} setLoading={setLoading} />}
+          path="/public/articles"
+          render={() => <Public setLoading={setLoading} />}
         />
         <Route exact path="/" render={() => <Redirect to="/dashboard" />} />
-        <Route
-          exact
-          path="/settings"
-          render={() => <Redirect to="/settings/general" />}
-        />
 
         <Container loading={loading} title="Scribble">
           <Route
             exact
             path="/dashboard"
-            render={() => (
-              <Dashboard setLoading={setLoading} loading={loading} />
-            )}
+            render={() => <Dashboard setLoading={setLoading} />}
           />
 
           <Route
             exact
             path="/articles/creates"
-            render={() => (
-              <CreateArticle setLoading={setLoading} loading={loading} />
-            )}
+            render={() => <CreateArticle setLoading={setLoading} />}
           />
           <Route
             exact
             path="/articles/:articleId/edit"
-            render={() => (
-              <EditArticle setLoading={setLoading} loading={loading} />
-            )}
+            render={() => <EditArticle setLoading={setLoading} />}
           />
 
-          <SettingsContainer>
-            <Route
-              exact
-              path="/settings/general"
-              render={() => (
-                <GeneralSettings setLoading={setLoading} loading={loading} />
-              )}
-            />
-
-            <Route
-              exact
-              path="/settings/redirections"
-              render={() => (
-                <RedirectionsSettings
-                  setLoading={setLoading}
-                  loading={loading}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/settings/manage-categories"
-              render={() => (
-                <CategorySettings setLoading={setLoading} loading={loading} />
-              )}
-            />
-          </SettingsContainer>
+          <Route
+            path="/settings"
+            render={() => <SettingsRoute setLoading={setLoading} />}
+          />
         </Container>
       </Switch>
     </BrowserRouter>

@@ -4,6 +4,7 @@ import { Typography, Label, Tag } from "neetoui";
 import { useParams } from "react-router-dom";
 
 import articleApi from "apis/public/article";
+import MenuContainer from "components/Public/Menu/Container";
 
 const Home = ({ setLoading }) => {
   const [article, setArticle] = useState();
@@ -11,7 +12,9 @@ const Home = ({ setLoading }) => {
   const { slug } = useParams();
 
   useEffect(() => {
-    fetchArticle();
+    if (slug) {
+      fetchArticle();
+    }
   }, [slug]);
 
   const fetchArticle = async () => {
@@ -28,23 +31,25 @@ const Home = ({ setLoading }) => {
   };
 
   return (
-    <div className="space-y-4">
-      <Typography style="h1">{article?.title}</Typography>
-      <div className="flex flex-row space-x-4">
-        <Tag
-          style="solid"
-          size="small"
-          color="blue"
-          label={article?.category}
-        />
-        <Label>{article?.date} </Label>
+    <MenuContainer setLoading={setLoading} slug={slug}>
+      <div className="space-y-4">
+        <Typography style="h1">{article?.title}</Typography>
+        <div className="flex flex-row space-x-4">
+          <Tag
+            style="solid"
+            size="small"
+            color="blue"
+            label={article?.category}
+          />
+          <Label>{article?.date} </Label>
+        </div>
+        {paragraphs.map((paragraph, index) => (
+          <Typography key={index} style="body3">
+            {paragraph}
+          </Typography>
+        ))}
       </div>
-      {paragraphs.map((paragraph, index) => (
-        <Typography key={index} style="body3">
-          {paragraph}
-        </Typography>
-      ))}
-    </div>
+    </MenuContainer>
   );
 };
 

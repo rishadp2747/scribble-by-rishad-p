@@ -16,7 +16,7 @@ const Container = ({ loading, title, titlePosition, children }) => {
         titlePosition={titlePosition}
         navLinks={<NavBar />}
         actionBlock={
-          <Link to="/public" target="_blank">
+          <Link to="/public/articles" target="_blank">
             <Button
               icon={ExternalLink}
               iconPosition="right"

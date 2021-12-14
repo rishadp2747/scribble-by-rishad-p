@@ -6,11 +6,10 @@ import { NavLink, useHistory } from "react-router-dom";
 import articleApi from "apis/public/article";
 import categoryApi from "apis/public/category";
 
-const NavBar = ({ setLoading }) => {
+const NavBar = ({ setLoading, slug }) => {
   const [categories, setCategories] = useState([]);
   const [articles, setArticles] = useState([]);
   const [menu, setMenu] = useState({});
-
   const history = useHistory();
 
   useEffect(() => {
@@ -24,7 +23,6 @@ const NavBar = ({ setLoading }) => {
 
   const setMenuItems = () => {
     const menuItems = {};
-
     categories?.forEach(({ title }) => (menuItems[title] = []));
 
     articles?.forEach((article, index) => {
@@ -44,15 +42,23 @@ const NavBar = ({ setLoading }) => {
       menuItems[article.category].push(link);
     });
 
-    const firstArticle = menuItems[categories[0].title][0];
-    const activeArticleLink = firstArticle.props.to;
+    let activeArticleLink;
+
+    if (slug) {
+      activeArticleLink = `/public/articles/${slug}/show`;
+    } else {
+      const firstArticle = menuItems[categories[0].title][0];
+      activeArticleLink = firstArticle.props.to;
+    }
 
     history.push(activeArticleLink);
+
     setMenu(menuItems);
   };
 
   const fetchCategories = async () => {
     setLoading(true);
+
     try {
       const response = await categoryApi.list();
       setCategories(response.data?.categories);
@@ -63,6 +69,7 @@ const NavBar = ({ setLoading }) => {
 
   const fetchArticles = async () => {
     setLoading(true);
+
     try {
       const response = await articleApi.list();
       setArticles(response.data?.articles);

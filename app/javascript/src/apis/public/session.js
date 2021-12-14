@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const login = payload => axios.post("api/public/sessions", payload);
+const login = payload => axios.post("api/public/session", payload);
 
 const sessionApi = {
   login,

@@ -3,7 +3,7 @@ import React from "react";
 import { Check } from "neetoicon";
 import { Button, Input } from "neetoui";
 
-const EditableCell = ({
+const Cell = ({
   isRecordEditing,
   editCategory,
   handleEditCategoryValue,
@@ -41,4 +41,4 @@ const EditableCell = ({
   );
 };
 
-export default React.memo(EditableCell);
+export default React.memo(Cell);
