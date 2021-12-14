@@ -96,7 +96,16 @@ const Redirections = ({ setLoading }) => {
     }
   };
 
+  const removeAddedRedirection = () => {
+    if (isAddedRedirection) {
+      const latestRedirections = redirections;
+      latestRedirections.pop();
+      setRedirections([...latestRedirections]);
+    }
+  };
+
   const handleEditRedirection = redirection => {
+    removeAddedRedirection();
     setIsAddedRedirection(false);
     setEditingRedirection(redirection);
   };

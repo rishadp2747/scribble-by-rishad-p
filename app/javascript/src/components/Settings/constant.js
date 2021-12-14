@@ -36,7 +36,11 @@ export const DEFAULT_EDITING_REDIRECTION = {
 };
 
 export const REDIRECTION_FORM_VALIDATION_SCHEMA = yup.object().shape({
-  from_path: yup.string().trim().required("Required"),
+  from_path: yup
+    .string()
+    .trim()
+    .required("Required")
+    .matches(/^\/[a-zA-Z][a-zA-Z0-9-/;]+$/, "Invalid URL"),
   to_path: yup.string().trim().required("Required"),
 });
 
