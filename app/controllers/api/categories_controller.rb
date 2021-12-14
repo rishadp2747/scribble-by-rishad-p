@@ -18,7 +18,6 @@ class Api::CategoriesController < ApplicationController
   end
 
   def sort
-    puts @current_user.to_json
     if @current_user.update(categories_params)
       render status: :ok, json: { success: true }
     else
