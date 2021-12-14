@@ -47,13 +47,12 @@ const Main = () => {
   return (
     <BrowserRouter>
       <Switch>
-        {REDIRECTION_ROUTES}
-
         <Route
           path="/public"
           render={() => <Public loading={loading} setLoading={setLoading} />}
         />
         <Route exact path="/" render={() => <Redirect to="/dashboard" />} />
+        {REDIRECTION_ROUTES}
         <Route
           exact
           path="/settings"
