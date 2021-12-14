@@ -17,7 +17,7 @@ class Api::RedirectionsController < ApplicationController
 
   def update
     if @redirection.update(redirection_params)
-      render status: :ok, json: { notice: t("successfull_action", action: "updated", entity: "redirection") }
+      handle_successful_response("redirection", "updated")
     else
       handle_error_response(@redirection)
     end
@@ -25,7 +25,7 @@ class Api::RedirectionsController < ApplicationController
 
   def destroy
     if @redirection.destroy
-      render status: :ok, json: { notice: t("successfull_action", action: "deleted", entity: "redirection") }
+      handle_successful_response("redirection", "deleted")
     else
       handle_error_response(@redirection)
     end

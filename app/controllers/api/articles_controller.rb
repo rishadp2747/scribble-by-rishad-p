@@ -16,7 +16,7 @@ class Api::ArticlesController < ApplicationController
 
   def update
     if @article.update(article_params)
-      render status: :ok, json: { notice: t("successfull_action", action: "updated", entity: "article") }
+      handle_successful_response("article", "updated")
     else
       handle_error_response(@article)
     end
@@ -25,7 +25,7 @@ class Api::ArticlesController < ApplicationController
   def create
     article = @current_user.articles.new(article_params)
     if article.save
-      render status: :ok, json: { notice: t("successfull_action", action: "created", entity: "article") }
+      handle_successful_response("article", "created")
     else
       handle_error_response(article)
     end
@@ -33,7 +33,7 @@ class Api::ArticlesController < ApplicationController
 
   def destroy
     if @article.destroy
-      render status: :ok, json: { notice: t("successfull_action", action: "deleted", entity: "article") }
+      handle_successful_response("article", "deleted")
     else
       handle_error_response(@article)
     end

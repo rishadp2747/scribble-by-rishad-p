@@ -10,7 +10,7 @@ class Api::CategoriesController < ApplicationController
 
   def update
     if @category.update(category_params)
-      render status: :ok, json: { notice: t("successfull_action", action: "updated", entity: "category") }
+      handle_successful_response("category", "updated")
     else
       handle_error_response(@category)
     end
@@ -33,7 +33,7 @@ class Api::CategoriesController < ApplicationController
 
   def destroy
     if @category.destroy
-      render status: :ok, json: { notice: t("successfull_action", action: "deleted", entity: "category") }
+      handle_successful_response("category", "deleted")
     else
       handle_error_response(@category)
     end
