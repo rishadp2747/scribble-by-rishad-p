@@ -11,8 +11,7 @@ class Api::RedirectionsController < ApplicationController
   def create
     @redirection = @site.redirections.new(redirection_params)
     unless @redirection.save
-      error = @redirection.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(@redirection)
     end
   end
 
@@ -20,8 +19,7 @@ class Api::RedirectionsController < ApplicationController
     if @redirection.update(redirection_params)
       render status: :ok, json: { notice: t("successfull_action", action: "updated", entity: "redirection") }
     else
-      error = @redirection.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(@redirection)
     end
   end
 
@@ -29,8 +27,7 @@ class Api::RedirectionsController < ApplicationController
     if @redirection.destroy
       render status: :ok, json: { notice: t("successfull_action", action: "deleted", entity: "redirection") }
     else
-      error = @redirection.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(@redirection)
     end
   end
 

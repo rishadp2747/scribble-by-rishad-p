@@ -11,8 +11,7 @@ class Api::SitesController < ApplicationController
     if @site.update(site_params)
       render status: :ok, json: { notice: t("successfull_action", action: "updated", entity: "site settings") }
     else
-      error = @site.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(@site)
     end
   end
 

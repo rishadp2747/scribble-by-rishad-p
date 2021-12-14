@@ -10,8 +10,7 @@ class Api::ArticlesController < ApplicationController
 
   def show
     unless @article
-      error = @article.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(@article)
     end
   end
 
@@ -19,8 +18,7 @@ class Api::ArticlesController < ApplicationController
     if @article.update(article_params)
       render status: :ok, json: { notice: t("successfull_action", action: "updated", entity: "article") }
     else
-      error = @article.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(@article)
     end
   end
 
@@ -29,8 +27,7 @@ class Api::ArticlesController < ApplicationController
     if article.save
       render status: :ok, json: { notice: t("successfull_action", action: "created", entity: "article") }
     else
-      error = article.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(article)
     end
   end
 
@@ -38,8 +35,7 @@ class Api::ArticlesController < ApplicationController
     if @article.destroy
       render status: :ok, json: { notice: t("successfull_action", action: "deleted", entity: "article") }
     else
-      error = @article.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(@article)
     end
   end
 

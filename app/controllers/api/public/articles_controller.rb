@@ -11,8 +11,7 @@ class Api::Public::ArticlesController < ApplicationController
 
   def show
     unless @article
-      error = @article.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(@article)
     end
   end
 
