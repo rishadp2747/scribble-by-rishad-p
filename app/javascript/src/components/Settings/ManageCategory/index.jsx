@@ -218,7 +218,11 @@ const Category = ({ setLoading }) => {
 
         if (response.data?.notice) {
           const editedCategories = categories;
-          editedCategories[position] = editCategory.value;
+
+          const editedCategoryIndex = editedCategories.findIndex(
+            editedCategory => editedCategory.id === id
+          );
+          editedCategories[editedCategoryIndex] = editCategory.value;
           setCategories([...editedCategories]);
           setEditingRecord("");
         }
