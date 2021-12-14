@@ -75,6 +75,7 @@ const Dashboard = ({ setLoading }) => {
 
   const fetchArticles = async () => {
     setLoading(true);
+
     try {
       const response = await articleApi.list();
       setArticleCounts(response.data?.counts);
@@ -104,13 +105,21 @@ const Dashboard = ({ setLoading }) => {
     setFilteredArticles(
       articles.filter(article => {
         if (selectedFilters.status !== "all") {
-          return (
-            article.status === selectedFilters.status &&
-            article.category === selectedFilters.category
-          );
+          if (selectedFilters.category !== "") {
+            return (
+              article.status === selectedFilters.status &&
+              article.category === selectedFilters.category
+            );
+          }
+
+          return article.status === selectedFilters.status;
         }
 
-        return article.category === selectedFilters.category;
+        if (selectedFilters.category !== "") {
+          return article.category === selectedFilters.category;
+        }
+
+        return article;
       })
     );
   };

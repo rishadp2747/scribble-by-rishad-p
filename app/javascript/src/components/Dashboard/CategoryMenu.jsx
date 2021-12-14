@@ -14,6 +14,7 @@ const CategoryMenu = ({
   handleSelectedFilters,
 }) => {
   const [categories, setCategories] = useState([]);
+  const [isActiveCategory, setIsActiveCategory] = useState(false);
   const [searchCategories, setSearchCategories] = useState([]);
   const [categoryActions, setCategoryActions] = useState(
     DEFAULT_CATEGORY_ACTIONS
@@ -27,12 +28,7 @@ const CategoryMenu = ({
 
   useEffect(() => {
     if (SEARCH_KEYWORD) {
-      const keyword = SEARCH_KEYWORD.toLowerCase();
-      setCategories(
-        categories.filter(({ title }) =>
-          title.toLowerCase().split(" ").includes(keyword)
-        )
-      );
+      handleSearchCategory();
     } else {
       setCategories(searchCategories);
     }
@@ -44,7 +40,6 @@ const CategoryMenu = ({
       const response = await categoryApi.list();
       const categories = response.data?.categories;
       setCategories(categories);
-      handleSelectedFilters({ category: categories[0].title });
     } finally {
       setLoading(false);
     }
@@ -53,32 +48,54 @@ const CategoryMenu = ({
   const handleCategoryActionValueChange = e => {
     const action = e.target.id;
     const newCategoryActionValue = categoryActions;
+
     if (e.target.value.trim() === "") {
       newCategoryActionValue[action].error = "Required";
     } else {
       newCategoryActionValue[action].error = "";
     }
+
     newCategoryActionValue[action].value = e.target.value;
     setCategoryActions({ ...newCategoryActionValue });
   };
 
   const handleAddCategory = async () => {
-    if (categoryActions.add.value.trim() !== "") {
+    const error = categoryActions.add.value.trim() === "";
+    const errorMessage = error && "Required";
+
+    if (error) {
+      const addActionStatus = { error: errorMessage, value: "", show: true };
+      setCategoryActions(categoryAction => ({
+        ...categoryAction,
+        add: addActionStatus,
+      }));
+    } else {
       setLoading(true);
+
       try {
         const payload = { category: { title: categoryActions.add.value } };
         const response = await categoryApi.create(payload);
-        if (response.data?.category) {
-          setCategories(categories => [...categories, response.data?.category]);
-          setCategoryActions(categoryActions => ({
-            ...categoryActions,
-            add: { show: true, value: "" },
-          }));
+        const category = response.data?.category;
+
+        if (category) {
+          setCategories(categories => [...categories, category]);
+          setCategoryActions(DEFAULT_CATEGORY_ACTIONS);
         }
       } finally {
         setLoading(false);
       }
     }
+  };
+
+  const handleSearchCategory = () => {
+    const REMOVE_SPACES_BETWEEN_WORDS = /\s+/g;
+    const keyword = SEARCH_KEYWORD.trim()
+      .toLowerCase()
+      .replace(REMOVE_SPACES_BETWEEN_WORDS, " ");
+
+    setCategories(
+      categories.filter(({ title }) => title.toLowerCase().includes(keyword))
+    );
   };
 
   const handleAddCategoryIcon = () => {
@@ -100,6 +117,8 @@ const CategoryMenu = ({
     const action = e.target.id.split("C")[0];
     const newCategoryActionValue = categoryActions;
     newCategoryActionValue[action].show = false;
+
+    searchCategories.length !== 0 && setCategories(searchCategories);
     setCategoryActions({ ...newCategoryActionValue });
   };
 
@@ -121,6 +140,16 @@ const CategoryMenu = ({
       icon: () => (categoryActions.add.show ? ACTIONS.addClose : ACTIONS.add),
     },
   ];
+
+  const handleActiveMenu = title => {
+    if (selectedFilters.category === title) {
+      setIsActiveCategory(false);
+      handleSelectedFilters({ category: "" });
+    } else {
+      setIsActiveCategory(true);
+      handleSelectedFilters({ category: title });
+    }
+  };
 
   return (
     <>
@@ -160,8 +189,8 @@ const CategoryMenu = ({
           key={index}
           label={title}
           count={count}
-          active={selectedFilters.category === title}
-          onClick={() => handleSelectedFilters({ category: title })}
+          active={isActiveCategory && selectedFilters.category === title}
+          onClick={() => handleActiveMenu(title)}
         />
       ))}
     </>
