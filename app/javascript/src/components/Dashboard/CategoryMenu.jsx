@@ -14,6 +14,7 @@ const CategoryMenu = ({
   handleSelectedFilters,
 }) => {
   const [categories, setCategories] = useState([]);
+  const [isActiveCategory, setIsActiveCategory] = useState(false);
   const [searchCategories, setSearchCategories] = useState([]);
   const [categoryActions, setCategoryActions] = useState(
     DEFAULT_CATEGORY_ACTIONS
@@ -44,7 +45,7 @@ const CategoryMenu = ({
       const response = await categoryApi.list();
       const categories = response.data?.categories;
       setCategories(categories);
-      handleSelectedFilters({ category: categories[0].title });
+      // handleSelectedFilters({ category: categories[0].title });
     } finally {
       setLoading(false);
     }
@@ -122,6 +123,16 @@ const CategoryMenu = ({
     },
   ];
 
+  const handleActiveMenu = title => {
+    if (selectedFilters.category === title) {
+      setIsActiveCategory(false);
+      handleSelectedFilters({ category: "" });
+    } else {
+      setIsActiveCategory(true);
+      handleSelectedFilters({ category: title });
+    }
+  };
+
   return (
     <>
       <MenuBar.SubTitle iconProps={CATEGORY_ACTION_ICONS}>
@@ -160,8 +171,8 @@ const CategoryMenu = ({
           key={index}
           label={title}
           count={count}
-          active={selectedFilters.category === title}
-          onClick={() => handleSelectedFilters({ category: title })}
+          active={isActiveCategory && selectedFilters.category === title}
+          onClick={() => handleActiveMenu(title)}
         />
       ))}
     </>
