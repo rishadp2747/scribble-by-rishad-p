@@ -158,7 +158,7 @@ const Dashboard = ({ setLoading }) => {
             key={index}
             label={status}
             className="capitalize"
-            count={articleCounts && articleCounts[status]}
+            count={articleCounts && articleCounts[status.toLowerCase()]}
             active={status === selectedFilters.status}
             onClick={() => handleSelectedFilters({ status: status })}
           />
