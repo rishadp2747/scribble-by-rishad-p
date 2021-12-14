@@ -60,13 +60,13 @@ const Category = ({ setLoading }) => {
     },
   ];
 
-  const editableTableColumns = TABLE_COLUMNS.map(col => {
-    if (!col.editable) {
-      return col;
+  const editableTableColumns = TABLE_COLUMNS.map(column => {
+    if (!column.editable) {
+      return column;
     }
 
     return {
-      ...col,
+      ...column,
       onCell: record => ({
         editCategory,
         handleEditCategoryValue,

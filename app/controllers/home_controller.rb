@@ -7,10 +7,13 @@ class HomeController < ApplicationController
     render
   end
 
-  def redirect
-    redirection = Redirection.find_by_from_path(request.path)
-    if redirection
-      redirect_to redirection.to_path, status: 301
+  private
+
+    def redirect
+      redirection = Redirection.find_by(from_path: request.path)
+
+      if redirection
+        redirect_to redirection.to_path, status: 301
+      end
     end
-  end
 end

@@ -13,7 +13,7 @@ const Cell = ({ editing, dataIndex, children, ...otherProps }) => {
   return (
     <td {...otherProps}>
       <div className={"flex truncate"}>
-        {dataIndex === "from_path" && <Label>https://scribble.com/</Label>}
+        {dataIndex === "from_path" && <Label>https://scribble.com</Label>}
         {childNode}
       </div>
     </td>
