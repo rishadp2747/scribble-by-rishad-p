@@ -51,33 +51,7 @@ const Public = ({ loading, setLoading }) => {
         path="/public/articles/:slug/show"
         render={isPrivateArticle}
       />
-
       <Route exact path="/public/articles/" render={isPrivateArticle} />
-
-      {/* {siteSettings?.isPassword && !isLoggedIn ? (
-        <>
-          <Route
-            exact
-            path="/public/login"
-            render={() => (
-              <Login
-                siteSettings={siteSettings}
-                setLoading={setLoading}
-                slug={slug}
-              />
-            )}
-          />
-          <Redirect from="/public" to={{ pathname: "/public/login" }} />
-        </>
-      ) : (
-        <MenuContainer setLoading={setLoading}>
-          {/* <Route
-            path={"/public/articles/:slug/show"}
-            render={() => <Home setLoading={setLoading} />}
-          /> */}
-      {/* <Redirect from="/public" to={{ pathname: "/public/articles" }} /> */}
-      {/* </MenuContainer> */}
-      {/* )} */}
     </Container>
   );
 };

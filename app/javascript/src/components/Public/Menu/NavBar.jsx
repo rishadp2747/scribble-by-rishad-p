@@ -10,7 +10,6 @@ const NavBar = ({ setLoading, slug }) => {
   const [categories, setCategories] = useState([]);
   const [articles, setArticles] = useState([]);
   const [menu, setMenu] = useState({});
-
   const history = useHistory();
 
   useEffect(() => {
@@ -24,7 +23,6 @@ const NavBar = ({ setLoading, slug }) => {
 
   const setMenuItems = () => {
     const menuItems = {};
-
     categories?.forEach(({ title }) => (menuItems[title] = []));
 
     articles?.forEach((article, index) => {
@@ -60,6 +58,7 @@ const NavBar = ({ setLoading, slug }) => {
 
   const fetchCategories = async () => {
     setLoading(true);
+
     try {
       const response = await categoryApi.list();
       setCategories(response.data?.categories);
@@ -70,6 +69,7 @@ const NavBar = ({ setLoading, slug }) => {
 
   const fetchArticles = async () => {
     setLoading(true);
+
     try {
       const response = await articleApi.list();
       setArticles(response.data?.articles);

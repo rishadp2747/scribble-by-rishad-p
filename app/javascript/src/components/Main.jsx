@@ -8,8 +8,7 @@ import EditArticle from "components/Article/EditArticle";
 import Container from "components/Common/Container";
 import Dashboard from "components/Dashboard";
 import Public from "components/Public";
-
-import SettingsRoute from "./Settings/Route";
+import SettingsRoute from "components/Settings/Route";
 
 const Main = () => {
   const [loading, setLoading] = useState(false);
@@ -25,19 +24,7 @@ const Main = () => {
           path="/public/articles"
           render={() => <Public setLoading={setLoading} />}
         />
-        {/* <Route
-          exact
-          path="/public/articles/:slug/show/"
-          render={() => <Public setLoading={setLoading} />}
-        /> */}
-
-        {/* <Route
-          path="/public"
-          render={() => <Public setLoading={setLoading} />}
-        /> */}
-
         <Route exact path="/" render={() => <Redirect to="/dashboard" />} />
-        {/* {REDIRECTION_ROUTES} */}
 
         <Container loading={loading} title="Scribble">
           <Route

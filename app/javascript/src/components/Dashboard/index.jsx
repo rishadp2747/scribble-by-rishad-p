@@ -9,6 +9,7 @@ import {
 } from "neetoui/layouts";
 
 import articleApi from "apis/article";
+import { DELETE_ALERT_MESSAGE } from "common/message";
 import CategoryMenu from "components/Dashboard/CategoryMenu";
 import {
   DEFAULT_TABLE_COLUMNS,
@@ -127,7 +128,7 @@ const Dashboard = ({ setLoading }) => {
   };
 
   const deleteArticle = async article => {
-    const decision = confirm("Are you sure you want to delete this article");
+    const decision = confirm(DELETE_ALERT_MESSAGE("article"));
     if (decision) {
       setLoading(true);
       try {
