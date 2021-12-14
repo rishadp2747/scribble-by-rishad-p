@@ -12,8 +12,7 @@ class Api::CategoriesController < ApplicationController
     if @category.update(category_params)
       render status: :ok, json: { notice: t("successfull_action", action: "updated", entity: "category") }
     else
-      error = @article.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(@category)
     end
   end
 
@@ -21,16 +20,14 @@ class Api::CategoriesController < ApplicationController
     if @current_user.update(categories_params)
       render status: :ok, json: { success: true }
     else
-      error = @current_user.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(@current_user)
     end
   end
 
   def create
     @category = @current_user.categories.new(category_params)
     unless @category.save
-      error = @category.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(@category)
     end
   end
 
@@ -38,8 +35,7 @@ class Api::CategoriesController < ApplicationController
     if @category.destroy
       render status: :ok, json: { notice: t("successfull_action", action: "deleted", entity: "category") }
     else
-      error = @article.errors.full_messages.to_sentence
-      render status: :unprocessable_entity, json: { error: error }
+      handle_error_response(@category)
     end
   end
 

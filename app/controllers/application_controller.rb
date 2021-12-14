@@ -4,4 +4,5 @@ class ApplicationController < ActionController::Base
   include LoadUser
   include LoadSite
   include Authenticatable
+  include HandleResponse
 end
