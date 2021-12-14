@@ -6,7 +6,7 @@ import { Typography, Button } from "neetoui";
 import { Input, Checkbox } from "neetoui/formik";
 
 import siteApi from "apis/site";
-import Header from "components/Settings/Header";
+import Header from "components/Dashboard/Settings/Header";
 
 import { GENERAL_SETTINGS_FORM_VALIDATION } from "./constant";
 

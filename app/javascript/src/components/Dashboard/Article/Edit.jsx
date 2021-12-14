@@ -4,8 +4,8 @@ import { Formik } from "formik";
 import { useParams, useHistory } from "react-router-dom";
 
 import articleApi from "apis/article";
-import { ARTICLE_FORM_VALIDATION_SCHEMA } from "components/Article/constant";
-import Article from "components/Article/Form/Article";
+import { ARTICLE_FORM_VALIDATION_SCHEMA } from "components/Dashboard/Article/constant";
+import Article from "components/Dashboard/Article/Form/Article";
 
 const EditArticle = ({ setLoading }) => {
   const [article, setArticle] = useState({});

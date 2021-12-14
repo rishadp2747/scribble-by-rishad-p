@@ -3,12 +3,12 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import { setAxiosInterceptor } from "apis/axios";
-import CreateArticle from "components/Article/Create";
-import EditArticle from "components/Article/Edit";
 import Container from "components/Common/Container";
 import Dashboard from "components/Dashboard";
+import CreateArticle from "components/Dashboard/Article/Create";
+import EditArticle from "components/Dashboard/Article/Edit";
+import SettingsRoute from "components/Dashboard/Settings/Route";
 import Public from "components/Public";
-import SettingsRoute from "components/Settings/Route";
 
 const Main = () => {
   const [loading, setLoading] = useState(false);

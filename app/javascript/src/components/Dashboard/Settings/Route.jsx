@@ -2,10 +2,10 @@ import React from "react";
 
 import { Route, Redirect } from "react-router-dom";
 
-import SettingsContainer from "components/Settings/Container";
-import GeneralSettings from "components/Settings/General";
-import CategorySettings from "components/Settings/ManageCategory";
-import RedirectionsSettings from "components/Settings/Redirection";
+import SettingsContainer from "components/Dashboard/Settings/Container";
+import GeneralSettings from "components/Dashboard/Settings/General";
+import CategorySettings from "components/Dashboard/Settings/ManageCategory";
+import RedirectionsSettings from "components/Dashboard/Settings/Redirection";
 
 const SettingsRoute = ({ setLoading }) => {
   return (

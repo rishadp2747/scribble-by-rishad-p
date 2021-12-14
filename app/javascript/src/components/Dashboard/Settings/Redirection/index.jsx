@@ -6,16 +6,16 @@ import { Table, Button } from "neetoui";
 
 import redirectionApi from "apis/redirection";
 import { DELETE_ALERT_MESSAGE } from "common/message";
-import ActionBlock from "components/Settings/ActionBlock";
+import ActionBlock from "components/Dashboard/Settings/ActionBlock";
 import {
   DEFAULT_EDITING_REDIRECTION,
   REDIRECTION_FORM_VALIDATION_SCHEMA,
-} from "components/Settings/constant";
-import Header from "components/Settings/Header";
-import CustomTable from "components/Settings/Redirection/Table";
-import BodyCell from "components/Settings/Redirection/Table/Body/Cell";
-import BodyRow from "components/Settings/Redirection/Table/Body/Row";
-import HeaderCell from "components/Settings/Redirection/Table/Header/Cell";
+} from "components/Dashboard/Settings/constant";
+import Header from "components/Dashboard/Settings/Header";
+import CustomTable from "components/Dashboard/Settings/Redirection/Table";
+import BodyCell from "components/Dashboard/Settings/Redirection/Table/Body/Cell";
+import BodyRow from "components/Dashboard/Settings/Redirection/Table/Body/Row";
+import HeaderCell from "components/Dashboard/Settings/Redirection/Table/Header/Cell";
 
 const TABLE_COMPONENTS = {
   table: CustomTable,
