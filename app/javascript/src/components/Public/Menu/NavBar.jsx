@@ -18,8 +18,10 @@ const NavBar = ({ setLoading, slug }) => {
   }, []);
 
   useEffect(() => {
-    if (articles?.length !== 0) setMenuItems();
-  }, [articles]);
+    if (articles?.length !== 0 && categories.length !== 0) {
+      setMenuItems();
+    }
+  }, [articles, categories]);
 
   const setMenuItems = () => {
     const menuItems = {};
