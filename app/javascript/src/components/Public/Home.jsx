@@ -30,9 +30,9 @@ const Home = ({ setLoading }) => {
     }
   };
 
-  return (
-    <MenuContainer setLoading={setLoading} slug={slug}>
-      {article ? (
+  if (article) {
+    return (
+      <MenuContainer setLoading={setLoading} slug={slug}>
         <div className="space-y-4">
           <Typography style="h1">{article?.title}</Typography>
           <div className="flex flex-row space-x-4">
@@ -50,11 +50,15 @@ const Home = ({ setLoading }) => {
             </Typography>
           ))}
         </div>
-      ) : (
-        <div className="flex items-center justify-center w-full">
-          <Typography style="h3">No such article Found</Typography>
-        </div>
-      )}
+      </MenuContainer>
+    );
+  }
+
+  return (
+    <MenuContainer setLoading={setLoading} slug={slug}>
+      <div className="flex items-center justify-center w-full">
+        <Typography style="h3">Article not found</Typography>
+      </div>
     </MenuContainer>
   );
 };
