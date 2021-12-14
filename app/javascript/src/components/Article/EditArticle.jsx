@@ -16,13 +16,15 @@ const EditArticle = ({ setLoading }) => {
     fetchArticle();
   }, []);
 
+  const CATEGORY_INITIAL_VALUE = {
+    label: article?.category?.title,
+    value: article?.category?.id,
+  };
+
   const ARTICLE_FORM_INITIAL_VALUE = {
     ...article,
     ...{
-      category: {
-        label: article?.category?.title,
-        value: article?.category?.id,
-      },
+      category: article?.category ? CATEGORY_INITIAL_VALUE : "",
     },
   };
 
