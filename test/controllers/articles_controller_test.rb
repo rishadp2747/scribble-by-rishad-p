@@ -34,6 +34,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_article_can_be_updated
+    put api_article_path(@article), params: article_params
     assert_response :success
     assert_equal response.parsed_body["notice"], t("successfull_action", action: "updated", entity: "article")
   end
