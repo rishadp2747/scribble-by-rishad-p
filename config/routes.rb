@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     namespace :api do
 
       namespace :public do
-        resources :sessions, only: :create
+        resource :session, only: :create
         resources :categories, only: :index
         resources :articles, only: %i[index show], param: :slug
       end
@@ -16,9 +16,9 @@ Rails.application.routes.draw do
         put "sort", on: :collection
       end
 
+      resource :site, only: %i[show update]
       resources :articles, except: %i[new edit]
       resources :redirections, except: %i[show new edit]
-      resource :sites, only: %i[show update]
 
     end
   end

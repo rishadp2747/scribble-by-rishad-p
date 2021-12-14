@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const show = () => axios.get("api/sites");
+const show = () => axios.get("api/site");
 
-const update = payload => axios.put("api/sites", payload);
+const update = payload => axios.put("api/site", payload);
 
 const siteApi = {
   show,
