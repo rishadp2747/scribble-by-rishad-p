@@ -184,7 +184,7 @@ const Dashboard = ({ setLoading }) => {
               label="Columns"
               buttonStyle="text"
               position="bottom-end"
-              className="h-8 bg-gray-200 border"
+              className="h-8 bg-gray-200"
             >
               <div className="p-4 space-y-4">
                 <Typography style="h5">Columns</Typography>
