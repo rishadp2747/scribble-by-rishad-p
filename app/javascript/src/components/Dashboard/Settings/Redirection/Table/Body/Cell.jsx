@@ -16,7 +16,7 @@ const Cell = ({ editing, dataIndex, children, ...otherProps }) => {
 
   return (
     <td {...otherProps}>
-      <div className={"flex truncate"}>
+      <div className="flex truncate">
         {dataIndex === "from_path" && (
           <Label>
             https://{domain}:{!isDefaultPort && port}
