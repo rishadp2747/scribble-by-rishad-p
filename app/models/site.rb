@@ -12,7 +12,7 @@ class Site < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   validates :password, length: { minimum: 6 }, format: { with: VALID_PASSWORD_REGEX }, if: -> { password.present? }
 
-  def isPassword
+  def is_authentication_required
     self.password_digest.present?
   end
 end

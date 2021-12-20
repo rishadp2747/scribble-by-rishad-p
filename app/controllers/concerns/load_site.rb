@@ -9,8 +9,4 @@ module LoadSite
       handle_not_found_enitiy_response("Site")
     end
   end
-
-  def is_authenticatable
-    @site.isPassword
-  end
 end
