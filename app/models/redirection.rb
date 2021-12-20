@@ -3,7 +3,7 @@
 class Redirection < ApplicationRecord
   belongs_to :site
 
-  validates :from_path, presence: true
+  validates :from_path, presence: true, uniqueness: true
   validates :to_path, presence: true
 
   validates_associated :site

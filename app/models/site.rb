@@ -11,6 +11,7 @@ class Site < ApplicationRecord
   has_secure_token :authentication_token
 
   validates :name, presence: true, uniqueness: true
+  validates :authentication_token, uniqueness: true
   validates :password, length: { minimum: MINIMUM_PASSWORD_LENGTH }, format: { with: VALID_PASSWORD_REGEX }, if: -> {
 password.present? }
 
