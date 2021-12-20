@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module HandleResponse
+module ApiResponders
   extend ActiveSupport::Concern
 
   def handle_successful_response(entity, action)
