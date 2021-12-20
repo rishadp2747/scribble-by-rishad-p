@@ -20,7 +20,7 @@ class SiteTest < ActiveSupport::TestCase
   end
 
   def test_password_should_not_be_valid_with_invalid_length
-    @site.password = "0#{'a' * (Constants::MINIMUM_USER_PASSWORD_LENGTH - 1)}"
+    @site.password = "0#{'a' * (Site::MINIMUM_PASSWORD_LENGTH - 1)}"
     assert_not @site.valid?
     assert_includes @site.errors.full_messages, "Password is invalid"
   end

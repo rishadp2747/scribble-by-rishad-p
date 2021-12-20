@@ -20,9 +20,9 @@ class ArticleTest < ActiveSupport::TestCase
   end
 
   def test_title_should_not_be_valid_with_invalid_length
-    @article.title = "a" * (Constants::MAXIMUM_ARTICLE_TITLE_LENGTH + 1)
+    @article.title = "a" * (Article::MAXIMUM_TITLE_LENGTH + 1)
     assert_not @article.valid?
-    assert_includes @article.errors.full_messages, "Title is too long (maximum is #{Constants::MAXIMUM_ARTICLE_TITLE_LENGTH} characters)"
+    assert_includes @article.errors.full_messages, "Title is too long (maximum is #{Article::MAXIMUM_TITLE_LENGTH} characters)"
   end
 
   def test_slug_should_be_parameterized_title

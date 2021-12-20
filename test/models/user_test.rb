@@ -14,9 +14,9 @@ class UserTest < ActiveSupport::TestCase
   end
 
   def test_name_should_not_valid_with_invalid_length
-    @user.name = "a" * (Constants::MAXIMUM_USER_NAME_LENGTH + 1)
+    @user.name = "a" * (User::MAXIMUM_NAME_LENGTH + 1)
     assert_not @user.valid?
-    assert_includes @user.errors.full_messages, "Name is too long (maximum is #{Constants::MAXIMUM_USER_NAME_LENGTH} characters)"
+    assert_includes @user.errors.full_messages, "Name is too long (maximum is #{User::MAXIMUM_NAME_LENGTH } characters)"
   end
 
   def test_user_should_not_be_valid_without_email
@@ -26,9 +26,9 @@ class UserTest < ActiveSupport::TestCase
   end
 
   def test_email_should_not_be_valid_with_invalid_length
-    @user.email = "#{"a" * Constants::MAXIMUM_USER_EMAIL_LENGTH}@test.com"
+    @user.email = "#{"a" * User::MAXIMUM_EMAIL_LENGTH}@test.com"
     assert_not @user.valid?
-    assert_includes @user.errors.full_messages, "Email is too long (maximum is #{Constants::MAXIMUM_USER_EMAIL_LENGTH} characters)"
+    assert_includes @user.errors.full_messages, "Email is too long (maximum is #{User::MAXIMUM_EMAIL_LENGTH} characters)"
   end
 
   def test_user_should_be_valid_with_valid_email
