@@ -26,7 +26,9 @@ class Api::CategoriesController < ApplicationController
 
   def create
     @category = @current_user.categories.new(category_params)
-    unless @category.save
+    if @category.save
+      handle_successful_response("category", "created")
+    else
       handle_error_response(@category)
     end
   end

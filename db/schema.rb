@@ -33,7 +33,6 @@ ActiveRecord::Schema.define(version: 2021_12_20_115752) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id"
     t.integer "position", default: 0
-    t.index ["position"], name: "index_categories_on_position", unique: true
     t.index ["title"], name: "index_categories_on_title", unique: true
     t.index ["user_id"], name: "index_categories_on_user_id"
   end

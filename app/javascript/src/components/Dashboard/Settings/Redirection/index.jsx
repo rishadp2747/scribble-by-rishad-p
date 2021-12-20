@@ -150,14 +150,9 @@ const Redirections = ({ setLoading }) => {
     try {
       const payload = { redirection: values };
       const response = await redirectionApi.create(payload);
-
       if (response.data?.notice) {
-        const latestRedirections = redirections;
-        const lastIndex = latestRedirections.length - 1;
-        latestRedirections[lastIndex] = response.data?.redirection;
+        fetchRedirections();
         setIsAddedRedirection(false);
-        setRedirections([...latestRedirections]);
-        setEditingRedirection(DEFAULT_EDITING_REDIRECTION);
       }
     } finally {
       setLoading(false);

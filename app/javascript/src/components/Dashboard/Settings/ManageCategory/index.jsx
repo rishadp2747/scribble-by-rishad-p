@@ -193,10 +193,11 @@ const Category = ({ setLoading }) => {
       try {
         const payload = { category: { title: addCategory.value } };
         const response = await categoryApi.create(payload);
-        response.data?.category &&
-          setCategories(category => [...category, response.data?.category]);
+        if (response.data?.notice) {
+          fetchCategories();
+          setAddCategory(addCategory => ({ ...addCategory, show: false }));
+        }
       } finally {
-        setAddCategory(addCategory => ({ ...addCategory, show: false }));
         setLoading(false);
       }
     }

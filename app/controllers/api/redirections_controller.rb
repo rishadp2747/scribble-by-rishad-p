@@ -10,7 +10,9 @@ class Api::RedirectionsController < ApplicationController
 
   def create
     @redirection = @site.redirections.new(redirection_params)
-    unless @redirection.save
+    if @redirection.save
+      handle_successful_response("redirection", "created")
+    else
       handle_error_response(@redirection)
     end
   end
