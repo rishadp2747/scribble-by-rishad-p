@@ -5,7 +5,7 @@ class Api::ArticlesController < ApplicationController
   before_action :load_article, only: %i[destroy show update]
 
   def index
-    @articles = @current_user.articles.order("updated_at DESC")
+    @articles = @current_user.articles.includes(:category, :user).order("updated_at DESC")
   end
 
   def show
@@ -46,7 +46,7 @@ class Api::ArticlesController < ApplicationController
     end
 
     def load_article
-      @article = @current_user.articles.find(params[:id])
+      @article = @current_user.articles.find_by(id: params[:id])
       unless @article
         handle_not_found_enitiy_response("Article")
       end

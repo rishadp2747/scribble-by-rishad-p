@@ -70,10 +70,10 @@ const Article = ({ setLoading }) => {
             label={`Save ${values.status}`}
           />
           <Dropdown buttonStyle="primary" position="bottom-end" name="status">
-            <li id="Draft" onClick={handleStatusChange}>
+            <li id="draft" onClick={handleStatusChange}>
               Draft
             </li>
-            <li id="Published" onClick={handleStatusChange}>
+            <li id="published" onClick={handleStatusChange}>
               Published
             </li>
           </Dropdown>

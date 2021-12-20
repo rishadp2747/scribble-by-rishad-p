@@ -12,7 +12,8 @@ class Category < ApplicationRecord
   private
 
     def set_position
-      count = Category.all.count
-      self.position = count
+      last_position = Category.last&.position || 0
+      new_position = last_position + 1
+      self.position = new_position
     end
 end

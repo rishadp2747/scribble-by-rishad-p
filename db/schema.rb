@@ -12,12 +12,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_13_142654) do
+ActiveRecord::Schema.define(version: 2021_12_20_115752) do
 
   create_table "articles", force: :cascade do |t|
     t.string "title", null: false
     t.text "body", null: false
-    t.integer "status", default: 0, null: false
+    t.string "status", default: "draft", null: false
     t.integer "category_id"
     t.integer "user_id"
     t.datetime "created_at", precision: 6, null: false
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 2021_12_13_142654) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "user_id"
-    t.integer "position"
+    t.integer "position", default: 0
     t.index ["title"], name: "index_categories_on_title", unique: true
     t.index ["user_id"], name: "index_categories_on_user_id"
   end
@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 2021_12_13_142654) do
     t.integer "site_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["from_path"], name: "index_redirections_on_from_path", unique: true
     t.index ["site_id"], name: "index_redirections_on_site_id"
   end
 
@@ -52,6 +53,7 @@ ActiveRecord::Schema.define(version: 2021_12_13_142654) do
     t.string "authentication_token"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["authentication_token"], name: "index_sites_on_authentication_token", unique: true
     t.index ["name"], name: "index_sites_on_name", unique: true
   end
 

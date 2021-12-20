@@ -7,10 +7,6 @@ class SiteTest < ActiveSupport::TestCase
     @site = create(:site)
   end
 
-  def test_site_should_be_valid
-    assert @site.valid?
-  end
-
   def test_site_should_not_be_valid_without_name
     @site.name = ""
     assert_not @site.valid?
@@ -23,15 +19,16 @@ class SiteTest < ActiveSupport::TestCase
     assert_includes duplicate_site.errors.full_messages, "Name has already been taken"
   end
 
-  def test_password_should_not_be_of_invalid_length
-    @site.password = "1a" * 2
+  def test_password_should_not_be_valid_with_invalid_length
+    @site.password = "0#{'a' * (Site::MINIMUM_PASSWORD_LENGTH - 1)}"
     assert_not @site.valid?
-    assert_includes @site.errors.full_messages, "Password is too short (minimum is 6 characters)"
+    assert_includes @site.errors.full_messages, "Password is invalid"
   end
 
-  def test_password_should_be_valid_of_valid_length
-    @site.password = "1a" * 3
-    assert @site.valid?
+  def test_site_should_not_be_valid_without_unique_authentication_token
+    duplicate_site = @site.dup
+    assert_not duplicate_site.valid?
+    assert_includes duplicate_site.errors.full_messages, "Authentication token has already been taken"
   end
 
   def test_password_should_not_be_of_invalid_format

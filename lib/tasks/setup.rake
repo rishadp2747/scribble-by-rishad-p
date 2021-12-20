@@ -20,8 +20,8 @@ def create_sample_data!
   5.times do
     category = create_category!
     3.times do
-      create_article!("Draft", category)
-      create_article!("Published", category)
+      create_article!("draft", category)
+      create_article!("published", category)
     end
   end
 

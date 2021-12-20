@@ -4,5 +4,5 @@ json.site do
   json.extract! @site,
     :name
 
-  json.isPassword @site.isPassword
+  json.is_authorization_required @site.is_authorization_required
 end

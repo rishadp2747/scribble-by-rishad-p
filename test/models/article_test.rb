@@ -7,10 +7,6 @@ class ArticleTest < ActiveSupport::TestCase
     @article = create(:article)
   end
 
-  def test_article_should_be_valid
-    assert @article.valid?
-  end
-
   def test_article_should_not_be_valid_without_title
     @article.title = ""
     assert_not @article.valid?
@@ -23,15 +19,10 @@ class ArticleTest < ActiveSupport::TestCase
     assert_includes @article.errors.full_messages, "Body can't be blank"
   end
 
-  def test_title_should_be_valid_with_valid_length
-    @article.title = "a" * 80
-    assert @article.valid?
-  end
-
   def test_title_should_not_be_valid_with_invalid_length
-    @article.title = "a" * 81
+    @article.title = "a" * (Article::MAXIMUM_TITLE_LENGTH + 1)
     assert_not @article.valid?
-    assert_includes @article.errors.full_messages, "Title is too long (maximum is 80 characters)"
+    assert_includes @article.errors.full_messages, "Title is too long (maximum is #{Article::MAXIMUM_TITLE_LENGTH} characters)"
   end
 
   def test_slug_should_be_parameterized_title
@@ -63,21 +54,6 @@ class ArticleTest < ActiveSupport::TestCase
     end
   end
 
-  def test_status_should_accept_valid_values
-    @article.status = "Draft"
-    assert @article.valid?
-
-    @article.status = "Published"
-    assert @article.valid?
-  end
-
-  def test_status_should_not_accept_invalid_values
-    error = assert_raises ArgumentError do
-      @article.status = "send"
-    end
-    assert_equal "'send' is not a valid status", error.message
-  end
-
   def test_article_should_not_be_valid_with_invalid_category
     assert_raises ActiveRecord::AssociationTypeMismatch do
       @article.category = ""
@@ -87,6 +63,12 @@ class ArticleTest < ActiveSupport::TestCase
   def test_article_should_not_be_valid_with_invalid_user
     assert_raises ActiveRecord::AssociationTypeMismatch do
       @article.user = ""
+    end
+  end
+
+  def test_article_remains_even_if_category_deleted
+    assert_no_changes -> { Article.all.count } do
+      @article.category.destroy!
     end
   end
 end

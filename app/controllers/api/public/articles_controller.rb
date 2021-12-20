@@ -6,7 +6,7 @@ class Api::Public::ArticlesController < ApplicationController
   before_action :load_article, only: :show
 
   def index
-    @articles = @site.user.articles
+    @articles = @site.user.articles.includes(:category)
   end
 
   def show
@@ -18,7 +18,7 @@ class Api::Public::ArticlesController < ApplicationController
   private
 
     def load_article
-      @article = @site.user.articles.find_by_slug(params[:slug])
+      @article = @site.user.articles.find_by(slug: params[:slug])
       unless @article
         handle_not_found_enitiy_response("Article")
       end

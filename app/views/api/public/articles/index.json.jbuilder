@@ -2,7 +2,7 @@
 
 json.articles @articles do |article|
 
-  if article.Published? && article.category.present?
+  if article.published? && article.category.present?
     json.extract! article,
       :id,
       :title,

@@ -75,12 +75,7 @@ const CategoryMenu = ({
       try {
         const payload = { category: { title: categoryActions.add.value } };
         const response = await categoryApi.create(payload);
-        const category = response.data?.category;
-
-        if (category) {
-          setCategories(categories => [...categories, category]);
-          setCategoryActions(DEFAULT_CATEGORY_ACTIONS);
-        }
+        response.data?.notice && fetchCategories();
       } finally {
         setLoading(false);
       }

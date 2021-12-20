@@ -16,7 +16,7 @@ const General = ({ setLoading }) => {
   const GENERAL_SETTINGS_FORM_INITIAL_VALUE = {
     password: "",
     name: siteSettings?.name,
-    isPassword: siteSettings?.isPassword,
+    isPassword: siteSettings?.is_authorization_required,
   };
 
   useEffect(() => fetchSite(), []);

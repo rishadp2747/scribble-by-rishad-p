@@ -94,7 +94,7 @@ const Category = ({ setLoading }) => {
         const payload = {
           categories: { categories_attributes: sortedCtegories },
         };
-        await categoryApi.sort(payload);
+        await categoryApi.reorder(payload);
       } finally {
         setCategories(sortedCtegories);
       }
@@ -193,10 +193,11 @@ const Category = ({ setLoading }) => {
       try {
         const payload = { category: { title: addCategory.value } };
         const response = await categoryApi.create(payload);
-        response.data?.category &&
-          setCategories(category => [...category, response.data?.category]);
+        if (response.data?.notice) {
+          fetchCategories();
+          setAddCategory(addCategory => ({ ...addCategory, show: false }));
+        }
       } finally {
-        setAddCategory(addCategory => ({ ...addCategory, show: false }));
         setLoading(false);
       }
     }

@@ -5,7 +5,7 @@ class Api::CategoriesController < ApplicationController
   before_action :load_category, only: %i[update destroy]
 
   def index
-    @categories = @current_user.categories.all.order(:position)
+    @categories = @current_user.categories.includes(:articles).order(:position)
   end
 
   def update
@@ -16,7 +16,7 @@ class Api::CategoriesController < ApplicationController
     end
   end
 
-  def sort
+  def reorder
     if @current_user.update(categories_params)
       render status: :ok, json: { success: true }
     else
@@ -26,7 +26,9 @@ class Api::CategoriesController < ApplicationController
 
   def create
     @category = @current_user.categories.new(category_params)
-    unless @category.save
+    if @category.save
+      handle_successful_response("category", "created")
+    else
       handle_error_response(@category)
     end
   end
@@ -50,7 +52,7 @@ class Api::CategoriesController < ApplicationController
     end
 
     def load_category
-      @category = @current_user.categories.find(params[:id])
+      @category = @current_user.categories.find_by(id: params[:id])
       unless @category
         handle_not_found_enitiy_response("Category")
       end

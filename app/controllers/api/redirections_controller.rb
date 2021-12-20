@@ -10,7 +10,9 @@ class Api::RedirectionsController < ApplicationController
 
   def create
     @redirection = @site.redirections.new(redirection_params)
-    unless @redirection.save
+    if @redirection.save
+      handle_successful_response("redirection", "created")
+    else
       handle_error_response(@redirection)
     end
   end
@@ -38,7 +40,7 @@ class Api::RedirectionsController < ApplicationController
     end
 
     def load_redirection
-      @redirection = @site.redirections.find(params[:id])
+      @redirection = @site.redirections.find_by(id: params[:id])
       unless @redirection
         handle_not_found_enitiy_response("Redirection")
       end

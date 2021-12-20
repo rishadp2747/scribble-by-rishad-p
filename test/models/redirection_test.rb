@@ -7,10 +7,6 @@ class RedirectionTest < ActiveSupport::TestCase
     @redirection = create(:redirection)
   end
 
-  def test_redirection_should_be_valid
-    assert @redirection.valid?
-  end
-
   def test_redirection_should_not_be_valid_without_from_path
     @redirection.from_path = ""
     assert_not @redirection.valid?
@@ -27,5 +23,11 @@ class RedirectionTest < ActiveSupport::TestCase
     assert_raises ActiveRecord::AssociationTypeMismatch do
       @redirection.site = ""
     end
+  end
+
+  def test_redirection_should_not_be_valid_without_unique_from_path
+    duplicate_redirection = @redirection.dup
+    assert_not duplicate_redirection.valid?
+    assert_includes duplicate_redirection.errors.full_messages, "From path has already been taken"
   end
 end
