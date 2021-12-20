@@ -30,7 +30,7 @@ const Public = ({ loading, setLoading }) => {
 
   const isPrivateArticle = () => {
     if (siteSettings) {
-      return siteSettings.is_authentication_required && !isLoggedIn ? (
+      return siteSettings.is_authorization_required && !isLoggedIn ? (
         <Login siteSettings={siteSettings} setLoading={setLoading} />
       ) : (
         <Home setLoading={setLoading} />

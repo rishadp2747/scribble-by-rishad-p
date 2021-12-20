@@ -65,4 +65,10 @@ class ArticleTest < ActiveSupport::TestCase
       @article.user = ""
     end
   end
+
+  def test_article_remains_even_if_category_deleted
+    assert_no_changes -> { Article.all.count } do
+      @article.category.destroy!
+    end
+  end
 end

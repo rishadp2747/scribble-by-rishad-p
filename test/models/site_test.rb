@@ -25,6 +25,8 @@ class SiteTest < ActiveSupport::TestCase
     assert_includes @site.errors.full_messages, "Password is invalid"
   end
 
+  def test_authe
+
   def test_password_should_not_be_of_invalid_format
     invalid_passwords = %w[111111 aaaaaa]
     invalid_passwords.each do |password|
