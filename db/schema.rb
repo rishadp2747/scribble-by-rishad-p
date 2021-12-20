@@ -12,12 +12,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_13_142654) do
+ActiveRecord::Schema.define(version: 2021_12_20_074042) do
 
   create_table "articles", force: :cascade do |t|
     t.string "title", null: false
     t.text "body", null: false
-    t.integer "status", default: 0, null: false
+    t.string "status", default: "draft", null: false
     t.integer "category_id"
     t.integer "user_id"
     t.datetime "created_at", precision: 6, null: false

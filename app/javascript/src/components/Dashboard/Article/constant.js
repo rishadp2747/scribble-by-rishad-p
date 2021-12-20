@@ -4,7 +4,7 @@ export const ARTICLE_FORM_INITIAL_VALUE = {
   title: "",
   category: "",
   body: "",
-  status: "Draft",
+  status: "draft",
 };
 
 export const ARTICLE_FORM_VALIDATION_SCHEMA = yup.object().shape({

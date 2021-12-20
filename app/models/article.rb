@@ -4,7 +4,7 @@ class Article < ApplicationRecord
   belongs_to :user
   belongs_to :category
 
-  enum status: { Draft: 0, Published: 1 }
+  enum status: { draft: "draft", published: "published" }
 
   validates :title, presence: true, length: { maximum: 80 }
   validates :body, presence: true

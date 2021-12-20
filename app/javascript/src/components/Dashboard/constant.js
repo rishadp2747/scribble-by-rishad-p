@@ -1,4 +1,4 @@
-export const STATUSES = ["all", "Draft", "Published"];
+export const STATUSES = ["all", "draft", "published"];
 
 export const DEFAULT_ARTICLE_FILTERS = {
   status: "all",

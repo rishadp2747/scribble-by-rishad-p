@@ -8,5 +8,5 @@ json.article do
     :category,
     :status
 
-  json.date @article.Published? ? @article.convert_date_format : "-"
+  json.date @article.published? ? @article.convert_date_format : "-"
 end

@@ -54,7 +54,7 @@ class ArticlesControllerTest < ActionDispatch::IntegrationTest
         article: {
           title: Faker::Lorem.sentence(word_count: 2),
           body: Faker::Lorem.paragraph,
-          status: "Published",
+          status: "published",
           category_id: create(:category).id
         }
       }

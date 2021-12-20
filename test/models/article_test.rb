@@ -67,7 +67,7 @@ class ArticleTest < ActiveSupport::TestCase
     @article.status = "Draft"
     assert @article.valid?
 
-    @article.status = "Published"
+    @article.status = ""
     assert @article.valid?
   end
 

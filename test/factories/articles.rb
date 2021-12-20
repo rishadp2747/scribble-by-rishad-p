@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :article do
     title { Faker::Book.title }
     body { Faker::Lorem.paragraph }
-    status { "Published" }
+    status { "published" }
     category
     user
   end
