@@ -9,8 +9,9 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :categories
 
-  validates :name, presence: true, length: { maximum: 30 }
-  validates :email, presence: true, uniqueness: true, length: { maximum: 50 }, format: { with: VALID_EMAIL_REGEX }
+  validates :name, presence: true, length: { maximum: Constants::MAXIMUM_USER_NAME_LENGTH }
+  validates :email, presence: true, uniqueness: true, length: { maximum: Constants::MAXIMUM_USER_EMAIL_LENGTH },
+            format: { with: VALID_EMAIL_REGEX }
 
   before_save :to_lowercase
 

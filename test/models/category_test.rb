@@ -7,10 +7,6 @@ class CategoryTest < ActiveSupport::TestCase
     @category = create(:category)
   end
 
-  def test_category_should_be_valid
-    assert @category.valid?
-  end
-
   def test_category_should_not_be_valid_without_title
     @category.title = ""
     assert_not @category.valid?

@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 class Article < ApplicationRecord
+  enum status: { draft: "draft", published: "published" }
+
   belongs_to :user
   belongs_to :category
 
-  enum status: { draft: "draft", published: "published" }
-
-  validates :title, presence: true, length: { maximum: 80 }
+  validates :title, presence: true, length: { maximum: Constants::MAXIMUM_ARTICLE_TITLE_LENGTH }
   validates :body, presence: true
   validates :slug, uniqueness: true
   validate :slug_not_changed

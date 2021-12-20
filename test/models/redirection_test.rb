@@ -7,10 +7,6 @@ class RedirectionTest < ActiveSupport::TestCase
     @redirection = create(:redirection)
   end
 
-  def test_redirection_should_be_valid
-    assert @redirection.valid?
-  end
-
   def test_redirection_should_not_be_valid_without_from_path
     @redirection.from_path = ""
     assert_not @redirection.valid?
