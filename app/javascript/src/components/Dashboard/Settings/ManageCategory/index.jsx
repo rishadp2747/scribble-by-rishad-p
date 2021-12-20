@@ -94,7 +94,7 @@ const Category = ({ setLoading }) => {
         const payload = {
           categories: { categories_attributes: sortedCtegories },
         };
-        await categoryApi.sort(payload);
+        await categoryApi.reorder(payload);
       } finally {
         setCategories(sortedCtegories);
       }

@@ -5,7 +5,7 @@ const list = () => axios.get("api/categories");
 const update = (categoryId, payload) =>
   axios.put(`api/categories/${categoryId}`, payload);
 
-const sort = payload => axios.put(`api/categories/sort`, payload);
+const reorder = payload => axios.put(`api/categories/reorder`, payload);
 
 const create = payload => axios.post("api/categories", payload);
 
@@ -14,7 +14,7 @@ const destroy = categoryId => axios.delete(`api/categories/${categoryId}`);
 const categoryApi = {
   list,
   update,
-  sort,
+  reorder,
   create,
   destroy,
 };
