@@ -15,6 +15,6 @@ module Authenticatable
     end
 
     def is_authenticatable
-      @site.is_authentication_required
+      @site.is_authorization_required
     end
 end
