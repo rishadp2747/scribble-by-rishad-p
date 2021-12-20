@@ -6,5 +6,5 @@ json.categories @categories do |category|
     :title,
     :position
 
-  json.count category.articles.count
+  json.count category.articles.size
 end

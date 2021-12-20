@@ -6,7 +6,7 @@ class Api::Public::ArticlesController < ApplicationController
   before_action :load_article, only: :show
 
   def index
-    @articles = @site.user.articles
+    @articles = @site.user.articles.includes(:category)
   end
 
   def show

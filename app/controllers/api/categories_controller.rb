@@ -5,7 +5,7 @@ class Api::CategoriesController < ApplicationController
   before_action :load_category, only: %i[update destroy]
 
   def index
-    @categories = @current_user.categories.all.order(:position).includes(:articles)
+    @categories = @current_user.categories.includes(:articles).order(:position)
   end
 
   def update

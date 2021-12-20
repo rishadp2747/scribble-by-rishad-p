@@ -13,7 +13,7 @@ json.articles @articles do |article|
 end
 
 json.counts do
-  json.all @articles.count
-  json.published @articles.published.count
-  json.draft @articles.draft.count
+  json.all @articles.size
+  json.published @articles.published.size
+  json.draft @articles.draft.size
 end
