@@ -38,7 +38,7 @@ class Api::RedirectionsController < ApplicationController
     end
 
     def load_redirection
-      @redirection = @site.redirections.find(params[:id])
+      @redirection = @site.redirections.find_by(id: params[:id])
       unless @redirection
         handle_not_found_enitiy_response("Redirection")
       end

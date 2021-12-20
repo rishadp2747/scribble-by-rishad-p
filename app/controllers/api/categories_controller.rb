@@ -50,7 +50,7 @@ class Api::CategoriesController < ApplicationController
     end
 
     def load_category
-      @category = @current_user.categories.find(params[:id])
+      @category = @current_user.categories.find_by(id: params[:id])
       unless @category
         handle_not_found_enitiy_response("Category")
       end
