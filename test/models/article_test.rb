@@ -71,6 +71,4 @@ class ArticleTest < ActiveSupport::TestCase
       @article.category.destroy!
     end
   end
-
-  def test_article
 end
