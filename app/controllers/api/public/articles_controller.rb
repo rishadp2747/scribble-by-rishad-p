@@ -2,7 +2,7 @@
 
 class Api::Public::ArticlesController < ApplicationController
   before_action :load_site, only: %i[index show]
-  before_action :authenticate_site_using_x_auth_token, only: %i[index show], if: :is_authentication_required
+  before_action :authenticate_site_using_x_auth_token, only: %i[index show], if: :is_authenticatable
   before_action :load_article, only: :show
 
   def index

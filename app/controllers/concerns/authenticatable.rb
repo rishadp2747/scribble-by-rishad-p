@@ -11,4 +11,10 @@ module Authenticatable
       render status: :unauthorized, json: { error: t("session.could_not_auth") }
     end
   end
+
+  private
+
+    def is_authenticatable
+      @site.is_authentication_required
+    end
 end
