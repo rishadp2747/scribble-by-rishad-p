@@ -25,7 +25,11 @@ class SiteTest < ActiveSupport::TestCase
     assert_includes @site.errors.full_messages, "Password is invalid"
   end
 
-  def test_authe
+  def test_site_should_not_be_valid_without_unique_authentication_token
+    duplicate_site = @site.dup
+    assert_not duplicate_site.valid?
+    assert_includes duplicate_site.errors.full_messages, "Authentication token has already been taken"
+  end
 
   def test_password_should_not_be_of_invalid_format
     invalid_passwords = %w[111111 aaaaaa]
