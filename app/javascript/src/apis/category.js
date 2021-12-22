@@ -5,7 +5,8 @@ const list = () => axios.get("api/categories");
 const update = (categoryId, payload) =>
   axios.put(`api/categories/${categoryId}`, payload);
 
-const reorder = payload => axios.put(`api/categories/reorder`, payload);
+const reorder = (categoryId, payload) =>
+  axios.patch(`api/categories/${categoryId}/reorder`, payload);
 
 const create = payload => axios.post("api/categories", payload);
 

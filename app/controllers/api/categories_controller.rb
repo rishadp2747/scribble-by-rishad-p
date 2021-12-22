@@ -2,7 +2,7 @@
 
 class Api::CategoriesController < ApplicationController
   before_action :load_user, excpet: %i[new edit]
-  before_action :load_category, only: %i[update destroy]
+  before_action :load_category, only: %i[update destroy reorder]
 
   def index
     @categories = @current_user.categories.includes(:articles).order(:position)
@@ -17,11 +17,7 @@ class Api::CategoriesController < ApplicationController
   end
 
   def reorder
-    if @current_user.update(categories_params)
-      render status: :ok, json: { success: true }
-    else
-      handle_error_response(@current_user)
-    end
+    @category.insert_at(category_params[:position])
   end
 
   def create
@@ -45,10 +41,6 @@ class Api::CategoriesController < ApplicationController
 
     def category_params
       params.require(:category).permit(:title, :position)
-    end
-
-    def categories_params
-      params.require(:categories).permit(categories_attributes: [:id, :title, :position])
     end
 
     def load_category

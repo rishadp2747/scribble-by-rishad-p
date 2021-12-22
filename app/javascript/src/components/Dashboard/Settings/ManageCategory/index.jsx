@@ -77,26 +77,25 @@ const Category = ({ setLoading }) => {
     };
   });
 
-  const onSortEnd = async ({ oldIndex, newIndex }) => {
+  const handleReorderCategories = async ({ oldIndex, newIndex }) => {
     setEditingRecord("");
 
     if (oldIndex !== newIndex) {
-      const sortedCtegories = arrayMoveImmutable(
+      const reorderedCategories = arrayMoveImmutable(
         [].concat(categories),
         oldIndex,
         newIndex
       ).map((category, index) => {
-        category.position = index;
+        category.position = index + 1;
         return category;
       });
 
+      const reorderedCategory = reorderedCategories[newIndex];
+
       try {
-        const payload = {
-          categories: { categories_attributes: sortedCtegories },
-        };
-        await categoryApi.reorder(payload);
+        await categoryApi.reorder(reorderedCategory.id, reorderedCategory);
       } finally {
-        setCategories(sortedCtegories);
+        setCategories(reorderedCategories);
       }
     }
   };
@@ -106,7 +105,7 @@ const Category = ({ setLoading }) => {
       useDragHandle
       disableAutoscroll
       helperClass="row-dragging"
-      onSortEnd={onSortEnd}
+      onSortEnd={handleReorderCategories}
       {...props}
     />
   );
