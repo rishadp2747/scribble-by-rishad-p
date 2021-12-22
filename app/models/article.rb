@@ -3,7 +3,7 @@
 class Article < ApplicationRecord
   MAXIMUM_TITLE_LENGTH = 80
 
-  enum status: { draft: "draft", published: "published" }
+  enum status: { draft: "draft", published: "published" }, _default: "draft"
 
   belongs_to :user
   belongs_to :category
