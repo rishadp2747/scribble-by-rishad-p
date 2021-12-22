@@ -9,7 +9,7 @@ Rails.application.routes.draw do
       resources :articles, only: %i[index show], param: :slug
     end
     resources :categories, except: %i[new edit] do
-      put "reorder", on: :collection
+      patch "reorder", on: :member
     end
     resource :site, only: %i[show update]
     resources :articles, except: %i[new edit]

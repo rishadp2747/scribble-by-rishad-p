@@ -38,6 +38,9 @@ gem "bcrypt", "~> 3.1.13"
 # For auto-generating demo data
 gem "faker"
 
+# For reordering list
+gem "acts_as_list"
+
 group :development, :test do
   # Access a debugger console by calling 'byebug' anywhere in the code
   gem "byebug", platforms: %i[mri mingw x64_mingw]
